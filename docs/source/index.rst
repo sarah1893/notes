@@ -13,6 +13,7 @@ Contents:
 
    notes/python-basic
    notes/python-generator
+   notes/python-rexp
    notes/python-socket
    notes/python-concurrency
    notes/python-asyncio
