@@ -6,7 +6,7 @@ import os
 from flask import Flask, send_from_directory
 
 DIR = os.path.dirname(os.path.realpath(__file__))
-ROOT = os.path.join(DIR, 'docs', 'build', 'html')
+ROOT = os.path.join(DIR, 'docs', '_build', 'html')
 
 app = Flask(__name__)
 
