@@ -138,3 +138,58 @@ Named Grouping ``(?P<name>)``
     # back reference ``(?P=name)``
     >>> re.search('^(?P<char>[a-z])(?P=char)','aa')
     <_sre.SRE_Match object at 0x10ae0f288>
+
+
+Substitute String
+-----------------
+
+.. code-block:: python
+
+    # basic substitute
+    >>> res = "1a2b3c"
+    >>> re.sub(r'[a-z]',' ', res)
+    '1 2 3 '
+
+    # substitute with group reference
+    >>> date = r'2016-01-01'
+    >>> re.sub(r'(\d{4})-(\d{2})-(\d{2})',r'\2/\3/\1/',date)
+    '01/01/2016/'    
+
+    # camelcase to underscore
+    >>> def convert(s):
+    ...     res = re.sub(r'(.)([A-Z][a-z]+)',r'\1_\2', s)
+    ...     return re.sub(r'([a-z])([A-Z])',r'\1_\2', res).lower()
+    ... 
+    >>> convert('CamelCase')
+    'camel_case'
+    >>> convert('CamelCamelCase')
+    'camel_camel_case'
+    >>> convert('SimpleHTTPServer')
+    'simple_http_server'
+
+Look around
+-----------
+
++---------------+---------------------+
+|   notation    |  compare direction  |
++===============+=====================+
+| ``(?=...)``   |   left to right     |
++---------------+---------------------+
+| ``(?!...)``   |   left to right     |
++---------------+---------------------+
+| ``(?<=...)``  |   right to left     |
++---------------+---------------------+
+| ``(?!<...)``  |   right to left     |
++---------------+---------------------+
+
+.. code-block:: python
+
+    # basic
+    >>> re.sub('(?=\d{3})', ' ', '12345')
+    ' 1 2 345'
+    >>> re.sub('(?!\d{3})', ' ', '12345')
+    '123 4 5 '
+    >>> re.sub('(?<=\d{3})', ' ', '12345')
+    '123 4 5 '
+    >>> re.sub('(?<!\d{3})', ' ', '12345')
+    ' 1 2 345'
