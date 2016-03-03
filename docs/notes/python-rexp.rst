@@ -95,3 +95,46 @@ Group Comparison
     '2016-01'
     >>> m.group(3)
     '2016'
+
+
+Back Reference
+--------------
+
+.. code-block:: python
+
+    # compare 'aa', 'bb'
+    >>> re.search(r'([a-z])\1$','aa') != None
+    True
+    >>> re.search(r'([a-z])\1$','bb') != None
+    True
+    >>> re.search(r'([a-z])\1$','ab') != None
+    False
+
+    # compare open tag and close tag
+    >>> pattern = r'<([^>]+)>[\s\S]*?</\1>'
+    >>> re.search(pattern, '<bold> test </bold>') != None
+    True
+    >>> re.search(pattern, '<h1> test </h1>') != None
+    True
+    >>> re.search(pattern, '<bold> test </h1>') != None
+    False
+
+
+Named Grouping ``(?P<name>)``
+-----------------------------
+
+.. code-block:: python
+
+    # group reference ``(?P<name>...)``
+    >>> pattern = '(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})'
+    >>> m = re.search(pattern, '2016-01-01')
+    >>> m.group('year')
+    '2016'
+    >>> m.group('month')
+    '01'
+    >>> m.group('day')
+    '01'
+
+    # back reference ``(?P=name)``
+    >>> re.search('^(?P<char>[a-z])(?P=char)','aa')
+    <_sre.SRE_Match object at 0x10ae0f288>
