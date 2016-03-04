@@ -20,5 +20,9 @@ def index_redirection():
     """Redirecting index file"""
     return send_from_directory(ROOT, 'index.html')
 
+@app.route('/.well-known/acme-challenge/ojASzRypK5pQC2tedqCle9ezlVMF0BhfEwb4n1-L_k0')
+def letsencrypt():
+    return "ojASzRypK5pQC2tedqCle9ezlVMF0BhfEwb4n1-L_k0.fqEt_5js_qhcwlQwcUBLIIAMmE_Hh7ipfKTeYWyMBvs" 
+
 if __name__ == "__main__":
     app.run(debug=True)
