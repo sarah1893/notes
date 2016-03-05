@@ -122,7 +122,9 @@ html_theme_options = {
     'github_user': 'crazyguitar',
     'github_repo': 'cheatsheet',
     'github_banner': True,
-    'show_related': False
+    'show_related': False,
+    'head_font_family': 'Georgia',
+    'font_family': 'Georgia'
 }
 
 # Add any paths that contain custom themes here, relative to this directory.

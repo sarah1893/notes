@@ -6,8 +6,6 @@
 Welcome to python-cheatsheet's documentation!
 =============================================
 
-Contents:
-
 .. toctree::
    :maxdepth: 2
 
