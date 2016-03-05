@@ -120,7 +120,7 @@ html_theme = 'alabaster'
 html_theme_options = {
     'show_powered_by': False,
     'github_user': 'crazyguitar',
-    'github_repo': 'cheatsheet',
+    'github_repo': 'pysheeet',
     'github_banner': True,
     'show_related': False,
     'head_font_family': 'Georgia',
