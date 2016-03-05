@@ -18,11 +18,3 @@ Welcome to python-cheatsheet's documentation!
    notes/python-tests
    notes/python-capi
    notes/python-cstyle
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`search`
-
