@@ -76,7 +76,7 @@ Simple TCP Echo Server Via SocketServer
     ...   host, handler)
     >>> s.serve_forever()
 
- output:
+output:
 
 .. code-block:: console
 
