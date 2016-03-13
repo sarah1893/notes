@@ -162,6 +162,35 @@ Get function/class name
     >>> exfun.__name__
     'exfun'
 
+
+``__new__`` & ``__init__``
+--------------------------
+
+.. code-block:: python
+
+    # __init__ will invoke
+    >>> class ClsA(object):
+    ...     def __new__(cls, arg):
+    ...         print '__new__ ' + arg
+    ...         return object.__new__(cls, arg)
+    ...     def __init__(self, arg):
+    ...         print '__init__ ' + arg  
+    ...
+    >>> o = ClsA("Hello")  
+    __new__ Hello
+    __init__ Hello
+
+    # init won't be invoke
+    >>> class ClsB(object):
+    ...     def __new__(cls, arg):
+    ...         print '__new__ ' + arg
+    ...         return object
+    ...     def __init__(self, arg):
+    ...         print '__init__ ' + arg
+    ...
+    >>> o = ClsB("Hello")  
+    __new__ Hello
+
 Representations of your class behave
 ------------------------------------
 
