@@ -427,6 +427,8 @@ output: (bash 1)
             print msg
             c_s.sendall("Hi! Parent!")
 
+output:
+
 .. code-block:: console
 
     $ python ex.py
