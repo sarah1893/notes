@@ -1,6 +1,32 @@
 Python SQLAlchemy Chatsheet
 =============================
 
+Set a database URL
+-------------------
+
+.. code-block:: python
+    
+    from sqlalchemy.engine.url import URL 
+
+    postgres_db = {'drivername': 'postgres',
+                   'username': 'postgres',
+                   'password': 'postgres',
+                   'host': '192.168.99.100',
+                   'port': 5432}
+    print URL(**postgres_db)
+
+    sqlite_db = {'drivername': 'sqlite', 'database': 'db.sqlite'}
+    print URL(**sqlite_db)
+
+output:
+
+.. code-block:: bash
+
+    $ python sqlalchemy_url.py
+    postgres://postgres:postgres@192.168.99.100:5432
+    sqlite:///db.sqlite
+
+
 Sqlalchemy Support DBAPI - PEP249
 -----------------------------------
 
@@ -16,8 +42,7 @@ Sqlalchemy Support DBAPI - PEP249
     engine.execute('CREATE TABLE "EX1" ('
                    'id INTEGER NOT NULL,' 
                    'name VARCHAR, '
-                   'PRIMARY KEY (id)'
-                   ');')
+                   'PRIMARY KEY (id));')
     # insert a raw
     engine.execute('INSERT INTO "EX1" '
                    '(id, name) '
@@ -30,10 +55,8 @@ Sqlalchemy Support DBAPI - PEP249
        print _r
 
     # delete *
-    engine.execute('DELETE from "EX1"'
-                   'where id=1;')
-    result = engine.execute('SELECT * FROM '
-                            '"EX1"')
+    engine.execute('DELETE from "EX1" where id=1;')
+    result = engine.execute('SELECT * FROM "EX1"')
     print result.fetchall()
 
 
@@ -161,13 +184,11 @@ Create all Tables Store in "MetaData"
 
     # Register t1, t2 to metadata
     t1 = Table('EX1', meta,
-               Column('id',Integer,
-                       primary_key=True),
+               Column('id',Integer, primary_key=True),
                Column('name',String))
 
     t2 = Table('EX2', meta,
-               Column('id',Integer,
-                       primary_key=True),
+               Column('id',Integer, primary_key=True),
                Column('val',Integer))
     # Create all tables in meta
     meta.create_all()
@@ -464,4 +485,49 @@ Check Table Existing
     for _t in ins.get_table_names():
        print _t
 
+Create multiple tables at once
+-------------------------------
 
+.. code-block:: python
+
+    from sqlalchemy import create_engine
+    from sqlalchemy import MetaData
+    from sqlalchemy import Table
+    from sqlalchemy import inspect
+    from sqlalchemy import Column, String, Integer
+    from sqlalchemy.engine.url import URL 
+    from sqlalchemy.ext.declarative import declarative_base
+
+    db = {'drivername': 'postgres',
+          'username': 'postgres',
+          'password': 'postgres',
+          'host': '192.168.99.100',
+          'port': 5432}
+
+    url = URL(**db)
+    engine = create_engine(url)
+
+    metadata = MetaData()
+    metadata.reflect(bind=engine)
+
+    def create_table(name, metadata):
+        tables = metadata.tables.keys()
+        if name not in tables:
+            table = Table(name, metadata,
+                          Column('id', Integer, primary_key=True),
+                          Column('key', String),
+                          Column('val', Integer))
+            table.create(engine)
+
+    tables = ['table1', 'table2', 'table3']
+    for _t in tables: create_table(_t, metadata)
+
+    inspector = inspect(engine)
+    print inspector.get_table_names()
+
+output:
+
+.. code-block:: bash
+
+    $ python sqlalchemy_create.py
+    [u'table1', u'table2', u'table3']
