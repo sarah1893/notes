@@ -607,6 +607,39 @@ Option arguments - (\*args, \*\*kwargs)
     (1, 2, 3, 4, 5)
     {'1': 1, '3': 3, '2': 2}
 
+``type()`` declare (create) a ``class``
+----------------------------------------
+
+.. code-block:: python
+
+    >>> def fib(self, n):
+    ...     if n <= 2:
+    ...         return 1
+    ...     return fib(self, n-1) + fib(self, n-2)
+    ...
+    >>> Fib = type('Fib', (object,), {'val': 10,
+    ...                               'fib': fib})
+    >>> f = Fib()
+    >>> f.val
+    10
+    >>> f.fib(f.val)
+    55
+
+    # equal to
+    >>> class Fib(object):
+    ...     val = 10
+    ...     def fib(self, n):
+    ...         if n <=2:
+    ...             return 1
+    ...         return self.fib(n-1)+self.fib(n-2)
+    ...
+    >>> f = Fib()
+    >>> f.val
+    10
+    >>> f.fib(f.val)
+    55
+
+
 Callable object
 ---------------
 
