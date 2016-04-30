@@ -14,6 +14,7 @@ Welcome to python-cheatsheet's documentation!
    notes/python-rexp
    notes/python-socket
    notes/python-concurrency
+   notes/python-sqlalchemy
    notes/python-asyncio
    notes/python-tests
    notes/python-capi
