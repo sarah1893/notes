@@ -715,12 +715,14 @@ Object Relational basic query
         print _row.name, _row.fullname, _row.birth
 
     print "\n----> AND:"
-    query = session.query(User).filter(User.name=='ed', User.fullname=='Ed Jones')
+    query = session.query(User).filter(
+            User.name=='ed', User.fullname=='Ed Jones')
     _row = query.first()
     print _row.name, _row.fullname, _row.birth
 
     print "\n----> OR:"
-    query = session.query(User).filter(or_(User.name=='ed', User.name=='wendy'))
+    query = session.query(User).filter(
+            or_(User.name=='ed', User.name=='wendy'))
     for _row in query.all():
         print _row.name, _row.fullname, _row.birth
 
