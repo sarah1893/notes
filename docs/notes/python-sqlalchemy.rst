@@ -619,6 +619,48 @@ Object Relational add data
     finally:
         session.close()
 
+Object Relational relationship
+-------------------------------
+
+.. code-block:: python
+
+    from sqlalchemy import Column, String, Integer, ForeignKey
+    from sqlalchemy.orm import relationship
+    from sqlalchemy.ext.declarative import declarative_base
+
+    Base = declarative_base()
+
+    class User(Base):
+        __tablename__ = 'user'
+        id = Column(Integer, primary_key=True)
+        name = Column(String)
+        addresses = relationship("Address", backref="user")
+
+    class Address(Base):
+        __tablename__ = 'address'
+        id = Column(Integer, primary_key=True)
+        email = Column(String)
+        user_id = Column(Integer, ForeignKey('user.id'))
+
+    u1 = User()
+    a1 = Address()
+    print u1.addresses
+    print a1.user
+
+    u1.addresses.append(a1)
+    print u1.addresses
+    print a1.user
+
+output:
+
+.. code-block:: bash
+
+    []
+    None
+    [<__main__.Address object at 0x10c4edb50>]
+    <__main__.User object at 0x10c4ed810>
+
+
 Object Relational basic query
 ------------------------------
 
