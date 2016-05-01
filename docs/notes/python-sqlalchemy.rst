@@ -269,8 +269,7 @@ Some Table Object Operation
 
     meta = MetaData()
     t = Table('ex_table', meta,
-              Column('id', Integer,
-                     primary_key=True),
+              Column('id', Integer, primary_key=True),
               Column('key', String),
               Column('val', Integer))
     # Get Table Name
@@ -305,8 +304,7 @@ SQL Expression Language
 
     meta = MetaData()
     table = Table('example', meta,
-                  Column('id', Integer,
-                     primary_key=True),
+                  Column('id', Integer, primary_key=True),
                   Column('l_name', String),
                   Column('f_name', String))
     # sql expression binary object 
@@ -452,7 +450,7 @@ join() - Joined Two Tables via "JOIN" Statement
        {'email':'yo@test','name':'Hello'}])
     # join statement
     join_obj = user_t.join(email_t,
-       email_t.c.name == user_t.c.l_name)
+               email_t.c.name == user_t.c.l_name)
     # using select_from
     sel_st = select(
        [user_t.c.l_name, email_t.c.email]).select_from(join_obj)
@@ -619,6 +617,131 @@ Object Relational add data
     finally:
         session.close()
 
+Object Relational update data
+------------------------------
+
+.. code-block:: python
+
+    from datetime import datetime
+
+    from sqlalchemy import create_engine
+    from sqlalchemy import Column, Integer, String, DateTime
+    from sqlalchemy.orm import sessionmaker
+    from sqlalchemy.exc import SQLAlchemyError
+    from sqlalchemy.ext.declarative import declarative_base
+    from sqlalchemy.engine.url import URL
+
+    db_url = {'drivername': 'postgres',
+              'username': 'postgres',
+              'password': 'postgres',
+              'host': '192.168.99.100',
+              'port': 5432}
+    engine = create_engine(URL(**db_url))
+    Base = declarative_base()
+
+    class TestTable(Base):
+        __tablename__ = 'Test Table'
+        id   = Column(Integer, primary_key=True)
+        key  = Column(String, nullable=False)
+        val  = Column(String)
+        date = Column(DateTime, default=datetime.utcnow)
+
+    # create tables
+    Base.metadata.create_all(bind=engine)
+
+    # create session
+    Session = sessionmaker()
+    Session.configure(bind=engine)
+    session = Session()
+
+    try:
+        # add row to database
+        row = TestTable(key="hello", val="world")
+        session.add(row)
+        session.commit()
+
+        # update row to database
+        row = session.query(TestTable).filter(
+              TestTable.key == 'hello').first()
+        print 'original:', row.key, row.val
+        row.key = "Hello"
+        row.val = "World"
+        session.commit()
+
+        # check update correct
+        row = session.query(TestTable).filter(
+              TestTable.key == 'Hello').first()
+        print 'update:', row.key, row.val
+    except SQLAlchemyError as e:
+        print e
+    finally:
+        session.close()
+
+output:
+
+.. code-block:: bash
+
+    $ python sqlalchemy_update.py
+    original: hello world
+    update: Hello World
+
+
+Object Relational delete row
+-----------------------------
+
+.. code-block:: python
+
+    from datetime import datetime
+
+    from sqlalchemy import create_engine
+    from sqlalchemy import Column, Integer, String, DateTime
+    from sqlalchemy.orm import sessionmaker
+    from sqlalchemy.exc import SQLAlchemyError
+    from sqlalchemy.ext.declarative import declarative_base
+    from sqlalchemy.engine.url import URL
+
+
+    db_url = {'drivername': 'postgres',
+            'username': 'postgres',
+            'password': 'postgres',
+            'host': '192.168.99.100',
+            'port': 5432}
+    engine = create_engine(URL(**db_url))
+    Base = declarative_base()
+
+    class TestTable(Base):
+        __tablename__ = 'Test Table'
+        id   = Column(Integer, primary_key=True)
+        key  = Column(String, nullable=False)
+        val  = Column(String)
+        date = Column(DateTime, default=datetime.utcnow)
+
+    # create tables
+    Base.metadata.create_all(bind=engine)
+
+    # create session
+    Session = sessionmaker()
+    Session.configure(bind=engine)
+    session = Session()
+
+    row = TestTable(key='hello', val='world')
+    session.add(row)
+    query = session.query(TestTable).filter(
+            TestTable.key=='hello')
+    print query.first()
+    query.delete()
+    query = session.query(TestTable).filter(
+            TestTable.key=='hello')
+    print query.all()
+
+output:
+
+.. code-block:: bash
+
+    $ python sqlalchemy_delete.py
+    <__main__.TestTable object at 0x104eb8f50>
+    []
+
 Object Relational relationship
 -------------------------------
 
@@ -655,6 +778,7 @@ output:
 
 .. code-block:: bash
 
+    $ python sqlalchemy_relationship.py
     []
     None
     [<__main__.Address object at 0x10c4edb50>]
@@ -845,3 +969,67 @@ output:
     ----> LIKE
     ed Ed Jones
     fred Fred Flinstone
+
+
+Object Relational join two tables
+----------------------------------
+
+.. code-block:: python
+
+    from sqlalchemy import create_engine
+    from sqlalchemy import Column, Integer, String, ForeignKey
+    from sqlalchemy.orm import relationship
+    from sqlalchemy.engine.url import URL
+    from sqlalchemy.orm import sessionmaker
+    from sqlalchemy.ext.declarative import declarative_base
+
+    Base = declarative_base()
+
+    class User(Base):
+        __tablename__ = 'user'
+        id    = Column(Integer, primary_key=True)
+        name  = Column(String)
+        addresses = relationship("Address", backref="user")
+
+    class Address(Base):
+        __tablename__ = 'address'
+        id = Column(Integer, primary_key=True)
+        email = Column(String)
+        user_id = Column(Integer, ForeignKey('user.id'))
+
+    db_url = {'drivername': 'postgres',
+              'username': 'postgres',
+              'password': 'postgres',
+              'host': '192.168.99.100',
+              'port': 5432}
+
+    # create engine
+    engine = create_engine(URL(**db_url))
+
+    # create tables
+    Base.metadata.create_all(bind=engine)
+
+    # create session
+    Session = sessionmaker()
+    Session.configure(bind=engine)
+    session = Session()
+
+    user = User(name='user1')
+    mail1 = Address(email='user1@foo.com')
+    mail2 = Address(email='user1@bar.com')
+    user.addresses.extend([mail1, mail2])
+
+    session.add(user)
+    session.add_all([mail1, mail2])
+    session.commit()
+
+    query = session.query(Address, User).join(User)
+    for _a, _u in query.all(): print _u.name, _a.email
+
+output:
+
+.. code-block:: bash
+
+    $ python sqlalchemy_join.py
+    user1 user1@foo.com
+    user1 user1@bar.com
