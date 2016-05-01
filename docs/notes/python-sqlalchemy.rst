@@ -573,4 +573,51 @@ output:
     [u'table1', u'table2', u'table3']
 
 
+Object Relational add data
+----------------------------
 
+.. code-block:: python
+
+    from datetime import datetime
+
+    from sqlalchemy import create_engine
+    from sqlalchemy import Column, Integer, String, DateTime
+    from sqlalchemy.orm import sessionmaker
+    from sqlalchemy.exc import SQLAlchemyError
+    from sqlalchemy.ext.declarative import declarative_base
+    from sqlalchemy.engine.url import URL
+
+    db_url = {'drivername': 'postgres',
+              'username': 'postgres',
+              'password': 'postgres',
+              'host': '192.168.99.100',
+              'port': 5432}
+    engine = create_engine(URL(**db_url))
+
+    Base = declarative_base()
+
+    class TestTable(Base):
+        __tablename__ = 'Test Table'
+        id   = Column(Integer, primary_key=True)
+        key  = Column(String, nullable=False)
+        val  = Column(String)
+        date = Column(DateTime, default=datetime.utcnow)
+
+    # create tables
+    Base.metadata.create_all(bind=engine)
+
+    # create session
+    Session = sessionmaker()
+    Session.configure(bind=engine)
+    session = Session()
+
+    data = {'a': 5566, 'b': 9527, 'c': 183}
+    try:
+        for _key, _val in data.items():
+            row = TestTable(key=_key, val=_val) 
+            session.add(row)
+        session.commit()
+    except SQLAlchemyError as e:
+        print e
+    finally:
+        session.close()
