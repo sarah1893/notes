@@ -568,6 +568,54 @@ output:
     [u'table1', u'table2', u'table3']
 
 
+Create tables with dynamic columns (Table)
+--------------------------------------------
+
+.. code-block:: python
+
+    from sqlalchemy import create_engine
+    from sqlalchemy import Column, Integer, String
+    from sqlalchemy import Table
+    from sqlalchemy import MetaData
+    from sqlalchemy import inspect
+    from sqlalchemy.engine.url import URL
+
+    db_url = {'drivername': 'postgres',
+              'username': 'postgres',
+              'password': 'postgres',
+              'host': '192.168.99.100',
+              'port': 5432}
+
+    engine = create_engine(URL(**db_url))
+
+    def create_table(name, *cols):
+        meta = MetaData()
+        meta.reflect(bind=engine)
+        if name in meta.tables: return
+
+        table = Table(name, meta, *cols)
+        table.create(engine)
+
+    create_table('Table1',
+                 Column('id', Integer, primary_key=True),
+                 Column('name', String))
+    create_table('Table2',
+                 Column('id', Integer, primary_key=True),
+                 Column('key', String),
+                 Column('val', String))
+
+    inspector = inspect(engine)
+    for _t in inspector.get_table_names(): print _t
+
+output:
+
+.. code-block:: bash
+
+    $ python sqlalchemy_dynamic.py
+    Table1
+    Table2
+
+
 Object Relational add data
 ----------------------------
 
@@ -1033,3 +1081,52 @@ output:
     $ python sqlalchemy_join.py
     user1 user1@foo.com
     user1 user1@bar.com
+
+Create tables with dynamic columns (ORM)
+------------------------------------------
+
+.. code-block:: python
+
+    from sqlalchemy import create_engine
+    from sqlalchemy import Column, Integer, String
+    from sqlalchemy import inspect
+    from sqlalchemy.engine.url import URL
+    from sqlalchemy.ext.declarative import declarative_base
+
+    db_url = {'drivername': 'postgres',
+              'username': 'postgres',
+              'password': 'postgres',
+              'host': '192.168.99.100',
+              'port': 5432}
+
+    engine = create_engine(URL(**db_url))
+    Base = declarative_base()
+
+    def create_table(name, cols):
+        Base.metadata.reflect(engine) 
+        if name in Base.metadata.tables: return
+
+        table = type(name, (Base,), cols)
+        table.__table__.create(bind=engine)
+
+    create_table('Table1', {
+                 '__tablename__': 'Table1',
+                 'id': Column(Integer, primary_key=True),
+                 'name': Column(String)})
+
+    create_table('Table2', {
+                 '__tablename__': 'Table2',
+                 'id': Column(Integer, primary_key=True),
+                 'key': Column(String),
+                 'val': Column(String)})
+
+    inspector = inspect(engine)
+    for _t in inspector.get_table_names(): print _t
+
+output:
+
+.. code-block:: bash
+
+    $ python sqlalchemy_dynamic_orm.py
+    Table1
+    Table2
