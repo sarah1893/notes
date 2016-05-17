@@ -193,3 +193,54 @@ Look around
     '123 4 5 '
     >>> re.sub('(?<!\d{3})', ' ', '12345')
     ' 1 2 345'
+
+
+Match common username or password
+-----------------------------------
+
+.. code-block:: python
+
+    >>> re.match('^[a-zA-Z0-9-_]{3,16}$', 'Foo') is not None
+    True
+    >>> re.match('^\w|[-_]{3,16}$', 'Foo') is not None
+    True
+
+Match hex color value
+----------------------
+
+.. code-block:: python
+
+    <_sre.SRE_Match object at 0x10886f288>
+    >>> re.match('^#?([a-f0-9]{6}|[a-f0-9]{3})$', '#ffffff')
+    <_sre.SRE_Match object at 0x10886f6c0>
+    >>> re.match('^#?([a-f0-9]{6}|[a-f0-9]{3})$', '#fffffh')
+    >>>
+
+
+Match email
+------------
+
+.. code-block:: python
+
+    >>> re.match('^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$',
+    ...          'hello.world@example.com')
+    <_sre.SRE_Match object at 0x1087a4d40>
+
+Match URL
+----------
+
+.. code-block:: python
+
+    >>> exp = re.compile(r'''^(https?:\/\/)? # match http or https
+    ...             ([\da-z\.-]+)            # match domain
+    ...             \.([a-z\.]{2,6})         # match domain
+    ...             ([\/\w \.-]*)\/?$        # match api or file
+    ...             ''', re.X)
+    >>> 
+    >>> exp.match('www.google.com')
+    <_sre.SRE_Match object at 0x10f01ddf8>
+    >>> exp.match('http://www.example')
+    <_sre.SRE_Match object at 0x10f01dd50>
+    >>> exp.match('http://www.example/file.html')
+    <_sre.SRE_Match object at 0x10f01ddf8>
+    >>> exp.match('http://www.example/file!.html')
