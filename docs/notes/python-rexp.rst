@@ -96,6 +96,22 @@ Group Comparison
     >>> m.group(3)
     '2016'
 
+Non capturing group
+---------------------
+
+.. code-block:: python
+
+    # non capturing group
+    >>> url = 'http://stackoverflow.com/'
+    >>> m = re.search('(?:http|ftp)://([^/\r\n]+)(/[^\r\n]*)?', url)
+    >>> m.groups()
+    ('stackoverflow.com', '/')
+
+    # capturing group
+    >>> m = re.search('(http|ftp)://([^/\r\n]+)(/[^\r\n]*)?', url)
+    >>> m.groups()
+    ('http', 'stackoverflow.com', '/')
+
 
 Back Reference
 --------------
@@ -298,3 +314,17 @@ Match Mac address
     ...                      (\1[0-9a-f]{2}){4}$''', re.X)
     >>> exp.match(mac) is not None
     True
+
+
+Match Email
+------------
+
+.. code-block:: python
+
+    >>> exp = re.compile(r'''^([a-zA-Z0-9._%-]+@
+    ...                   [a-zA-Z0-9.-]+
+                          \.[a-zA-Z]{2,4})*$''', re.X)
+    >>> exp.match('hello.world@example.hello.com')
+    <_sre.SRE_Match object at 0x1083efd50>
+    >>> exp.match('hello%world@example.hello.com')
+    <_sre.SRE_Match object at 0x1083efeb8>
