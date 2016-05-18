@@ -244,3 +244,57 @@ Match URL
     >>> exp.match('http://www.example/file.html')
     <_sre.SRE_Match object at 0x10f01ddf8>
     >>> exp.match('http://www.example/file!.html')
+
+
+Match IP address
+----------------
+
++----------------+-----------------------+
+| notation       | description           |
++----------------+-----------------------+
+| (?:...)        | Don't capture group   |
++----------------+-----------------------+
+| 25[0-5]        | Match 251-255 pattern |
++----------------+-----------------------+
+| 2[0-4][0-9]    | Match 200-249 pattern |
++----------------+-----------------------+
+| [1]?[0-9][0-9] | Match 0-199   pattern |
++----------------+-----------------------+
+
+.. code-block:: python
+
+    >>> exp = re.compile(r'''^(?:(?:25[0-5]
+    ...                      |2[0-4][0-9]
+    ...                      |[1]?[0-9][0-9]?)\.){3}
+    ...                      (?:25[0-5]
+    ...                      |2[0-4][0-9]
+    ...                      |[1]?[0-9][0-9]?)$''', re.X)
+    >>> exp.match('192.168.1.1')
+    <_sre.SRE_Match object at 0x108f47ac0>
+    >>> exp.match('255.255.255.0')
+    <_sre.SRE_Match object at 0x108f47b28>
+    >>> exp.match('172.17.0.5')
+    <_sre.SRE_Match object at 0x108f47ac0>
+    >>> exp.match('256.0.0.0') is None
+    True
+
+Match Mac address
+------------------
+
+.. code-block:: python
+
+    >>> import random
+    >>> mac = [random.randint(0x00, 0x7f),
+    ...        random.randint(0x00, 0x7f),
+    ...        random.randint(0x00, 0x7f),
+    ...        random.randint(0x00, 0x7f),
+    ...        random.randint(0x00, 0x7f),
+    ...        random.randint(0x00, 0x7f)]
+    >>> mac = ':'.join(map(lambda x: "%02x" % x, mac))
+    >>> mac
+    '3c:38:51:05:03:1e'
+    >>> exp = re.compile(r'''[0-9a-f]{2}([:])
+    ...                      [0-9a-f]{2}
+    ...                      (\1[0-9a-f]{2}){4}$''', re.X)
+    >>> exp.match(mac) is not None
+    True
