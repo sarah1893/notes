@@ -44,6 +44,7 @@ Compare HTML tags
 .. code-block:: python
 
     # split all string
+    >>> source = "Hello World Ker HAHA"
     >>> re.findall('[\w]+', source)
     ['Hello', 'World', 'Ker', 'HAHA']
 
