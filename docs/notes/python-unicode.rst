@@ -15,9 +15,28 @@ Decode: bytes to unicode code point
 ------------------------------------
 
 .. code-block:: python
+
     >>> s = bytes('Café', encoding='utf-8')
     >>> s.decode('utf-8')
     'Café'
+
+Get unicode code point
+-----------------------
+
+.. code-block:: python
+
+    >>> s = u'Café'
+    >>> for _c in s: print('U+%04x' % ord(_c))
+    ... 
+    U+0043
+    U+0061
+    U+0066
+    U+00e9
+    >>> u = '中文'
+    >>> for _c in u: print('U+%04x' % ord(_c))
+    ... 
+    U+4e2d
+    U+6587
 
 python2 ``str`` is equivalent to byte string
 ---------------------------------------------
