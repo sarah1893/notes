@@ -10,6 +10,7 @@ Welcome to python-cheatsheet's documentation!
    :maxdepth: 2
 
    notes/python-basic
+   notes/python-unicode
    notes/python-generator
    notes/python-rexp
    notes/python-socket
