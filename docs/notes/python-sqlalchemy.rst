@@ -1056,6 +1056,68 @@ output:
     ed Ed Jones
     fred Fred Flinstone
 
+mapper: Map ``Table`` to ``class``
+-----------------------------------
+
+.. code-block:: python
+
+    from sqlalchemy import (
+        create_engine,
+        Table,
+        MetaData,
+        Column,
+        Integer,
+        String,
+        ForeignKey)
+
+    from sqlalchemy.orm import (
+        mapper,
+        relationship,
+        sessionmaker)
+
+    # classical mapping: map "table" to "class"
+    db_url = 'sqlite://'
+    engine = create_engine(db_url)
+
+    meta = MetaData(bind=engine)
+
+    user = Table('User', meta,
+                 Column('id', Integer, primary_key=True),
+                 Column('name', String),
+                 Column('fullname', String),
+                 Column('password', String))
+
+    addr = Table('Address', meta,
+                 Column('id', Integer, primary_key=True),
+                 Column('email', String),
+                 Column('user_id', Integer, ForeignKey('User.id')))
+
+    # map table to class
+    class User(object):
+        def __init__(self, name, fullname, password):
+            self.name = name
+            self.fullname = fullname
+            self.password = password
+
+    class Address(object):
+        def __init__(self, email):
+            self.email = email
+
+    mapper(User, user, properties={
+           'addresses': relationship(Address, backref='user')})
+    mapper(Address, addr)
+
+    # create table
+    meta.create_all()
+
+
+output:
+
+.. code-block: bash
+
+    $ python map_table_class.py
+    Hello HelloWorld ker
+
 
 Object Relational join two tables
 ----------------------------------
