@@ -1110,10 +1110,28 @@ mapper: Map ``Table`` to ``class``
     # create table
     meta.create_all()
 
+    # create session
+    Session = sessionmaker()
+    Session.configure(bind=engine)
+    session = Session()
+
+    u = User(name='Hello', fullname='HelloWorld', password='ker')
+    a = Address(email='hello@hello.com')
+    u.addresses.append(a)
+    try:
+        session.add(u)
+        session.commit()
+
+        # query result
+        u = session.query(User).filter(User.name == 'Hello').first()
+        print u.name, u.fullname, u.password
+
+    finally:
+        session.close()
 
 output:
 
-.. code-block: bash
+.. code-block:: bash
 
     $ python map_table_class.py
     Hello HelloWorld ker
