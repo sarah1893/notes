@@ -1,4 +1,4 @@
-Development Staus
+Development Status
 ===================
 
 .. image:: https://travis-ci.org/crazyguitar/pysheeet.svg?branch=master
