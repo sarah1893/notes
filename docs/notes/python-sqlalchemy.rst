@@ -5,8 +5,8 @@ Set a database URL
 -------------------
 
 .. code-block:: python
-    
-    from sqlalchemy.engine.url import URL 
+
+    from sqlalchemy.engine.url import URL
 
     postgres_db = {'drivername': 'postgres',
                    'username': 'postgres',
@@ -32,7 +32,7 @@ Sqlalchemy Support DBAPI - PEP249
 
 .. code-block:: python
 
-    from sqlalchemy import create_engine 
+    from sqlalchemy import create_engine
 
     db_uri = "sqlite:///db.sqlite"
     engine = create_engine(db_uri)
@@ -40,7 +40,7 @@ Sqlalchemy Support DBAPI - PEP249
     # DBAPI - PEP249
     # create table
     engine.execute('CREATE TABLE "EX1" ('
-                   'id INTEGER NOT NULL,' 
+                   'id INTEGER NOT NULL,'
                    'name VARCHAR, '
                    'PRIMARY KEY (id));')
     # insert a raw
@@ -133,7 +133,7 @@ Reflection - Loading Table from Existing Database
 
     from sqlalchemy import create_engine
     from sqlalchemy import MetaData
-    from sqlalchemy import Table 
+    from sqlalchemy import Table
 
     db_uri = 'sqlite:///db.sqlite'
     engine = create_engine(db_uri)
@@ -163,7 +163,7 @@ Get Table from MetaData
     print metadata.tables
 
     # Get Table
-    ex_table = metadata.tables['Example'] 
+    ex_table = metadata.tables['Example']
     print ex_table
 
 
@@ -238,7 +238,7 @@ Create table with same columns
 
     class TemplateTable(object):
         id   = Column(Integer, primary_key=True)
-        name = Column(String) 
+        name = Column(String)
         age  = Column(Integer)
 
     class DowntownAPeople(TemplateTable, Base):
@@ -247,10 +247,10 @@ Create table with same columns
     class DowntownBPeople(TemplateTable, Base):
         __tablename__ = "downtown_b_people"
 
-    Base.metadata.create_all(bind=engine) 
+    Base.metadata.create_all(bind=engine)
 
     # check table exists
-    ins = inspect(engine) 
+    ins = inspect(engine)
     for _t in ins.get_table_names(): print _t
 
 
@@ -345,7 +345,7 @@ SQL Expression Language
                   Column('id', Integer, primary_key=True),
                   Column('l_name', String),
                   Column('f_name', String))
-    # sql expression binary object 
+    # sql expression binary object
     print repr(table.c.l_name == 'ed')
     # exhbit sql expression
     print str(table.c.l_name == 'ed')
@@ -360,7 +360,7 @@ SQL Expression Language
     # Equal to
     print or_(table.c.id > 5, table.c.id < 2)
 
-    # compare to None produce IS NULL 
+    # compare to None produce IS NULL
     print (table.c.l_name == None)
     # Equal to
     print (table.c.l_name.is_(None))
@@ -390,7 +390,7 @@ insert() - Create an "INSERT" Statement
 
     # create table
     meta = MetaData(engine)
-    table = Table('user', meta, 
+    table = Table('user', meta,
        Column('id', Integer, primary_key=True),
        Column('l_name', String),
        Column('f_name', String))
@@ -429,19 +429,19 @@ select() - Create a "SELECT" Statement
 
     # select * from 'user'
     select_st = select([table]).where(
-       table.c.l_name == 'Hello') 
-    res = conn.execute(select_st) 
+       table.c.l_name == 'Hello')
+    res = conn.execute(select_st)
     for _row in res: print _row
 
     # or equal to
     select_st = table.select().where(
        table.c.l_name == 'Hello')
-    res = conn.execute(select_st) 
+    res = conn.execute(select_st)
     for _row in res: print _row
 
     # combine with "OR"
     select_st = select([
-       table.c.l_name, 
+       table.c.l_name,
        table.c.f_name]).where(or_(
           table.c.l_name == 'Hello',
           table.c.l_name == 'Hi'))
@@ -569,7 +569,7 @@ Create multiple tables at once
     from sqlalchemy import Table
     from sqlalchemy import inspect
     from sqlalchemy import Column, String, Integer
-    from sqlalchemy.engine.url import URL 
+    from sqlalchemy.engine.url import URL
 
     db = {'drivername': 'postgres',
           'username': 'postgres',
@@ -695,7 +695,7 @@ Object Relational add data
     data = {'a': 5566, 'b': 9527, 'c': 183}
     try:
         for _key, _val in data.items():
-            row = TestTable(key=_key, val=_val) 
+            row = TestTable(key=_key, val=_val)
             session.add(row)
         session.commit()
     except SQLAlchemyError as e:
@@ -1200,6 +1200,84 @@ output:
     user1 user1@foo.com
     user1 user1@bar.com
 
+
+join on relationship and group_by count
+----------------------------------------
+
+.. code-block:: python
+
+    from sqlalchemy import (
+        create_engine,
+        Column,
+        String,
+        Integer,
+        ForeignKey,
+        func)
+
+    from sqlalchemy.orm import (
+        relationship,
+        sessionmaker,
+        scoped_session)
+
+    from sqlalchemy.ext.declarative import declarative_base
+
+    db_url = 'sqlite://'
+    engine = create_engine(db_url)
+
+    Base = declarative_base()
+
+    class Parent(Base):
+        __tablename__ = 'parent'
+        id       = Column(Integer, primary_key=True)
+        name     = Column(String)
+        children = relationship('Child', back_populates='parent')
+
+    class Child(Base):
+        __tablename__ = 'child'
+        id        = Column(Integer, primary_key=True)
+        name      = Column(String)
+        parent_id = Column(Integer, ForeignKey('parent.id'))
+        parent    = relationship('Parent', back_populates='children')
+
+    Base.metadata.create_all(bind=engine)
+    Session = scoped_session(sessionmaker(bind=engine))
+
+    p1 = Parent(name="Alice")
+    p2 = Parent(name="Bob")
+
+    c1 = Child(name="foo")
+    c2 = Child(name="bar")
+    c3 = Child(name="ker")
+    c4 = Child(name="cat")
+
+    p1.children.extend([c1, c2, c3])
+    p2.children.append(c4)
+
+    try:
+        Session.add(p1)
+        Session.add(p2)
+        Session.commit()
+
+        # count number of children
+        q = Session.query(Parent, func.count(Child.id))\
+                   .join(Child)\
+                   .group_by(Parent.id)
+
+        # print result
+        for _p, _c in q.all():
+            print 'parent: {}, num_child: {}'.format(_p.name, _c)
+    finally:
+        Session.remove()
+
+output:
+
+.. code-block:: bash
+
+    $ python join_group_by.py
+    parent: Alice, num_child: 3
+    parent: Bob, num_child: 1
+
+
 Create tables with dynamic columns (ORM)
 ------------------------------------------
 
@@ -1221,7 +1299,7 @@ Create tables with dynamic columns (ORM)
     Base = declarative_base()
 
     def create_table(name, cols):
-        Base.metadata.reflect(engine) 
+        Base.metadata.reflect(engine)
         if name in Base.metadata.tables: return
 
         table = type(name, (Base,), cols)
