@@ -1137,6 +1137,71 @@ output:
     Hello HelloWorld ker
 
 
+Get table dynamically
+----------------------
+
+.. code-block:: python
+
+    from sqlalchemy import (
+        create_engine,
+        MetaData,
+        Table,
+        inspect,
+        Column,
+        String,
+        Integer)
+
+    from sqlalchemy.orm import (
+        mapper,
+        scoped_session,
+        sessionmaker)
+
+    db_url = "sqlite://"
+    engine = create_engine(db_url)
+    metadata = MetaData(engine)
+
+    class TableTemp(object):
+        def __init__(self, name):
+            self.name = name
+
+    def get_table(name):
+        if name in metadata.tables:
+            table = metadata.tables[name]
+        else:
+            table = Table(name, metadata,
+                    Column('id', Integer, primary_key=True),
+                    Column('name', String))
+            table.create(engine)
+
+        cls = type(name.title(), (TableTemp,), {})
+        mapper(cls, table)    
+        return cls
+
+    # get table first times
+    t = get_table('Hello')
+
+    # get table secone times
+    t = get_table('Hello')
+
+    Session = scoped_session(sessionmaker(bind=engine))
+    try:
+        Session.add(t(name='foo'))
+        Session.add(t(name='bar'))
+        for _ in Session.query(t).all(): print _.name
+    except Exception as e:
+        Session.rollback()
+    finally:
+        Session.close()
+
+output:
+
+.. code-block:: bash
+
+    $ python get_table.py
+    foo
+    bar
+
+
 Object Relational join two tables
 ----------------------------------
 
