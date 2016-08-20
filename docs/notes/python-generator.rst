@@ -387,6 +387,32 @@ output:
     [1, 2, 3, 4, 5]
     exit scope
 
+
+profile code block
+-------------------
+
+.. code-block:: python
+
+    >>> import time
+    >>> @contextmanager
+    ... def profile(msg):
+    ...     try:
+    ...         s = time.time()
+    ...         yield
+    ...     finally:
+    ...         e = time.time()
+    ...         print('{} cost time: {}'.format(msg, e-s))
+    ... 
+    >>> with profile('block1'):
+    ...     time.sleep(1)
+    ... 
+    block1 cost time: 1.00105595589
+    >>> with profile('block2'):
+    ...     time.sleep(3)
+    ... 
+    block2 cost time: 3.00104284286
+
+
 'yield from' and '__iter__'
 ---------------------------
 
