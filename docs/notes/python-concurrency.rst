@@ -14,7 +14,7 @@ Create a thread via "threading"
     ...     self._id = id
     ...   def run(self):
     ...     print "I am worker %d" % self._id
-    ... 
+    ...
     >>> t1 = Worker(1)
     >>> t2 = Worker(2)
     >>> t1.start(); t2.start()
@@ -24,7 +24,7 @@ Create a thread via "threading"
     # using function could be more flexible
     >>> def Worker(worker_id):
     ...   print "I am worker %d" % worker_id
-    ... 
+    ...
     >>> from threading import Thread
     >>> t1 = Thread(target=Worker, args=(1,))
     >>> t2 = Thread(target=Worker, args=(2,))
@@ -53,14 +53,14 @@ Performance Problem - GIL
     ... def nothread():
     ...   fib(35)
     ...   fib(35)
-    ... 
+    ...
     >>> @profile
     ... def hasthread():
     ...   t1=Thread(target=fib, args=(35,))
     ...   t2=Thread(target=fib, args=(35,))
     ...   t1.start(); t2.start()
     ...   t1.join(); t2.join()
-    ... 
+    ...
     >>> nothread()
     9.51164007187
     >>> hasthread()
@@ -83,19 +83,19 @@ Consumer and Producer
     ...   if n<=2:
     ...     return 1
     ...   return fib(n-1)+fib(n-2)
-    ... 
+    ...
     >>> def producer():
     ...   while True:
     ...     wt = random()*5
     ...     time.sleep(wt)
     ...     q.put((fib,35))
-    ... 
+    ...
     >>> def consumer():
     ...   while True:
     ...     task,arg = q.get()
     ...     print task(arg)
     ...     q.task_done()
-    ... 
+    ...
     >>> t1 = Thread(target=producer)
     >>> t2 = Thread(target=consumer)
     >>> t1.start();t2.start()
@@ -129,16 +129,16 @@ Thread Pool Templeate
           self._q = Queue(num_t)
           # Create Worker Thread
           for _ in range(num_t):
-             Worker(self._q) 
+             Worker(self._q)
        def add_task(self,f,*args,**kwargs):
           self._q.put((f, args, kwargs))
        def wait_complete(self):
           self._q.join()
-          
+
     def fib(n):
        if n <= 2:
           return 1
-       return fib(n-1)+fib(n-2) 
+       return fib(n-1)+fib(n-2)
 
     if __name__ == '__main__':
        pool = ThreadPool()
@@ -170,21 +170,21 @@ Compare with "map" performance
     pool = ThreadPool(10)
     def profile(func):
         def wrapper(*args, **kwargs):
-           print func.__name__ 
-           s = time.time() 
+           print func.__name__
+           s = time.time()
            func(*args, **kwargs)
            e = time.time()
-           print "cost: {0}".format(e-s) 
+           print "cost: {0}".format(e-s)
         return wrapper
 
     @profile
     def pool_map():
-        res = pool.map(lambda x:x**2, 
+        res = pool.map(lambda x:x**2,
                        range(999999))
 
     @profile
     def ordinary_map():
-        res = map(lambda x:x**2, 
+        res = map(lambda x:x**2,
                   range(999999))
 
     pool_map()
@@ -297,7 +297,7 @@ Using RLock
        m.foo(id)
 
     def task2(id):
-       m.ker(id)      
+       m.ker(id)
 
     t1 = Thread(target=task1,args=(1,))
     t2 = Thread(target=task2,args=(2,))
@@ -310,7 +310,7 @@ output:
 
 .. code-block:: console
 
-    $ python monitor.py 
+    $ python monitor.py
     1 in foo
     1 in ker
     2 in ker
@@ -394,7 +394,7 @@ output:
 
 .. code-block:: console
 
-    python event.py 
+    python event.py
     1 wait event
     2 wait event
     3 wait event
@@ -575,6 +575,7 @@ Simple round-robin scheduler
     done
 
 Scheduler with blocking function
+---------------------------------
 
 .. code-block:: python
 
@@ -622,7 +623,7 @@ Scheduler with blocking function
             yield 'recv', sock
             c, a = sock.accept()
             tasks.append(fib_handler(c))
-          
+
     def fib_handler(client):
         while True:
             yield 'recv', client
@@ -639,7 +640,7 @@ Scheduler with blocking function
 
 output: (bash 1)
 
-.. code-block:: console 
+.. code-block:: console
 
     $ nc loalhost 5566
     20
@@ -647,9 +648,9 @@ output: (bash 1)
 
 output: (bash 2)
 
-.. code-block:: console 
+.. code-block:: console
 
-    $ nc localhost 5566 
+    $ nc localhost 5566
     10
     55
 
@@ -671,16 +672,16 @@ PoolExecutor
     ...     res= e.map(fib,[1,2,3,4,5])
     ...     for _ in res:
     ...         print(_, end=' ')
-    ... 
-    1 1 2 3 5 >>> 
+    ...
+    1 1 2 3 5 >>>
     # result is generator?!
     >>> with ThreadPoolExecutor(3) as e:
     ...   res = e.map(fib, [1,2,3])
     ...   inspect.isgenerator(res)
-    ... 
+    ...
     True
 
-    # demo GIL 
+    # demo GIL
     from concurrent import futures
     import time
 
@@ -708,7 +709,7 @@ PoolExecutor
         print("pocess cost: {}".format(e-s))
 
 
-    # bash> python3 -i test.py 
+    # bash> python3 -i test.py
     >>> thread()
     9227465
     9227465
@@ -788,9 +789,9 @@ Future Object
 
 output:
 
-.. code-block:: console 
+.. code-block:: console
 
-    $ python3 -i fut.py 
+    $ python3 -i fut.py
     >>> thread_v1()
     res: 832040
     res: 1346269
@@ -826,7 +827,7 @@ Future error handling
 
 output:
 
-.. code-block:: console 
+.. code-block:: console
 
     $ python -i fut_err.py
     >>> thread_spam()
