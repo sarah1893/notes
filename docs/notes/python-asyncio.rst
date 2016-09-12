@@ -424,6 +424,42 @@ Asynchronous Iterator
     2
     3
 
+What is asynchronous iterator
+------------------------------
+
+.. code-block:: python
+
+    >>> import asyncio
+    >>> class AsyncIter:
+    ...     def __init__(self, it):
+    ...         self._it = iter(it)
+    ...     async def __aiter__(self):
+    ...         return self
+    ...     async def __anext__(self):
+    ...         await asyncio.sleep(1)
+    ...         try:
+    ...             val = next(self._it)
+    ...         except StopIteration:
+    ...             raise StopAsyncIteration
+    ...         return val
+    ...
+    >>> async def foo():
+    ...     _ = [1,2,3]
+    ...     running = True
+    ...     it = AsyncIter(_)
+    ...     while running:
+    ...         try:
+    ...             res = await it.__anext__()
+    ...             print(res)
+    ...         except StopAsyncIteration:
+    ...             running = False
+    ...
+    >>> loop = asyncio.get_event_loop()
+    >>> loop.run_until_complete(loop.create_task(foo()))
+    1
+    2
+    3
+
 Asynchronous context manager
 ----------------------------
 
@@ -454,6 +490,34 @@ Asynchronous context manager
     __anter__
     hello block
     __aexit__
+
+What is asynchronous context manager
+-------------------------------------
+
+..code-block:: python
+
+    >>> import asyncio
+    >>> class AsyncManager:
+    ...     async def __aenter__(self):
+    ...         await asyncio.sleep(5)
+    ...         print("__aenter__")
+    ...     async def __aexit__(self, *exc_info):
+    ...         await asyncio.sleep(3)
+    ...         print("__aexit__")
+    ...
+    >>> async def foo():
+    ...     import sys
+    ...     mgr = AsyncManager()
+    ...     await mgr.__aenter__()
+    ...     print("body")
+    ...     await mgr.__aexit__(*sys.exc_info())
+    ...
+    >>> loop = asyncio.get_event_loop()
+    >>> loop.run_until_complete(loop.create_task(foo()))
+    __aenter__
+    body
+    __aexit__
+
 
 Simple asyncio web server
 -------------------------
