@@ -360,6 +360,113 @@ Event Loop with polling
     loop.run_forever()
 
 
+Transport and Protocol
+-----------------------
+
+.. code-block:: python
+
+    import asyncio
+
+    class EchoProtocol(asyncio.Protocol):
+
+        def connection_made(self, transport):
+            peername = transport.get_extra_info('peername')
+            print('Connection from {}'.format(peername))
+            self.transport = transport
+
+        def data_received(self, data):
+            msg = data.decode()
+            self.transport.write(data)
+
+    loop = asyncio.get_event_loop()
+    coro = loop.create_server(EchoProtocol, 'localhost', 5566)
+    server = loop.run_until_complete(coro)
+
+    try:
+        loop.run_forever()
+    except:
+        loop.run_until_complete(server.wait_closed())
+    finally:
+        loop.close()
+
+output:
+
+.. code-block:: bash
+
+    # console 1
+    $ nc localhost 5566
+    Hello
+    Hello
+
+    # console 2
+    $ nc localhost 5566
+    World
+    World
+
+
+What ``loop.create_server`` do?
+--------------------------------
+
+.. code-block:: python
+
+    import asyncio
+    import socket
+
+    loop = asyncio.get_event_loop()
+
+    async def create_server(loop, protocol_factory, host,
+                            port, *args, **kwargs):
+       sock = socket.socket(socket.AF_INET,
+                            socket.SOCK_STREAM, 0)
+       sock.setsockopt(socket.SOL_SOCKET,
+                       socket.SO_REUSEADDR, 1)
+       sock.setblocking(False)
+       sock.bind((host, port))
+       sock.listen(10)
+       sockets = [sock]
+       server = asyncio.base_events.Server(loop, sockets)
+       loop._start_serving(protocol_factory, sock, None, server)
+
+       return server
+
+    loop.create_server = create_server
+
+    class EchoProtocol(asyncio.Protocol):
+        def connection_made(self, transport):
+            peername = transport.get_extra_info('peername')
+            print('Connection from {}'.format(peername))
+            self.transport = transport
+
+        def data_received(self, data):
+            message = data.decode()
+            self.transport.write(data)
+
+    # Equal to: loop.create_server(EchoProtocol,
+    #                              'localhost', 5566)
+    coro = create_server(loop, EchoProtocol, 'localhost', 5566)
+    server = loop.run_until_complete(coro)
+
+    try:
+        loop.run_forever()
+    finally:
+        server.close()
+        loop.run_until_complete(server.wait_closed())
+        loop.close()
+
+output:
+
+.. code-block:: bash
+
+    # console1
+    $ nc localhost 5566
+    Hello
+    Hello
+
+    # console2
+    $ nc localhost 5566
+    asyncio
+    asyncio
+
 Inline callback
 ---------------
 
