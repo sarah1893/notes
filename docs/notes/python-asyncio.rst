@@ -234,6 +234,24 @@ Patch loop runner ``_run_once``
     >>> loop.close()
 
 
+Put blocking task into Executor
+--------------------------------
+
+.. code-block:: python
+
+    >>> import asyncio
+    >>> from concurrent.futures import ThreadPoolExecutor
+    >>> e = ThreadPoolExecutor()
+    >>> loop = asyncio.get_event_loop()
+    >>> async def read_file(file_):
+    ...     with open(file_) as f:
+    ...         data = await loop.run_in_executor(e, f.read)
+    ...         return data
+
+    >>> task = loop.create_task(read_file('/etc/passwd'))
+    >>> ret = loop.run_until_complete(task)
+
+
 Socket with asyncio
 -------------------
 
