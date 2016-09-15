@@ -203,6 +203,37 @@ What event loop doing? (Without polling)
     Foo 
     Bar
 
+
+Patch loop runner ``_run_once``
+--------------------------------
+
+.. code-block:: python
+
+    >>> import asyncio
+
+    >>> def _run_once(self):
+    ...     num_tasks = len(self._scheduled)
+    ...     print("num tasks in queue: {}".format(num_tasks))
+    ...     super(asyncio.SelectorEventLoop, self)._run_once()
+    ...
+    >>> EventLoop = asyncio.SelectorEventLoop
+    >>> EventLoop._run_once = _run_once
+    >>> loop = EventLoop()
+    >>> asyncio.set_event_loop(loop)
+    >>> async def task(n):
+    ...     await asyncio.sleep(n)
+    ...     print("sleep: {} sec".format(n))
+    ...
+    >>> coro = loop.create_task(task(3))
+    >>> loop.run_until_complete(coro)
+    num tasks in queue: 0
+    num tasks in queue: 1
+    num tasks in queue: 0
+    sleep: 3 sec
+    num tasks in queue: 0
+    >>> loop.close()
+
+
 Socket with asyncio
 -------------------
 
