@@ -204,6 +204,68 @@ What event loop doing? (Without polling)
     Bar
 
 
+Future like object
+--------------------
+
+.. code-block:: python
+
+    >>> import sys
+    >>> PY_35 = sys.version_info >= (3, 5)
+    >>> import asyncio
+    >>> loop = asyncio.get_event_loop()
+    >>> class SlowObj:
+    ...     def __init__(self, n):
+    ...         print("__init__")
+    ...         self._n = n
+    ...     if PY_35:
+    ...         def __await__(self):
+    ...             print("__await__ sleep({})".format(self._n))
+    ...             yield from asyncio.sleep(self._n)
+    ...             print("ok")
+    ...             return self
+    ...
+    >>> async def main():
+    ...     obj = await SlowObj(3)
+    ...
+    >>> loop.run_until_complete(main())
+    __init__
+    __await__ sleep(3)
+    ok
+
+
+Future like object ``__await__`` other task
+--------------------------------------------
+
+.. code-block:: python
+
+    >>> import sys
+    >>> PY_35 = sys.version_info >= (3, 5)
+    >>> import asyncio
+    >>> loop = asyncio.get_event_loop()
+    >>> async def slow_task(n):
+    ...     await asyncio.sleep(n)
+
+    >>> class SlowObj:
+    ...     def __init__(self, n):
+    ...         print("__init__")
+    ...         self._n = n
+    ...     if PY_35:
+    ...         def __await__(self):
+    ...             print("__await__")
+    ...             yield from slow_task(self._n).__await__()
+    ...             yield from asyncio.sleep(self._n)
+    ...             print("ok")
+    ...             return self
+    ...
+    >>> async def main():
+    ...     obj = await SlowObj(1)
+    ...
+    >>> loop.run_until_complete(main())
+    __init__
+    __await__
+    ok
+
+
 Patch loop runner ``_run_once``
 --------------------------------
 
