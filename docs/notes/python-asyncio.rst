@@ -852,6 +852,130 @@ Simple asyncio web server
     # Then open browser with url: localhost:9527
 
 
+Simple HTTPS asyncio web server
+--------------------------------
+
+.. code-block:: python
+
+    import asyncio
+    import socket
+    import ssl
+
+    def make_header():
+        head  = b'HTTP/1.1 200 OK\r\n'
+        head += b'Content-type: text/html\r\n'
+        head += b'\r\n'
+        return head
+
+    def make_body():
+        resp  = b'<html>'
+        resp += b'<h1>Hello SSL</h1>'
+        resp += b'</html>'
+        return resp
+
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    sock.setblocking(False)
+    sock.bind(('localhost' , 4433))
+    sock.listen(10)
+
+    sslctx = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
+    sslctx.load_cert_chain(certfile='./root-ca.crt',
+                           keyfile='./root-ca.key')
+
+
+    def do_handshake(loop, sock, waiter):
+        sock_fd = sock.fileno()
+        try:
+            sock.do_handshake()
+        except ssl.SSLWantReadError:
+            loop.remove_reader(sock_fd)
+            loop.add_reader(sock_fd, do_handshake,
+                            loop, sock, waiter)
+            return
+        except ssl.SSLWantWriteError:
+            loop.remove_writer(sock_fd)
+            loop.add_writer(sock_fd, do_handshake,
+                            loop, sock, waiter)
+            return
+
+        loop.remove_reader(sock_fd)
+        loop.remove_writer(sock_fd)
+        waiter.set_result(None)
+
+
+    def handle_read(loop, conn, waiter):
+        try:
+            req = conn.recv(1024)
+        except ssl.SSLWantReadError:
+            loop.remove_reader(conn.fileno())
+            loop.add_reader(conn.fileno(), handle_read,
+                            loop, conn, waiter)
+            return
+        loop.remove_reader(conn.fileno())
+        waiter.set_result(req)
+
+
+    def handle_write(loop, conn, msg, waiter):
+        try:
+            resp = make_header()
+            resp += make_body()
+            ret = conn.send(resp)
+        except ssl.SSLWantReadError:
+            loop.remove_writer(conn.fileno())
+            loop.add_writer(conn.fileno(), handle_write,
+                            loop, conn, waiter)
+            return
+        loop.remove_writer(conn.fileno())
+        conn.close()
+        waiter.set_result(None)
+
+
+    async def server(loop):
+        while True:
+            conn, addr = await loop.sock_accept(sock)
+            conn.setblocking(False)
+            sslconn = sslctx.wrap_socket(conn,
+                                         server_side=True,
+                                         do_handshake_on_connect=False)
+            # wait SSL handshake
+            waiter = loop.create_future()
+            do_handshake(loop, sslconn, waiter)
+            await waiter
+
+            # wait read request
+            waiter = loop.create_future()
+            handle_read(loop, sslconn, waiter)
+            msg = await waiter
+
+            # wait write response
+            waiter = loop.create_future()
+            handle_write(loop, sslconn, msg, waiter)
+            await waiter
+
+    loop = asyncio.get_event_loop()
+    try:
+        loop.run_until_complete(server(loop))
+    finally:
+        loop.close()
+
+output:
+
+.. code-block:: bash
+
+    # console 1
+
+    $ openssl genrsa -out root-ca.key 2048
+    $ openssl req -x509 -new -nodes -key root-ca.key -days 365 -out root-ca.crt
+    $ python Simple_https_server.py
+
+    # console 2
+
+    $ curl https://localhost:4433 -v          \
+    >      --resolve localhost:4433:127.0.0.1 \
+    >      --cacert ~/test/root-ca.crt
+
+
 Simple asyncio WSGI web server
 ------------------------------
 
