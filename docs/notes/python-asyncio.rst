@@ -774,7 +774,7 @@ Asynchronous context manager
 What is asynchronous context manager
 -------------------------------------
 
-..code-block:: python
+.. code-block:: python
 
     >>> import asyncio
     >>> class AsyncManager:
