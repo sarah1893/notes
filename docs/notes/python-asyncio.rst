@@ -244,7 +244,7 @@ Future like object ``__await__`` other task
     >>> loop = asyncio.get_event_loop()
     >>> async def slow_task(n):
     ...     await asyncio.sleep(n)
-
+    ...
     >>> class SlowObj:
     ...     def __init__(self, n):
     ...         print("__init__")
@@ -272,7 +272,6 @@ Patch loop runner ``_run_once``
 .. code-block:: python
 
     >>> import asyncio
-
     >>> def _run_once(self):
     ...     num_tasks = len(self._scheduled)
     ...     print("num tasks in queue: {}".format(num_tasks))
@@ -602,7 +601,6 @@ What ``loop.create_server`` do?
 
        return server
 
-    loop.create_server = create_server
 
     class EchoProtocol(asyncio.Protocol):
         def connection_made(self, transport):
