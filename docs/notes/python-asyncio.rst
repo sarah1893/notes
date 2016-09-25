@@ -769,6 +769,7 @@ Asynchronous context manager
     hello block
     __aexit__
 
+
 What is asynchronous context manager
 -------------------------------------
 
@@ -795,6 +796,115 @@ What is asynchronous context manager
     __aenter__
     body
     __aexit__
+
+
+What `loop.sock_*` do?
+-----------------------
+
+.. code-block:: python
+
+    import asyncio
+    import socket
+
+    def sock_accept(self, sock, fut=None, registed=False):
+        fd = sock.fileno()
+        if fut is None:
+            fut = self.create_future()
+        if registed:
+            self.remove_reader(fd)
+        try:
+            conn, addr = sock.accept()
+            conn.setblocking(False)
+        except (BlockingIOError, InterruptedError):
+            self.add_reader(fd, self.sock_accept, sock, fut, True)
+        except Exception as e:
+            fut.set_exception(e)
+        else:
+            fut.set_result((conn, addr))
+        return fut
+
+    def sock_recv(self, sock, n , fut=None, registed=False):
+        fd = sock.fileno()
+        if fut is None:
+            fut = self.create_future()
+        if registed:
+            self.remove_reader(fd)
+        try:
+            data = sock.recv(n)
+        except (BlockingIOError, InterruptedError):
+            self.add_reader(fd, self.sock_recv, sock, n ,fut, True)
+        except Exception as e:
+            fut.set_exception(e)
+        else:
+            fut.set_result(data)
+        return fut
+
+    def sock_sendall(self, sock, data, fut=None, registed=False):
+        fd = sock.fileno()
+        if fut is None:
+            fut = self.create_future()
+        if registed:
+            self.remove_reader(fd)
+        try:
+            n = sock.send(data)
+        except (BlockingIOError, InterruptedError):
+            n = 0
+        except Exception as e:
+            fut.set_exception(e)
+            return
+        if n == len(data):
+            fut.set_result(None)
+        else:
+            if n:
+                data = data[n:]
+            self.add_writer(fd, sock, data, fut, True)
+        return fut
+
+    async def handler(loop, conn):
+        while True:
+            msg = await loop.sock_recv(conn, 1024)
+            if msg: await loop.sock_sendall(conn, msg)
+            else: break
+        conn.close()
+
+    async def server(loop):
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        sock.setblocking(False)
+        sock.bind(('localhost', 9527))
+        sock.listen(10)
+
+        while True:
+            conn, addr = await loop.sock_accept(sock)
+            loop.create_task(handler(loop, conn))
+
+    EventLoop = asyncio.SelectorEventLoop
+    EventLoop.sock_accept = sock_accept
+    EventLoop.sock_recv = sock_recv
+    EventLoop.sock_sendall = sock_sendall
+    loop = EventLoop()
+
+    try:
+        loop.run_until_complete(server(loop))
+    except KeyboardInterrupt:
+        pass
+    finally:
+        loop.close()
+
+output:
+
+.. code-block:: bash
+
+    # console 1
+    $ python3 async_sock.py &
+    $ nc localhost 9527
+    Hello
+    Hello
+
+    # console 2
+    $ nc localhost 9527
+    asyncio
+    asyncio
 
 
 Simple asyncio web server
