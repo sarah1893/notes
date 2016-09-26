@@ -38,7 +38,7 @@ Performance Problem - GIL
 .. code-block:: python
 
     # GIL - Global Interpreter Lock
-    # see: Ungerstanging the Python GIL
+    # see: Understanding the Python GIL
     >>> from threading import Thread
     >>> def profile(func):
     ...   def wrapper(*args, **kwargs):
