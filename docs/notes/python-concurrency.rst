@@ -100,7 +100,7 @@ Consumer and Producer
     >>> t2 = Thread(target=consumer)
     >>> t1.start();t2.start()
 
-Thread Pool Templeate
+Thread Pool Template
 ---------------------
 
 .. code-block:: python
@@ -194,7 +194,7 @@ output:
 
 .. code-block:: console
 
-    $ python test_theadpool.py
+    $ python test_threadpool.py
     pool_map
     cost: 0.562669038773
     ordinary_map
