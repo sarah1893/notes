@@ -844,7 +844,7 @@ What `loop.sock_*` do?
         if fut is None:
             fut = self.create_future()
         if registed:
-            self.remove_reader(fd)
+            self.remove_writer(fd)
         try:
             n = sock.send(data)
         except (BlockingIOError, InterruptedError):
@@ -905,6 +905,77 @@ output:
     $ nc localhost 9527
     asyncio
     asyncio
+
+
+Simple asyncio UDP echo server
+--------------------------------
+
+.. code-block:: python
+
+    import asyncio
+    import socket
+
+    loop = asyncio.get_event_loop()
+
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, 0)
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    sock.setblocking(False)
+
+    host = 'localhost'
+    port = 3553
+
+    sock.bind((host, port))
+
+    def recvfrom(loop, sock, n_bytes, fut=None, registed=False):
+        fd = sock.fileno()
+        if fut is None:
+            fut = loop.create_future()
+        if registed:
+            loop.remove_reader(fd)
+
+        try:
+            data, addr = sock.recvfrom(n_bytes)
+        except (BlockingIOError, InterruptedError):
+            loop.add_reader(fd, recvfrom, loop, sock, n_bytes, fut, True)
+        else:
+            fut.set_result((data, addr))
+        return fut
+
+    def sendto(loop, sock, data, addr, fut=None, registed=False):
+        fd = sock.fileno()
+        if fut is None:
+            fut = loop.create_future()
+        if registed:
+            loop.remove_writer(fd)
+        if not data:
+            return
+
+        try:
+            n = sock.sendto(data, addr)
+        except (BlockingIOError, InterruptedError):
+            loop.add_writer(fd, sendto, loop, sock, data, addr, fut, True)
+        else:
+            fut.set_result(n)
+        return fut
+
+    async def udp_server(loop, sock):
+        while True:
+            data, addr = await recvfrom(loop, sock, 1024)
+            n_bytes = await sendto(loop, sock, data, addr)
+
+    try:
+        loop.run_until_complete(udp_server(loop, sock))
+    finally:
+        loop.close()
+
+output:
+
+.. code-block:: bash
+
+    $ python3 udp_server.py
+    $ nc -u localhost 3553
+    Hello UDP
+    Hello UDP
 
 
 Simple asyncio web server
@@ -1075,7 +1146,7 @@ output:
 
     $ openssl genrsa -out root-ca.key 2048
     $ openssl req -x509 -new -nodes -key root-ca.key -days 365 -out root-ca.crt
-    $ python Simple_https_server.py
+    $ python3 Simple_https_server.py
 
     # console 2
 
