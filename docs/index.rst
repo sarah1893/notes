@@ -17,7 +17,6 @@ Welcome to Python cheatsheet!
    notes/python-concurrency
    notes/python-sqlalchemy
    notes/python-asyncio
-   notes/python-network
    notes/python-tests
    notes/python-capi
    notes/python-cstyle
