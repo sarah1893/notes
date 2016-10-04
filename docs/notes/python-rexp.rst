@@ -243,6 +243,16 @@ Match email
     ...          'hello.world@example.com')
     <_sre.SRE_Match object at 0x1087a4d40>
 
+    # or
+
+    >>> exp = re.compile(r'''^([a-zA-Z0-9._%-]+@
+    ...                   [a-zA-Z0-9.-]+
+                          \.[a-zA-Z]{2,4})*$''', re.X)
+    >>> exp.match('hello.world@example.hello.com')
+    <_sre.SRE_Match object at 0x1083efd50>
+    >>> exp.match('hello%world@example.hello.com')
+    <_sre.SRE_Match object at 0x1083efeb8>
+
 Match URL
 ----------
 
@@ -317,15 +327,33 @@ Match Mac address
     True
 
 
-Match Email
-------------
+Lexer
+------
 
 .. code-block:: python
 
-    >>> exp = re.compile(r'''^([a-zA-Z0-9._%-]+@
-    ...                   [a-zA-Z0-9.-]+
-                          \.[a-zA-Z]{2,4})*$''', re.X)
-    >>> exp.match('hello.world@example.hello.com')
-    <_sre.SRE_Match object at 0x1083efd50>
-    >>> exp.match('hello%world@example.hello.com')
-    <_sre.SRE_Match object at 0x1083efeb8>
+    >>> import re
+    >>> from collections import namedtuple
+    >>> tokens = [r'(?P<NUMBER>\d+)',
+    ...           r'(?P<PLUS>\+)',
+    ...           r'(?P<MINUS>-)',
+    ...           r'(?P<TIMES>\*)',
+    ...           r'(?P<DIVIDE>/)',
+    ...           r'(?P<WS>)\s+']
+    >>> lex = re.compile('|'.join(tokens))
+    >>> Token = namedtuple('Token', ['type', 'value'])
+    >>> def tokenize(text):
+    ...     scan = lex.scanner(text)
+    ...     return (Token(m.lastgroup, m.group())
+    ...         for m in iter(scan.match, None) if m.lastgroup != 'WS')
+    ...
+    >>> for _t in tokenize('9 + 5 * 2 - 7'):
+    ...     print(_t)
+    ...
+    Token(type='NUMBER', value='9')
+    Token(type='PLUS', value='+')
+    Token(type='NUMBER', value='5')
+    Token(type='TIMES', value='*')
+    Token(type='NUMBER', value='2')
+    Token(type='MINUS', value='-')
+    Token(type='NUMBER', value='7')
