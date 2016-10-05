@@ -339,7 +339,7 @@ Lexer
     ...           r'(?P<MINUS>-)',
     ...           r'(?P<TIMES>\*)',
     ...           r'(?P<DIVIDE>/)',
-    ...           r'(?P<WS>)\s+']
+    ...           r'(?P<WS>\s+)']
     >>> lex = re.compile('|'.join(tokens))
     >>> Token = namedtuple('Token', ['type', 'value'])
     >>> def tokenize(text):
