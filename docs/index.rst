@@ -14,6 +14,7 @@ Welcome to Python cheatsheet!
    notes/python-generator
    notes/python-rexp
    notes/python-socket
+   notes/python-crypto
    notes/python-concurrency
    notes/python-sqlalchemy
    notes/python-asyncio
