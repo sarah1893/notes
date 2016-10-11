@@ -168,15 +168,17 @@ html_static_path = ['_static']
 html_sidebars = {
     'index': [
         'sidebarintro.html',
+        'link.html',
         'relations.html',
         'github.html',
         'searchbox.html'
     ],
     '**': [
         'sidebarintro.html',
+        'link.html',
+        'github.html',
         'localtoc.html',
         'relations.html',
-        'github.html',
         'searchbox.html'
     ]
 }
