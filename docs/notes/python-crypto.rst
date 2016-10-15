@@ -129,3 +129,37 @@ generate RSA keyfile without passphrase
     ...     encoding=serialization.Encoding.PEM,
     ...     format=serialization.PrivateFormat.TraditionalOpenSSL,
     ...     encryption_algorithm=serialization.NoEncryption()))
+
+
+HMAC - check integrity of a message
+-------------------------------------
+
+.. code-block:: python
+
+    >>> import socket
+    >>> import hmac
+    >>> import hashlib
+    >>> secret_key = b"Alice & Bob secret key"
+    >>> def verify(digest, msg):
+    ...     h = hmac.new(secret_key, msg, hashlib.sha256)
+    ...     if h.digest() != digest:
+    ...         raise ValueError("Check integrity fail")
+    ...
+    >>> alice_msg = b"Hello Bob"
+    >>> h = hmac.new(secret_key, alice_msg, hashlib.sha256)
+    >>> alice_digest = h.digest()
+    >>> alice, bob = socket.socketpair()
+    >>> _ = alice.send(alice_msg)    # Alice send msg to Bob
+    >>> msg = bob.recv(1024)         # Bob recv msg from Alice
+    >>> _ = alice.send(alice_digest) # Alice send digest to Bob
+    >>> digest = bob.recv(1024)      # Bob recv digest from Alice
+    >>> verify(digest, msg)          # Bob check msg integrity
+    >>>
+    >>> # if message be modified by someone, check integrity fail
+    >>>
+    >>> verify(digest, b"Hello Attack")
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+      File "<stdin>", line 4, in verify
+    ValueError: Check integrity fail
+    Check integrity fail
