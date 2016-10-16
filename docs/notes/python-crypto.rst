@@ -154,12 +154,48 @@ HMAC - check integrity of a message
     >>> _ = alice.send(alice_digest) # Alice send digest to Bob
     >>> digest = bob.recv(1024)      # Bob recv digest from Alice
     >>> verify(digest, msg)          # Bob check msg integrity
-    >>>
     >>> # if message be modified by someone, check integrity fail
-    >>>
     >>> verify(digest, b"Hello Attack")
     Traceback (most recent call last):
       File "<stdin>", line 1, in <module>
       File "<stdin>", line 4, in verify
     ValueError: Check integrity fail
     Check integrity fail
+
+
+Simple Diffie-Hellman key exchange
+------------------------------------
+
+.. code-block:: python
+
+    """
+    p (public know)
+    n (public know)
+    Alice                               Bob
+
+    alice_y = 23                        bob_y = 16
+    alice_x = (n ** alice_y) % p  --->
+                                  <---  bob_x = (n ** bob_y) % p
+    k = (bob_x ** alice_y) %p           k = (alice_x ** bob_y) % p
+    """
+
+    >>> import socket
+    >>> alice, bob = socket.socketpair()
+    >>> p = 353       # public know
+    >>> n = 3         # public know
+    >>> alice_y = 23  # only alice know
+    >>> bob_y = 16    # only bob know
+    >>> alice_x = (n ** alice_y) % p
+    >>> num_bytes = alice.send(alice_x.to_bytes(4, 'big'))
+    >>> msg = bob.recv(1024)
+    >>> bob_recv_x = int.from_bytes(msg, 'big')
+    >>> bob_x = (n ** bob_y) % p
+    >>> num_bytes = bob.send(bob_x.to_bytes(4, 'big'))
+    >>> msg = alice.recv(1024)
+    >>> alice_recv_x = int.from_bytes(msg, 'big')
+    >>> alice_key = (alice_recv_x ** alice_y) % p
+    >>> bob_key = (bob_recv_x ** bob_y) % p
+    >>> alice_key
+    136
+    >>> bob_key
+    136
