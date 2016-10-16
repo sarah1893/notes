@@ -199,3 +199,104 @@ Simple Diffie-Hellman key exchange
     136
     >>> bob_key
     136
+
+
+AES CBC mode encrypt and decrypt
+----------------------------------
+
+.. code-block:: python
+
+    import os
+    from cryptography.hazmat.primitives import padding
+    from cryptography.hazmat.backends import default_backend
+    from cryptography.hazmat.primitives.ciphers import (
+            Cipher,
+            algorithms,
+            modes)
+
+    backend = default_backend()
+    key = os.urandom(32)
+    iv = os.urandom(16)
+
+    cipher = Cipher(algorithms.AES(key),
+                    modes.CBC(iv),
+                    backend=backend)
+
+    # PS. CBC mode need padding
+
+    def encrypt(p_text, cipher):
+        # add padding to plain text
+        padder = padding.PKCS7(128).padder() # 128 bit
+        text = padder.update(p_text) + padder.finalize()
+
+        # encrypt plain text
+        encryptor = cipher.encryptor()
+        c_text = encryptor.update(text) + encryptor.finalize()
+        return c_text
+
+    def decrypt(c_text, cipher):
+        # decrypt plain text with padding
+        decryptor = cipher.decryptor()
+        text = decryptor.update(c_text) + decryptor.finalize()
+
+        # remove padding
+        unpadder = padding.PKCS7(128).unpadder() # 128 bit
+        p_text = unpadder.update(text) + unpadder.finalize()
+        return p_text
+
+    text = b"Hello Encrypt"
+    c_text = encrypt(text, cipher)
+    print(c_text)
+    p_text = decrypt(c_text, cipher)
+    print(p_text)
+
+output:
+
+.. code-block:: bash
+
+    $ python3 aes_cbc.py
+    b',n\xcb\xd3\x95\xfayvX\xa6q\\\x19\xdb\x12C'
+    b'Hello Encrypt'
+
+
+AES CTR mode encrypt and decrypt
+---------------------------------
+
+.. code-block:: python
+
+    >>> import os
+    >>> from cryptography.hazmat.backends import default_backend
+    >>> from cryptography.hazmat.primitives.ciphers import (
+    ... Cipher,
+    ... algorithms,
+    ... modes)
+    >>> backend = default_backend()
+    >>> key = os.urandom(32)
+    >>> nonce = os.urandom(16)
+    >>> # CTR mode does not require padding
+    >>> cipher = Cipher(algorithms.AES(key),
+    ...                 modes.CTR(nonce),
+    ...                 backend=backend)
+    >>> encryptor = cipher.encryptor()
+    >>> p_text = b"Hello Encrypt"
+    >>> ct = encryptor.update(p_text) + encryptor.finalize()
+    >>> ct
+    b'o\xb3;\x079\xde\x86@\xec^o\x1f\x9f'
+    >>> decryptor = cipher.decryptor()
+    >>> pt = decryptor.update(ct) + decryptor.finalize()
+    >>> pt
+    b'Hello Encrypt'
+
+Require padding or not
+~~~~~~~~~~~~~~~~~~~~~~~
+
+================================   ===================
+   mode                             require padding
+================================   ===================
+  CBC(initialization_vector)            YES
+  CTR(nonce)                            NO
+  OFB(initialization_vector)            NO
+  CFB(initialization_vector)            NO
+  CFB8(initialization_vector)           NO
+  GCM(initialization_vector)            NO
+================================   ===================
