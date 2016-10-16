@@ -162,6 +162,67 @@ HMAC - check integrity of a message
     ValueError: Check integrity fail
     Check integrity fail
 
+Using DSA to proof of identity
+--------------------------------
+
+.. code-block:: python
+
+    import socket
+
+    from cryptography.exceptions import InvalidSignature
+    from cryptography.hazmat.backends import default_backend
+    from cryptography.hazmat.primitives import hashes
+    from cryptography.hazmat.primitives.asymmetric import dsa
+
+    alice, bob = socket.socketpair()
+
+    def gen_dsa_key():
+        private_key = dsa.generate_private_key(
+            key_size=2048, backend=default_backend())
+        return private_key, private_key.public_key()
+
+
+    def sign_data(data, private_key):
+        signature = private_key.sign(data, hashes.SHA256())
+        return signature
+
+
+    def verify_data(data, signature, public_key):
+        try:
+            public_key.verify(signature, data, hashes.SHA256())
+        except InvalidSignature:
+            print("recv msg: {} not trust!".format(data))
+        else:
+            print("check msg: {} success!".format(data))
+
+
+    # generate alice private & public key
+    alice_private_key, alice_public_key = gen_dsa_key()
+
+    # alice send message to bob, then bob recv
+    alice_msg = b"Hello Bob"
+    b = alice.send(alice_msg)
+    bob_recv_msg = bob.recv(1024)
+
+    # alice send signature to bob, then bob recv
+    signature = sign_data(alice_msg, alice_private_key)
+    b = alice.send(signature)
+    bob_recv_signature = bob.recv(1024)
+
+    # bob check message recv from alice
+    verify_data(bob_recv_msg, bob_recv_signature, alice_public_key)
+
+    # attacker modify the msg will make the msg check fail
+    verify_data(b"I'm attacker!", bob_recv_signature, alice_public_key)
+
+output:
+
+.. code-block:: bash
+
+    $ python3 test_dsa.py
+    check msg: b'Hello Bob' success!
+    recv msg: b"I'm attacker!" not trust!
+
 
 Simple Diffie-Hellman key exchange
 ------------------------------------
