@@ -195,7 +195,7 @@ What event loop doing? (Without polling)
             asyncio.wait(tasks))
     loop.close()
 
- output:
+output:
 
 .. code-block:: console
 
