@@ -168,12 +168,12 @@ What event loop doing? (Without polling)
             """Run task at once"""
             ntodo = len(self._ready)
             for i in range(ntodo):
-                t, a = self._ready.popleft() 
+                t, a = self._ready.popleft()
                 t(*a)
 
         def stop(self):
             self._stopping = True
-            
+
         def close(self):
             self._ready.clear()
 
@@ -200,8 +200,72 @@ output:
 .. code-block:: console
 
     $ python test.py
-    Foo 
+    Foo
     Bar
+
+
+What ``asyncio.wait`` doing?
+-----------------------------
+
+.. code-block:: python
+
+    import asyncio
+
+    async def wait(fs, loop=None):
+        fs = {asyncio.ensure_future(_) for _ in set(fs)}
+        if loop is None:
+            loop = asyncio.get_event_loop()
+
+        waiter = loop.create_future()
+        counter = len(fs)
+
+        def _on_complete(f):
+            nonlocal counter
+            counter -= 1
+            if counter <= 0 and not waiter.done():
+                 waiter.set_result(None)
+
+        for f in fs:
+            f.add_done_callback(_on_complete)
+
+        # wait all tasks done
+        await waiter
+
+        done, pending = set(), set()
+        for f in fs:
+            f.remove_done_callback(_on_complete)
+            if f.done():
+                done.add(f)
+            else:
+                pending.add(f)
+        return done, pending
+
+    async def slow_task(n):
+        await asyncio.sleep(n)
+        print('sleep "{}" sec'.format(n))
+
+    loop = asyncio.get_event_loop()
+
+    try:
+        print("---> wait")
+        loop.run_until_complete(
+                wait([slow_task(_) for _ in range(1,3)]))
+        print("---> asyncio.wait")
+        loop.run_until_complete(
+                asyncio.wait([slow_task(_) for _ in range(1,3)]))
+    finally:
+        loop.close()
+
+output:
+
+.. code-block:: bash
+
+    ---> wait
+    sleep "1" sec
+    sleep "2" sec
+    ---> asyncio.wait
+    sleep "1" sec
+    sleep "2" sec
 
 
 Future like object
@@ -353,7 +417,7 @@ output: (bash 1)
 
     $ nc localhost 9527
     Hello
-    Hello 
+    Hello
 
 output: (bash 2)
 
@@ -361,7 +425,7 @@ output: (bash 2)
 
     $ nc localhost 9527
     World
-    World 
+    World
 
 
 Event Loop with polling
@@ -389,7 +453,7 @@ Event Loop with polling
         """Simple loop prototype"""
 
         def __init__(self):
-            self.ready = deque() 
+            self.ready = deque()
             self.selector = selectors.DefaultSelector()
 
         @asyncio.coroutine
@@ -404,7 +468,7 @@ Event Loop with polling
 
         @asyncio.coroutine
         def sock_sendall(self, c, m):
-            while m: 
+            while m:
                 yield from write_wait(c)
                 nsent = c.send(m)
                 m = m[nsent:]
@@ -647,15 +711,15 @@ Inline callback
     >>> async def foo():
     ...     await asyncio.sleep(1)
     ...     return "foo done"
-    ... 
+    ...
     >>> async def bar():
     ...     await asyncio.sleep(.5)
     ...     return "bar done"
-    ... 
+    ...
     >>> async def ker():
     ...     await asyncio.sleep(3)
     ...     return "ker done"
-    ... 
+    ...
     >>> async def task():
     ...     res = await foo()
     ...     print(res)
@@ -663,7 +727,7 @@ Inline callback
     ...     print(res)
     ...     res = await ker()
     ...     print(res)
-    ... 
+    ...
     >>> loop = asyncio.get_event_loop()
     >>> loop.run_until_complete(task())
     foo done
@@ -695,7 +759,7 @@ Asynchronous Iterator
     ...     it = [1,2,3]
     ...     async for _ in AsyncIter(it):
     ...         print(_)
-    ... 
+    ...
     >>> loop = asyncio.get_event_loop()
     >>> loop.run_until_complete(foo())
     1
@@ -758,7 +822,7 @@ Asynchronous context manager
     >>> async def hello():
     ...     async with AsyncCtxMgr() as m:
     ...         print("hello block")
-    ... 
+    ...
     >>> async def world():
     ...     print("world block")
     ...
@@ -997,8 +1061,8 @@ Simple asyncio web server
     loop = asyncio.get_event_loop()
 
     def make_header():
-        header  = b"HTTP/1.1 200 OK\r\n" 
-        header += b"Content-Type: text/html\r\n" 
+        header  = b"HTTP/1.1 200 OK\r\n"
+        header += b"Content-Type: text/html\r\n"
         header += b"\r\n"
         return header
 
@@ -1187,7 +1251,7 @@ Simple asyncio WSGI web server
             self._header = []
 
         def parse_request(self, req):
-            """ HTTP Request Format: 
+            """ HTTP Request Format:
 
             GET /hello.htm HTTP/1.1\r\n
             Accept-Language: en-us\r\n
@@ -1215,8 +1279,8 @@ Simple asyncio WSGI web server
             # Required CGI variables
             env['REQUEST_METHOD']    = method    # GET
             env['PATH_INFO']         = path      # /hello
-            env['SERVER_NAME']       = host      # localhost 
-            env['SERVER_PORT']       = str(port) # 9527 
+            env['SERVER_NAME']       = host      # localhost
+            env['SERVER_PORT']       = str(port) # 9527
             return env
 
         def start_response(self, status, resp_header, exc_info=None):
