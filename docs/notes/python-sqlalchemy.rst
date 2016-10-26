@@ -1,4 +1,4 @@
-Python SQLAlchemy Chatsheet
+Python SQLAlchemy Cheatsheet
 =============================
 
 Set a database URL
