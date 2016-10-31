@@ -307,6 +307,52 @@ output:
     Hello
     Hello
 
+
+Simple duplex processes communication
+---------------------------------------
+
+.. code-block:: python
+
+    import os
+    import socket
+
+    child, parent = socket.socketpair()
+    pid = os.fork()
+    try:
+
+        if pid == 0:
+            print('chlid pid: {}'.format(os.getpid()))
+
+            child.send(b'Hello Parent')
+            msg = child.recv(1024)
+            print('p[{}] ---> c[{}]: {}'.format(
+                os.getppid(), os.getpid(), msg))
+        else:
+            print('parent pid: {}'.format(os.getpid()))
+
+            # simple echo server (parent)
+            msg = parent.recv(1024)
+            print('c[{}] ---> p[{}]: {}'.format(
+                    pid, os.getpid(), msg))
+            parent.send(msg)
+
+    except KeyboardInterrupt:
+        pass
+    finally:
+        child.close()
+        parent.close()
+
+output:
+
+.. code-block:: bash
+
+    $ python3 socketpair_demo.py
+    parent pid: 9497
+    chlid pid: 9498
+    c[9498] ---> p[9497]: b'Hello Parent'
+    p[9497] ---> c[9498]: b'Hello Parent'
+
+
 Simple Asynchronous TCP Server - Thread
 ---------------------------------------
 
