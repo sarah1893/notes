@@ -1391,3 +1391,56 @@ output:
     $ python sqlalchemy_dynamic_orm.py
     Table1
     Table2
+
+
+Close database connection
+--------------------------
+
+.. warning::
+
+    Be careful. Close *session* does not mean close database connection.
+    SQLAlchemy *session* generally represents the *transactions*, not connections.
+
+.. code-block:: python
+
+    from sqlalchemy import (
+        create_engine,
+        event,
+        Column,
+        Integer)
+
+    from sqlalchemy.orm import sessionmaker
+    from sqlalchemy.ext.declarative import declarative_base
+
+    engine = create_engine('sqlite://')
+    base = declarative_base()
+
+    @event.listens_for(engine, 'engine_disposed')
+    def receive_engine_disposed(engine):
+        print("engine dispose")
+
+    class Table(base):
+        __tablename__ = 'example table'
+        id = Column(Integer, primary_key=True)
+
+    base.metadata.create_all(bind=engine)
+    session = sessionmaker(bind=engine)()
+
+    try:
+        try:
+            row = Table()
+            session.add(row)
+        except Exception as e:
+            session.rollback()
+            raise
+        finally:
+            session.close()
+    finally:
+        engine.dispose()
+
+output:
+
+.. code-block:: bash
+
+    $ python db_dispose.py
+    engine dispose
