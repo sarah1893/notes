@@ -703,8 +703,8 @@ Using @contextmanager
     from contextlib import contextmanager
 
     @contextmanager
-    def opening(filename):
-       f = open(filename)
+    def opening(filename, mode='r'):
+       f = open(filename, mode)
        try:
           yield f
        finally:
