@@ -157,6 +157,7 @@ Get function/class name
     >>> def exfun():
     ...   pass
     ...
+    >>> ex = excls()
     >>> ex.__class__.__name__
     'excls'
     >>> exfun.__name__
