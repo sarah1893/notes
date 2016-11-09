@@ -679,7 +679,7 @@ Context Manager - "with" statement
             return self.sock
 
         def __exit__(self,*exc_info):
-            if exc_ty is not None:
+            if exc_info[0] is not None:
                 import traceback
                 traceback.print_exception(*exc_info)
             self.sock.close()
@@ -749,10 +749,10 @@ Property - Managed attributes
         raise TypeError("Expect int")
     TypeError: Expect int
 
-Computed attribures - Using property
+Computed attributes - Using property
 ------------------------------------
 
-Concept: Attribure's value is not store in memory. Computing the value only 
+Concept: Attribute's value is not store in memory. Computing the value only 
 when we need.
 
 .. code-block:: python
