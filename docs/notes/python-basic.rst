@@ -80,7 +80,7 @@ Check, Get, Set attribute
 
 .. code-block:: python
 
-    >>> class example(object):
+    >>> class Example(object):
     ...   def __init__(self):
     ...     self.name = "ex"
     ...   def printex(self):
@@ -89,7 +89,7 @@ Check, Get, Set attribute
 
     # Check object has attributes
     # hasattr(obj, 'attr')
-    >>> ex = example()
+    >>> ex = Example()
     >>> hasattr(ex,"name")
     True
     >>> hasattr(ex,"printex")
