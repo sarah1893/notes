@@ -553,7 +553,7 @@ profile code block
     ...         while True:
     ...             yield n
     ...             n += 1
-    ...     def __reversed(self):
+    ...     def __reversed__(self):
     ...         n = 9527
     ...         while True:
     ...            yield n 
