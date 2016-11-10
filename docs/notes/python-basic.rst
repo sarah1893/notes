@@ -113,13 +113,13 @@ Check inheritance
 
 .. code-block:: python
 
-    >>> class example(object):
+    >>> class Example(object):
     ...   def __init__(self):
     ...     self.name = "ex"
     ...   def printex(self):
     ...     print "This is an example"
     ... 
-    >>> issubclass(example,object)
+    >>> issubclass(Example, object)
     True
 
 Check all global variables
