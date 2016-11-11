@@ -788,7 +788,7 @@ Using @contextmanager
        finally:
           f.close()
 
-    with opening('example.txt','r') as fd:
+    with opening('example.txt') as fd:
        fd.read()
 
 Using "with" statement open file
@@ -804,28 +804,47 @@ Property - Managed attributes
 
 .. code-block:: python
 
-    >>> class example(object):
-    ...     def __init__(self,value):
+    >>> class Example(object):
+    ...     def __init__(self, value):
     ...        self._val = value
     ...     @property
     ...     def val(self):
     ...         return self._val
     ...     @val.setter
-    ...     def val(self,value):
-    ...         if not isintance(value,int):
-    ...             raise TypeError("Expect int")
+    ...     def val(self, value):
+    ...         if not isintance(value, int):
+    ...             raise TypeError("Expected int")
     ...         self._val = value
     ...     @val.deleter
     ...     def val(self):
     ...         del self._val
     ...
-    >>> ex = example(123)
+    >>> ex = Example(123)
     >>> ex.val = "str"
     Traceback (most recent call last):
       File "", line 1, in
       File "test.py", line 12, in val
-        raise TypeError("Expect int")
-    TypeError: Expect int
+        raise TypeError("Expected int")
+    TypeError: Expected int
+
+    # equivalent to
+    >>> class Example(object):
+    ...     def __init__(self, value):
+    ...        self._val = value
+    ...
+    ...     def _val_getter(self):
+    ...         return self._val
+    ...
+    ...     def _val_setter(self, value):
+    ...         if not isintance(value, int):
+    ...             raise TypeError("Expected int")
+    ...         self._val = value
+    ...
+    ...     def _val_deleter(self):
+    ...         del self._val
+    ...
+    ...     val = property(fget=_val_getter, fset=_val_setter, fdel=_val_deleter, doc=None)
+    ...
 
 Computed attributes - Using property
 ------------------------------------
@@ -835,12 +854,12 @@ when we need.
 
 .. code-block:: python
 
-    >>> class example(object):
+    >>> class Example(object):
     ...   @property
     ...   def square3(self):
     ...     return 2**3
     ...
-    >>> ex = example()
+    >>> ex = Example()
     >>> ex.square3
     8
 
@@ -850,32 +869,40 @@ Descriptor - manage attributes
 .. code-block:: python
 
     >>> class Integer(object):
-    ...   def __init__(self,name):
+    ...   def __init__(self, name):
     ...     self._name = name
-    ...   def __get__(self,inst,cls):
+    ...   def __get__(self, inst, cls):
     ...     if inst is None:
     ...       return self
     ...     else:
     ...       return inst.__dict__[self._name]
-    ...   def __set__(self,inst,value):
-    ...     if not isinstance(value,int):
-    ...       raise TypeError("Expected INT")
+    ...   def __set__(self, inst, value):
+    ...     if not isinstance(value, int):
+    ...       raise TypeError("Expected int")
     ...     inst.__dict__[self._name] = value
     ...   def __delete__(self,inst):
     ...     del inst.__dict__[self._name]
     ...
-    >>> class example(object):
+    >>> class Example(object):
     ...   x = Integer('x')
-    ...   def __init__(self,val):
+    ...   def __init__(self, val):
     ...     self.x = val
     ...
-    >>> ex = example(1)
-    >>> ex = example("str")
+    >>> ex1 = Example(1)
+    >>> ex1.x
+    1
+    >>> ex2 = Example("str")
     Traceback (most recent call last):
       File "<stdin>", line 1, in <module>
       File "<stdin>", line 4, in __init__
       File "<stdin>", line 11, in __set__
     TypeError: Expected an int
+    >>> ex3 = Example(3)
+    >>> hasattr(ex3, 'x')
+    True
+    >>> del ex3.x
+    >>> hasattr(ex3, 'x')
+    False
 
 @staticmethod, @classmethod
 ---------------------------
