@@ -885,8 +885,7 @@ Abstract method - Metaclass
 .. code-block:: python
 
     # usually using in define methods but not implement
-    from abc import ABCMeta, abstractmethod
-
+    >>> from abc import ABCMeta, abstractmethod
     >>> class base(object):
     ...   __metaclass__ = ABCMeta
     ...   @abstractmethod
