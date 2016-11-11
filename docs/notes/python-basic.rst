@@ -80,7 +80,7 @@ Check, Get, Set attribute
 
 .. code-block:: python
 
-    >>> class example(object):
+    >>> class Example(object):
     ...   def __init__(self):
     ...     self.name = "ex"
     ...   def printex(self):
@@ -89,7 +89,7 @@ Check, Get, Set attribute
 
     # Check object has attributes
     # hasattr(obj, 'attr')
-    >>> ex = example()
+    >>> ex = Example()
     >>> hasattr(ex,"name")
     True
     >>> hasattr(ex,"printex")
@@ -113,13 +113,13 @@ Check inheritance
 
 .. code-block:: python
 
-    >>> class example(object):
+    >>> class Example(object):
     ...   def __init__(self):
     ...     self.name = "ex"
     ...   def printex(self):
-    ...     print "This is an example"
-    ...
-    >>> issubclass(example,object)
+    ...     print "This is an Example"
+    ... 
+    >>> issubclass(Example, object)
     True
 
 Check all global variables
@@ -369,48 +369,49 @@ Emulating a list
 
 .. code-block:: python
 
-    >>> class emulist(object):
-    ...   def __init__(self,list_):
+    >>> class EmuList(object):
+    ...   def __init__(self, list_):
     ...     self._list = list_
     ...   def __repr__(self):
-    ...     return "emulist: "+str(self._list)
-    ...   def append(self,item):
+    ...     return "EmuList: " + str(self._list)
+    ...   def append(self, item):
     ...     self._list.append(item)
-    ...   def remove(self,item):
+    ...   def remove(self, item):
     ...     self._list.remove(item)
     ...   def __len__(self):
     ...     return len(self._list)
-    ...   def __getitem__(self,sliced):
+    ...   def __getitem__(self, sliced):
     ...     return self._list[sliced]
-    ...   def __setitem__(self,sliced,val):
+    ...   def __setitem__(self, sliced, val):
     ...     self._list[sliced] = val
-    ...   def __delitem__(self,sliced):
+    ...   def __delitem__(self, sliced):
     ...     del self._list[sliced]
-    ...   def __contains__(self,item):
+    ...   def __contains__(self, item):
     ...     return item in self._list
     ...   def __iter__(self):
     ...     return iter(self._list)
     ...
-    >>> emul = emulist(range(5))
+    >>> emul = EmuList(range(5))
     >>> emul
-    emulist: [0, 1, 2, 3, 4]
-    >>> emul[1:3]
+    EmuList: [0, 1, 2, 3, 4]
+    >>> emul[1:3]  #  __getitem__ 
     [1, 2]
-    >>> emul[0:4:2]
+    >>> emul[0:4:2]  #  __getitem__
     [0, 2]
-    >>> len(emul)
+    >>> len(emul)  #  __len__
     5
     >>> emul.append(5)
     >>> emul
-    emulist: [0, 1, 2, 3, 4, 5]
+    EmuList: [0, 1, 2, 3, 4, 5]
     >>> emul.remove(2)
     >>> emul
-    emulist: [0, 1, 3, 4, 5]
-    >>> emul[3] = 6
+    EmuList: [0, 1, 3, 4, 5]
+    >>> emul[3] = 6  # __setitem__
     >>> emul
-    emulist: [0, 1, 3, 6, 5]
-    >>> 0 in emul
+    EmuList: [0, 1, 3, 6, 5]
+    >>> 0 in emul  # __contains__
     True
+
 
 Emulating a dictionary
 ----------------------
@@ -450,6 +451,52 @@ Emulating a dictionary
     1 3 5
     >>> '1' in emudict
     True
+
+
+Emulating a matrix multiplication
+----------------------------------
+
+.. code-block:: python
+
+    # PEP 465 - "@" represent matrix multiplication
+    #
+    # Need Python-3.5 or above
+    >>> class Arr:
+    ...     def __init__(self, *arg):
+    ...         self._arr = arg
+    ...     def __matmul__(self, other):
+    ...         if not hasattr(other, '_arr'):
+    ...             raise AttributeError
+    ...         if not isinstance(other, Arr):
+    ...             raise TypeError
+    ...         if len(self) != len(other):
+    ...             raise ValueError
+    ...         return sum([x*y for x, y in zip(self._arr, other._arr)])
+    ...     def __imatmul__(self, other):
+    ...         if not hasattr(other, '_arr'):
+    ...             raise AttributeError
+    ...         if not isinstance(other, Arr):
+    ...             raise TypeError
+    ...         if len(self) != len(other):
+    ...             raise ValueError
+    ...         res = sum([x*y for x, y in zip(self._arr, other._arr)])
+    ...         self._arr = [res]
+    ...         return self
+    ...     def __len__(self):
+    ...         return len(self._arr)
+    ...     def __str__(self):
+    ...         return "Arr({})".format(repr(self._arr))
+    ...     def __repr__(self):
+    ...         return self.__str__()
+    ...
+    >>> a = Arr(9, 5, 2, 7)
+    >>> b = Arr(5, 5, 6, 6)
+    >>> a @ b
+    124
+    >>> a @= b
+    >>> a
+    Arr([124])
+
 
 Decorator
 ---------
@@ -837,8 +884,7 @@ Abstract method - Metaclass
 .. code-block:: python
 
     # usually using in define methods but not implement
-    from abc import ABCMeta, abstractmethod
-
+    >>> from abc import ABCMeta, abstractmethod
     >>> class base(object):
     ...   __metaclass__ = ABCMeta
     ...   @abstractmethod
