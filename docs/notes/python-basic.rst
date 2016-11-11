@@ -118,7 +118,7 @@ Check inheritance
     ...     self.name = "ex"
     ...   def printex(self):
     ...     print "This is an Example"
-    ... 
+    ...
     >>> issubclass(Example, object)
     True
 
@@ -159,9 +159,9 @@ Get function/class name
     ...
     >>> ex = ExampleClass()
     >>> ex.__class__.__name__
-    'excls'
+    'ExampleClass'
     >>> example_function.__name__
-    'exfun'
+    'example_function'
 
 
 ``__new__`` & ``__init__``
@@ -394,7 +394,7 @@ Emulating a list
     >>> emul = EmuList(range(5))
     >>> emul
     EmuList: [0, 1, 2, 3, 4]
-    >>> emul[1:3]  #  __getitem__ 
+    >>> emul[1:3]  #  __getitem__
     [1, 2]
     >>> emul[0:4:2]  #  __getitem__
     [0, 2]
