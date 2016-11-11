@@ -462,7 +462,6 @@ Emulating a matrix multiplication
     # PEP 465 - "@" represent matrix multiplication
     #
     # Need Python-3.5 or above
-
     >>> class Arr:
     ...     def __init__(self, *arg):
     ...         self._arr = arg
