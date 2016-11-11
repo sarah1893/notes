@@ -433,7 +433,7 @@ Emulating a dictionary
     ...     return key in self._dict
     ...   def __iter__(self):
     ...     return iter(self._dict.keys())
-    ... 
+    ...
     >>> _ = {"1":1, "2":2, "3":3}
     >>> emud = EmuDict(_)
     >>> emud  # __repr__
@@ -447,7 +447,7 @@ Emulating a dictionary
     >>> emud
     EmuDict: {'1': 1, '3': 3, '5': 5}
     >>> for _ in emud: print emud[_],  # __iter__
-    ... 
+    ...
     1 3 5
     >>> '1' in emud  # __contains__
     True
@@ -500,62 +500,66 @@ Decorator
 .. code-block:: python
 
     # see: PEP318
-    >>> def decor(func):
-    ...   def wrapper(*args,**kwargs):
-    ...     print "wrapper"
-    ...     func()
-    ...     print "-------"
+    >>> from functools import wraps
+    >>> def decorator(func):
+    ...   @wraps(func)
+    ...   def wrapper(*args, **kwargs):
+    ...     print "Before calling {}.".format(func.__name___)
+    ...     ret = func(*args, **kwargs)
+    ...     print "After calling {}.".format(func.__name___)
+    ...     return ret
     ...   return wrapper
     ...
-    >>> @decor
+    >>> @decorator
     ... def example():
-    ...   print "Example"
+    ...   print "Inside example function."
     ...
     >>> example()
-    wrapper
-    Example
-    -------
+    Before calling example.
+    Inside example function.
+    After calling example.
 
     # equivalent to
-    >>> def example():
-    ...   print "Example"
+    ... def example():
+    ...   print "Inside example function."
     ...
-    >>> example = decor(example)
+    >>> example = decorator(example)
     >>> example()
-    wrapper
-    Example
-    -------
+    Before calling example.
+    Inside example function.
+    After calling example.
 
 Decorator with arguments
 ------------------------
 
 .. code-block:: python
 
-    >>> def example(val):
-    ...   def decor(func):
-    ...     def wrapper(*args,**kargs):
+    >>> from functools import wraps
+    >>> def decorator_with_argument(val):
+    ...   def decorator(func):
+    ...     @wraps(func)
+    ...     def wrapper(*args, **kargs):
     ...       print "Val is {0}".format(val)
-    ...       func()
+    ...       return func(*args, **kwargs)
     ...     return wrapper
-    ...   return decor
+    ...   return decorator
     ...
-    >>> @example(10)
-    ... def undecor():
-    ...   print "This is undecor func"
+    >>> @decorator_with_argument(10)
+    ... def example():
+    ...   print "This is example function."
     ...
-    >>> undecor()
+    >>> example()
     Val is 10
-    This is undecor func
+    This is example function.
 
     # equivalent to
-    >>> def undecor():
-    ...   print "This is undecor func"
+    >>> def example():
+    ...   print "This is example function."
     ...
-    >>> d = example(10)
-    >>> undecor = d(undecor)
-    >>> undecor()
+    >>> example = decorator_with_argument(10)(example)
+    >>> example()
     Val is 10
-    This is undecor func
+    This is example function.
 
 for: exp else: exp
 ------------------
