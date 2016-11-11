@@ -413,6 +413,7 @@ Emulating a list
     >>> 0 in emul  # __contains__
     True
 
+
 Emulating a dictionary
 ----------------------
 
@@ -451,6 +452,53 @@ Emulating a dictionary
     1 3 5
     >>> '1' in emudict
     True
+
+
+Emulating a matrix multiplication
+----------------------------------
+
+.. code-block:: python
+
+    # PEP 465 - "@" represent matrix multiplication
+    #
+    # Need Python-3.5 or above
+
+    >>> class Arr:
+    ...     def __init__(self, *arg):
+    ...         self._arr = arg
+    ...     def __matmul__(self, other):
+    ...         if not hasattr(other, '_arr'):
+    ...             raise AttributeError
+    ...         if not isinstance(other, Arr):
+    ...             raise TypeError
+    ...         if len(self) != len(other):
+    ...             raise ValueError
+    ...         return sum([x*y for x, y in zip(self._arr, other._arr)])
+    ...     def __imatmul__(self, other):
+    ...         if not hasattr(other, '_arr'):
+    ...             raise AttributeError
+    ...         if not isinstance(other, Arr):
+    ...             raise TypeError
+    ...         if len(self) != len(other):
+    ...             raise ValueError
+    ...         res = sum([x*y for x, y in zip(self._arr, other._arr)])
+    ...         self._arr = [res]
+    ...         return self
+    ...     def __len__(self):
+    ...         return len(self._arr)
+    ...     def __str__(self):
+    ...         return "Arr({})".format(repr(self._arr))
+    ...     def __repr__(self):
+    ...         return self.__str__()
+    ...
+    >>> a = Arr(9, 5, 2, 7)
+    >>> b = Arr(5, 5, 6, 6)
+    >>> a @ b
+    124
+    >>> a @= b
+    >>> a
+    Arr([124])
+
 
 Decorator
 ---------
