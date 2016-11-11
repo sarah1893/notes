@@ -21,7 +21,7 @@ Python Naming Styles
     # for internal use
     _var
 
-    # convention to avoid conflict keyword 
+    # convention to avoid conflict keyword
     var_
 
     # for private use in class
@@ -34,7 +34,7 @@ Python Naming Styles
     # ex: __init__, __file__, __main__
     __var__
 
-    # for "internal" use throwaway variable 
+    # for "internal" use throwaway variable
     # usually used in loop
     # ex: [_ for _ in range(10)]
     # or variable not used
@@ -85,7 +85,7 @@ Check, Get, Set attribute
     ...     self.name = "ex"
     ...   def printex(self):
     ...     print "This is an example"
-    ... 
+    ...
 
     # Check object has attributes
     # hasattr(obj, 'attr')
@@ -117,7 +117,7 @@ Check inheritance
     ...   def __init__(self):
     ...     self.name = "ex"
     ...   def printex(self):
-    ...     print "This is an example"
+    ...     print "This is an Example"
     ... 
     >>> issubclass(Example, object)
     True
@@ -140,7 +140,7 @@ Check "callable"
     >>> a = 10
     >>> def fun():
     ...   print "I am callable"
-    ... 
+    ...
     >>> callable(a)
     False
     >>> callable(fun)
@@ -151,16 +151,16 @@ Get function/class name
 
 .. code-block:: python
 
-    >>> class excls(object):
-    ...   pass
-    ... 
-    >>> def exfun():
+    >>> class ExampleClass(object):
     ...   pass
     ...
-    >>> ex = excls()
+    >>> def example_function():
+    ...   pass
+    ...
+    >>> ex = ExampleClass()
     >>> ex.__class__.__name__
     'excls'
-    >>> exfun.__name__
+    >>> example_function.__name__
     'exfun'
 
 
@@ -170,26 +170,26 @@ Get function/class name
 .. code-block:: python
 
     # __init__ will invoke
-    >>> class ClsA(object):
+    >>> class ClassA(object):
     ...     def __new__(cls, arg):
     ...         print '__new__ ' + arg
     ...         return object.__new__(cls, arg)
     ...     def __init__(self, arg):
-    ...         print '__init__ ' + arg  
+    ...         print '__init__ ' + arg
     ...
-    >>> o = ClsA("Hello")  
+    >>> o = ClassA("Hello")
     __new__ Hello
     __init__ Hello
 
     # init won't be invoke
-    >>> class ClsB(object):
+    >>> class ClassB(object):
     ...     def __new__(cls, arg):
     ...         print '__new__ ' + arg
     ...         return object
     ...     def __init__(self, arg):
     ...         print '__init__ ' + arg
     ...
-    >>> o = ClsB("Hello")  
+    >>> o = ClassB("Hello")
     __new__ Hello
 
 Representations of your class behave
@@ -197,61 +197,61 @@ Representations of your class behave
 
 .. code-block:: python
 
-    >>> class example(object):
+    >>> class Example(object):
     ...    def __str__(self):
-    ...       return "example __str__"
+    ...       return "Example __str__"
     ...    def __repr__(self):
-    ...       return "example __repr__"
-    ... 
-    >>> print str(example())
-    example __str__
-    >>> example()
-    example __repr__
+    ...       return "Example __repr__"
+    ...
+    >>> print str(Example())
+    Example __str__
+    >>> Example()
+    Example __repr__
 
 Get list item "SMART"
 ---------------------
 
 .. code-block:: python
 
-    >>> a = [1,2,3,4,5]
+    >>> a = [1, 2, 3, 4, 5]
     >>> a[0]
     1
     >>>a[-1]
     5
     >>> a[0:]
-    [1,2,3,4,5]
+    [1, 2, 3, 4, 5]
     >>> a[:-1]
-    [1,2,3,4]
+    [1, 2, 3, 4]
 
     # a[start:end:step]
     >>> a[0:-1:2]
-    [1,3]
+    [1, 3]
 
     # using slice object
     # slice(start,end,step)
-    >>> s = slice(0,-1,2)
+    >>> s = slice(0, -1, 2)
     >>> a[s]
-    [1,3]
+    [1, 3]
 
     # Get index and item in loop
     >>> a = range(3)
-    >>> for idx,item in enumerate(a):
+    >>> for idx, item in enumerate(a):
     ...   print (idx,item),
-    ... 
+    ...
     (0, 0) (1, 1) (2, 2)
 
     # Transfer two list into tuple list
-    >>> a = [1,2,3,4,5]
-    >>> b = [2,4,5,6,8]
-    >>> zip(a,b)
+    >>> a = [1, 2, 3, 4, 5]
+    >>> b = [2, 4, 5, 6, 8]
+    >>> zip(a, b)
     [(1, 2), (2, 4), (3, 5), (4, 6), (5, 8)]
 
     # with filter
-    >>> [x for x in range(5) if x>1]
+    >>> [x for x in range(5) if x > 1]
     [2, 3, 4]
-    >>> _ = ['1','2',3,'Hello',4]
-    >>> f = lambda x: isinstance(x,int)
-    >>> filter(f,_)
+    >>> l = ['1', '2', 3, 'Hello', 4]
+    >>> predicate = lambda x: isinstance(x, int)
+    >>> filter(predicate, l)
     [3, 4]
 
 Get dictionary item "SMART"
@@ -260,8 +260,8 @@ Get dictionary item "SMART"
 .. code-block:: python
 
     # get dictionary all keys
-    >>> a={"1":1,"2":2,"3":3}
-    >>> b={"2":2,"3":3,"4":4}
+    >>> a = {"1":1, "2":2, "3":3}
+    >>> b = {"2":2, "3":3, "4":4}
     >>> a.keys()
     ['1', '3', '2']
 
@@ -291,16 +291,16 @@ Set a list/dict "SMART"
 .. code-block:: python
 
     # get a list with init value
-    >>> ex = [0]*10
+    >>> ex = [0] * 10
     >>> ex
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
     # extend two list
-    >>> a = [1,2,3]; b=['a','b']
-    >>> a+b
+    >>> a = [1, 2, 3]; b = ['a', 'b']
+    >>> a + b
     [1, 2, 3, 'a', 'b']
 
-    # using generator
+    # using list comprehension
     >>> [x for x in range(10)]
     [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     >>> fn = lambda x: x**2
@@ -310,8 +310,8 @@ Set a list/dict "SMART"
     {'1': 1, '0': 0, '2': 2}
 
     # using builtin function "map"
-    >>> map(fn,range(5))
-    [0, 1, 4, 9, 16] 
+    >>> map(fn, range(5))
+    [0, 1, 4, 9, 16]
 
 NamedTuple
 ----------
@@ -319,11 +319,11 @@ NamedTuple
 .. code-block:: python
 
     # namedtuple(typename, field_names)
-    # replace define class without method 
+    # replace define class without method
     >>> from collections import namedtuple
-    >>> ex = namedtuple("ex",'a b c')
-    >>> e = ex(1,2,3)
-    >>> print e.a, e[1], e[1]+e.b
+    >>> Example = namedtuple("Example",'a b c')
+    >>> e = Example(1, 2, 3)
+    >>> print e.a, e[1], e[1] + e.b
     1 2 4
 
 Delegating Iteration (__iter__)
@@ -332,14 +332,14 @@ Delegating Iteration (__iter__)
 .. code-block:: python
 
     # __iter__ return an iterator object
-    # Be careful: list is an "iterable" object not an "iterator" 
-    >>> class example(object):
+    # Be careful: list is an "iterable" object not an "iterator"
+    >>> class Example(object):
     ...    def __init__(self,list_):
     ...       self._list = list_
     ...    def __iter__(self):
     ...      return iter(self._list)
     ...
-    >>> ex = example([1,2,3,4,5])
+    >>> ex = Example([1, 2, 3, 4, 5])
     >>> for _ in ex: print _,
     ...
     1 2 3 4 5
@@ -352,18 +352,17 @@ Using Generator as Iterator
     # see: PEP289
     >>> a = (_ for _ in range(10))
     >>> for _ in a: print _,
-    ... 
+    ...
     0 1 2 3 4 5 6 7 8 9
 
     # equivalent to
-    >>> def _gen():
+    >>> def generator():
     ...   for _ in range(10):
     ...     yield _
-    ... 
-    >>> a = _gen()
-    >>> for _ in a: print _,
-    ... 
-    0 1 2 3 4 5 6 7 8 9 
+    ...
+    >>> for _ in generator(): print _,
+    ...
+    0 1 2 3 4 5 6 7 8 9
 
 Emulating a list
 ----------------
@@ -390,7 +389,7 @@ Emulating a list
     ...   def __contains__(self, item):
     ...     return item in self._list
     ...   def __iter__(self):
-    ...     return iter(self._list) 
+    ...     return iter(self._list)
     ...
     >>> emul = EmuList(range(5))
     >>> emul
@@ -434,7 +433,7 @@ Emulating a dictionary
     ...     return key in self._dict
     ...   def __iter__(self):
     ...     return iter(self._dict.keys())
-    ... 
+    ...
     >>> _ = {"1":1,"2":2,"3":3}
     >>> emud = emudict(_)
     >>> emud
@@ -448,7 +447,7 @@ Emulating a dictionary
     >>> emud
     emudict: {'1': 1, '3': 3, '5': 5}
     >>> for _ in emud: print emud[_],
-    ... 
+    ...
     1 3 5
     >>> '1' in emudict
     True
@@ -511,11 +510,11 @@ Decorator
     ...     func()
     ...     print "-------"
     ...   return wrapper
-    ... 
+    ...
     >>> @decor
     ... def example():
     ...   print "Example"
-    ... 
+    ...
     >>> example()
     wrapper
     Example
@@ -524,7 +523,7 @@ Decorator
     # equivalent to
     >>> def example():
     ...   print "Example"
-    ... 
+    ...
     >>> example = decor(example)
     >>> example()
     wrapper
@@ -573,8 +572,8 @@ for: exp else: exp
     ...   print _,
     ... else:
     ...   print "\nno break occur"
-    ... 
-    0 1 2 3 4 
+    ...
+    0 1 2 3 4
     no break occur
     >>> for _ in range(5):
     ...   if _ % 2 ==0:
@@ -582,7 +581,7 @@ for: exp else: exp
     ...     break
     ... else:
     ...   print "else not occur"
-    ... 
+    ...
     break occur
 
     # above statement equivalent to
@@ -607,7 +606,7 @@ try: exp else: exp
     ...   pass
     ... else:
     ...   print "No exception occur"
-    ... 
+    ...
     No exception
     No exception occur
 
@@ -626,11 +625,11 @@ Lambda function
     >>> (lambda x: x if x>3 else 3)(5)
     5
 
-    # multiline lambda example 
+    # multiline lambda example
     >>> (lambda x:
     ... True
-    ... if x>0 
-    ... else 
+    ... if x>0
+    ... else
     ... False)(3)
     True
 
@@ -698,7 +697,7 @@ Callable object
     ...     print "I am callable!"
     ...   def __call__(self):
     ...     self.example()
-    ... 
+    ...
     >>> ex = calobj()
     >>> ex()
     I am callable!
@@ -756,7 +755,7 @@ Using @contextmanager
           yield f
        finally:
           f.close()
-              
+
     with opening('example.txt','r') as fd:
        fd.read()
 
@@ -791,7 +790,7 @@ Property - Managed attributes
     >>> ex = example(123)
     >>> ex.val = "str"
     Traceback (most recent call last):
-      File "", line 1, in 
+      File "", line 1, in
       File "test.py", line 12, in val
         raise TypeError("Expect int")
     TypeError: Expect int
@@ -799,7 +798,7 @@ Property - Managed attributes
 Computed attributes - Using property
 ------------------------------------
 
-Concept: Attribute's value is not store in memory. Computing the value only 
+Concept: Attribute's value is not store in memory. Computing the value only
 when we need.
 
 .. code-block:: python
@@ -808,7 +807,7 @@ when we need.
     ...   @property
     ...   def square3(self):
     ...     return 2**3
-    ... 
+    ...
     >>> ex = example()
     >>> ex.square3
     8
@@ -862,7 +861,7 @@ Descriptor - manage attributes
     ...     print "I am staticmethod"
     ...   def instmethod(self):
     ...     print "I am instancemethod"
-    ... 
+    ...
     >>> ex = example()
     >>> ex.clsmethod()
     I am classmethod
@@ -876,7 +875,7 @@ Descriptor - manage attributes
     I am staticmethod
     >>> example.instmethod()
     Traceback (most recent call last):
-      File "", line 1, in 
+      File "", line 1, in
     TypeError: unbound method instmethod() ...
 
 Abstract method - Metaclass
@@ -891,11 +890,11 @@ Abstract method - Metaclass
     ...   @abstractmethod
     ...   def absmethod(self):
     ...     """ Abstract method """
-    ... 
+    ...
     >>> class example(base):
     ...   def absmethod(self):
     ...     print "abstract"
-    ... 
+    ...
     >>> ex = example()
     >>> ex.absmethod()
     abstract
@@ -908,7 +907,7 @@ Abstract method - Metaclass
     >>> class example(base):
     ...   def absmethod(self):
     ...     print "abstract"
-    ... 
+    ...
     >>> ex = example()
     >>> ex.absmethod()
     abstract
@@ -918,7 +917,7 @@ Common Use "Magic"
 
 .. code-block:: python
 
-    # see python document: data model 
+    # see python document: data model
     # For command class
     __main__
     __name__
