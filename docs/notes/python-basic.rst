@@ -571,28 +571,28 @@ for: exp else: exp
     >>> for _ in range(5):
     ...   print _,
     ... else:
-    ...   print "\nno break occur"
+    ...   print "\nno break occurred"
     ...
     0 1 2 3 4
-    no break occur
+    no break occurred
     >>> for _ in range(5):
-    ...   if _ % 2 ==0:
-    ...     print "break occur"
+    ...   if _ % 2 == 0:
+    ...     print "break occurred"
     ...     break
     ... else:
-    ...   print "else not occur"
+    ...   print "no break occurred"
     ...
-    break occur
+    break occurred
 
     # above statement equivalent to
     flag = False
     for _ in range(5):
         if _ % 2 == 0:
             flag = True
-            print "break occur"
+            print "break occurred"
             break
     if flag == False:
-        print "else not occur"
+        print "no break occurred"
 
 try: exp else: exp
 ------------------
@@ -605,10 +605,10 @@ try: exp else: exp
     ... except:
     ...   pass
     ... else:
-    ...   print "No exception occur"
+    ...   print "No exception occurred"
     ...
     No exception
-    No exception occur
+    No exception occurred
 
 Lambda function
 ---------------
@@ -618,7 +618,7 @@ Lambda function
     >>> fn = lambda x: x**2
     >>> fn(3)
     9
-    >>> (lambda x:x**2)(3)
+    >>> (lambda x: x**2)(3)
     9
     >>> (lambda x: [x*_ for _ in range(5)])(2)
     [0, 2, 4, 6, 8]
@@ -638,21 +638,21 @@ Option arguments - (\*args, \*\*kwargs)
 
 .. code-block:: python
 
-    >>> def example(a,b=None,*args,**kwargs):
+    >>> def example(a, b=None, *args, **kwargs):
     ...   print a, b
     ...   print args
     ...   print kwargs
     ...
-    >>> example(1,"var",2,3,word="hello")
+    >>> example(1, "var", 2, 3, word="hello")
     1 var
     (2, 3)
     {'word': 'hello'}
-    >>> _args = (1,2,3,4,5)
-    >>> _kwargs = {"1":1,"2":2,"3":3}
-    >>> example(1,"var",*_args,**_kwargs)
+    >>> a_tuple = (1, 2, 3, 4, 5)
+    >>> a_dict = {"1":1, "2":2, "3":3}
+    >>> example(1, "var", *a_tuple, **a_dict)
     1 var
     (1, 2, 3, 4, 5)
-    {'1': 1, '3': 3, '2': 2}
+    {'1': 1, '2': 2, '3': 3}
 
 ``type()`` declare (create) a ``class``
 ----------------------------------------
@@ -692,13 +692,13 @@ Callable object
 
 .. code-block:: python
 
-    >>> class calobj(object):
-    ...   def example(self):
+    >>> class CallableObject(object):
+    ...   def example(self, *args, **kwargs):
     ...     print "I am callable!"
-    ...   def __call__(self):
-    ...     self.example()
+    ...   def __call__(self, *args, **kwargs):
+    ...     self.example(*args, **kwargs)
     ...
-    >>> ex = calobj()
+    >>> ex = CallableObject()
     >>> ex()
     I am callable!
 
@@ -717,6 +717,7 @@ Context Manager - "with" statement
         def __init__(self,host,port):
             self.host = host
             self.port = port
+
         def __enter__(self):
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.bind((self.host,self.port))
@@ -732,8 +733,8 @@ Context Manager - "with" statement
 
     if __name__=="__main__":
         host = 'localhost'
-        port 5566
-        with Socket(host,port) as s:
+        port = 5566
+        with Socket(host, port) as s:
             while True:
                 conn, addr = s.accept()
                 msg = conn.recv(1024)
