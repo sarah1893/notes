@@ -2,17 +2,48 @@
 Python basic cheatsheet
 =======================
 
-Python Naming Styles
---------------------
+Python Naming Rule - class
+----------------------------
 
 .. code-block:: python
 
-    # see: PEP8
+    # PEP8 - camel style only
 
-    # class: camel style only
+    # good
+
     MyClass
 
-    # func, module, package
+    # bad
+
+    myClass
+    myclass
+    my_class
+
+Python Naming Rule - func, module, package, variables
+------------------------------------------------------
+
+.. code-block:: python
+
+    # PEP8 - lowercase with words separated by underscores
+
+    # good
+
+    var_underscore_separate
+
+    # bad
+
+    varCamel
+    VarCamel
+
+Python Naming Rule - summary
+-----------------------------
+
+.. code-block:: python
+
+    # for class
+    MyClass
+
+    # func, module, package, variables
     var_underscore_separate
 
     # for public use
