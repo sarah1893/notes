@@ -374,7 +374,7 @@ Emulating a list
     ...   def __init__(self, list_):
     ...     self._list = list_
     ...   def __repr__(self):
-    ...     return "EmuList: " + str(self._list)
+    ...     return "EmuList: " + repr(self._list)
     ...   def append(self, item):
     ...     self._list.append(item)
     ...   def remove(self, item):
@@ -419,38 +419,38 @@ Emulating a dictionary
 
 .. code-block:: python
 
-    >>> class emudict(object):
-    ...   def __init__(self,dict_):
+    >>> class EmuDict(object):
+    ...   def __init__(self, dict_):
     ...     self._dict = dict_
     ...   def __repr__(self):
-    ...     return "emudict: "+str(self._dict)
-    ...   def __getitem__(self,key):
+    ...     return "EmuDict: " + repr(self._dict)
+    ...   def __getitem__(self, key):
     ...     return self._dict[key]
-    ...   def __setitem__(self,key,val):
+    ...   def __setitem__(self, key, val):
     ...     self._dict[key] = val
-    ...   def __delitem__(self,key):
+    ...   def __delitem__(self, key):
     ...     del self._dict[key]
-    ...   def __contains__(self,key):
+    ...   def __contains__(self, key):
     ...     return key in self._dict
     ...   def __iter__(self):
     ...     return iter(self._dict.keys())
     ... 
-    >>> _ = {"1":1,"2":2,"3":3}
-    >>> emud = emudict(_)
-    >>> emud
-    emudict: {'1': 1, '3': 3, '2': 2}
-    >>> emud['1']
+    >>> _ = {"1":1, "2":2, "3":3}
+    >>> emud = EmuDict(_)
+    >>> emud  # __repr__
+    EmuDict: {'1': 1, '2': 2, '3': 3}
+    >>> emud['1']  # __getitem__
     1
-    >>> emud['5'] = 5
+    >>> emud['5'] = 5  # __setitem__
     >>> emud
-    emudict: {'1': 1, '3': 3, '2': 2, '5': 5}
-    >>> del emud['2']
+    EmuDict: {'1': 1, '2': 2, '3': 3, '5': 5}
+    >>> del emud['2']  # __delitem__
     >>> emud
-    emudict: {'1': 1, '3': 3, '5': 5}
-    >>> for _ in emud: print emud[_],
+    EmuDict: {'1': 1, '3': 3, '5': 5}
+    >>> for _ in emud: print emud[_],  # __iter__
     ... 
     1 3 5
-    >>> '1' in emudict
+    >>> '1' in emud  # __contains__
     True
 
 
@@ -462,20 +462,16 @@ Emulating a matrix multiplication
     # PEP 465 - "@" represent matrix multiplication
     #
     # Need Python-3.5 or above
-    >>> class Arr:
+    >>> class Arr(object):
     ...     def __init__(self, *arg):
     ...         self._arr = arg
     ...     def __matmul__(self, other):
-    ...         if not hasattr(other, '_arr'):
-    ...             raise AttributeError
     ...         if not isinstance(other, Arr):
     ...             raise TypeError
     ...         if len(self) != len(other):
     ...             raise ValueError
     ...         return sum([x*y for x, y in zip(self._arr, other._arr)])
     ...     def __imatmul__(self, other):
-    ...         if not hasattr(other, '_arr'):
-    ...             raise AttributeError
     ...         if not isinstance(other, Arr):
     ...             raise TypeError
     ...         if len(self) != len(other):
@@ -486,15 +482,15 @@ Emulating a matrix multiplication
     ...     def __len__(self):
     ...         return len(self._arr)
     ...     def __str__(self):
-    ...         return "Arr({})".format(repr(self._arr))
+    ...         return self.__repr__()
     ...     def __repr__(self):
-    ...         return self.__str__()
+    ...         return "Arr({})".format(repr(self._arr))
     ...
     >>> a = Arr(9, 5, 2, 7)
     >>> b = Arr(5, 5, 6, 6)
-    >>> a @ b
+    >>> a @ b  # __matmul__
     124
-    >>> a @= b
+    >>> a @= b  # __imatmul__
     >>> a
     Arr([124])
 
