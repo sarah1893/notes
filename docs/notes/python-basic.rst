@@ -72,6 +72,46 @@ Python Naming Rule - summary
     # for _, a in [(1,2),(3,4)]: print a
     _
 
+
+Using ``__future__`` backport features
+---------------------------------------
+
+.. code-block:: python
+
+    # PEP 236 - Back to the __future__
+
+    # backport python3 print_function in python2
+
+    >>> print "Hello World"  # `print` is statement in python2
+    Hello World
+    >>> from __future__ import print_function
+    >>> print "Hello World"
+      File "<stdin>", line 1
+        print "Hello World"
+                          ^
+    SyntaxError: invalid syntax
+    >>> print("Hello World") # after backport, `print` is a function
+    Hello World
+
+    # backport python3 unicode_literals in python2
+
+    >>> type("Guido") # string default type is `str` in python2
+    <type 'str'>
+    >>> from __future__ import unicode_literals
+    >>> type("Guido") # after backport, string default type is `unicode`
+    <type 'unicode'>
+
+
+.. note::
+
+    ``from __future__ import feature`` is a `future statement`__.
+    It use for backporting features of other python version to
+    current python version, not like original import.
+
+.. _future: https://docs.python.org/2/reference/simple_stmts.html#future
+__ future_
+
+
 Check object attributes
 -----------------------
 
@@ -492,6 +532,7 @@ Emulating a matrix multiplication
     # PEP 465 - "@" represent matrix multiplication
     #
     # Need Python-3.5 or above
+
     >>> class Arr:
     ...     def __init__(self, *arg):
     ...         self._arr = arg
