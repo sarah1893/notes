@@ -10,7 +10,7 @@ Glossary of Generator
     # generator function
     >>> def gen_func():
     ...     yield 5566
-    ... 
+    ...
     >>> gen_func
     <function gen_func at 0x1019273a>
 
@@ -43,10 +43,11 @@ Produce value via generator
 
 .. code-block:: python
 
+    >>> from __future__ import print_function
     >>> def prime(n):
     ...   p = 2
     ...   while n > 0:
-    ...     for _ in range(2,p):
+    ...     for _ in range(2, p):
     ...       if p % _ == 0:
     ...         break
     ...     else:
@@ -59,7 +60,7 @@ Produce value via generator
     2
     >>> next(p)
     3
-    >>> 
+    >>>
     >>> next(p)
     5
     >>> next(p)
@@ -68,16 +69,16 @@ Produce value via generator
     StopIteration
     >>> for _ in prime(5):
     ...   print(_, end=" ")
-    ... 
+    ...
     2 3 5 7 11 >>>
 
 Implement Iterable object via generator
 ---------------------------------------
 
 .. code-block:: python
-
-    >>> class count(object):
-    ...   def __init__(self,n):
+    >>> from __future__ import print_function
+    >>> class Count(object):
+    ...   def __init__(self, n):
     ...     self._n = n
     ...   def __iter__(self):
     ...     n = self._n
@@ -85,19 +86,19 @@ Implement Iterable object via generator
     ...       yield n
     ...       n-=1
     ...   def __reversed__(self):
-    ...     n = 0
-    ...     while n<self._n:
+    ...     n = 1
+    ...     while n<=self._n:
     ...       yield n
     ...       n+=1
-    ... 
-    >>> for _ in count(5):
+    ...
+    >>> for _ in Count(5):
     ...   print(_, end=" ")
-    ... 
-    5 4 3 2 1 >>> 
-    >>> for _ in reversed(count(5)):
+    ...
+    5 4 3 2 1 >>>
+    >>> for _ in reversed(Count(5)):
     ...   print(_, end=" ")
-    ... 
-    0 1 2 3 4 >>>
+    ...
+    1 2 3 4 5 >>>
 
 Send message to generator
 -------------------------
@@ -107,7 +108,7 @@ Send message to generator
     >>> def spam():
     ...   msg = yield
     ...   print("Message:",msg)
-    ... 
+    ...
     >>> try:
     ...   g = spam()
     ...   # start generator
@@ -116,7 +117,7 @@ Send message to generator
     ...   g.send("Hello World!")
     ... except StopIteration:
     ...   pass
-    ... 
+    ...
     Message: Hello World!
 
 "yield from" expression
@@ -130,17 +131,17 @@ Send message to generator
     ...         yield 9527
     ...     except ValueError:
     ...         print("get value error")
-    ... 
+    ...
     >>> def delegating_gen():
     ...     yield from subgen()
     ...
     >>> g = delegating_gen()
-    >>> try: 
+    >>> try:
     ...     next(g)
     ...     g.throw(ValueError)
     ... except StopIteration:
     ...     print("gen stop")
-    ... 
+    ...
     9527
     get value error
     gen stop
@@ -149,10 +150,10 @@ Send message to generator
     >>> import inspect
     >>> def subgen():
     ...     yield from range(5)
-    ... 
+    ...
     >>> def delegating_gen():
     ...     yield from subgen()
-    ... 
+    ...
     >>> g = delegating_gen()
     >>> inspect.getgeneratorstate(g)
     'GEN_CREATED'
@@ -174,14 +175,14 @@ yield (from) EXPR return RES
     ...     count = 0
     ...     avg = None
     ...     while True:
-    ...         val = yield 
+    ...         val = yield
     ...         if not val:
     ...             break
     ...         total += val
     ...         count += 1
     ...         avg = total / count
     ...     return avg
-    ... 
+    ...
     >>> g = average()
     >>> g = average()
     >>> next(g) # start gen
@@ -191,14 +192,14 @@ yield (from) EXPR return RES
     ...     g.send(None)
     ... except StopIteration as e:
     ...     ret = e.value
-    ... 
+    ...
     >>> ret
     4.0
 
     # yield from EXP return RES
     >>> def subgen():
     ...     yield 9527
-    ... 
+    ...
     >>> def delegating_gen():
     ...     yield from subgen()
     ...     return 5566
@@ -209,7 +210,7 @@ yield (from) EXPR return RES
     ...     next(g)
     ... except StopIteration as _e:
     ...     print(_e.value)
-    ... 
+    ...
     9527
     5566
 
@@ -224,11 +225,11 @@ Generate sequences
     ...         yield _
     ...     for _ in range(3):
     ...         yield _
-    ... 
+    ...
     >>> a = list(chain())
     >>> a
     ['a', 'b', 0, 1, 2]
-    # equivalent to 
+    # equivalent to
     >>> def chain():
     ...     yield from 'ab'
     ...     yield range(3)
@@ -246,7 +247,7 @@ What "RES = yield from EXP" actually do?
     >>> def subgen():
     ...     for _ in range(3):
     ...         yield _
-    ... 
+    ...
     >>> EXP = subgen()
     >>> def delegating_gen():
     ...   _i = iter(EXP)
@@ -262,7 +263,7 @@ What "RES = yield from EXP" actually do?
     ...       except StopIteration as _e:
     ...           RES = _e.value
     ...           break
-    ... 
+    ...
     >>> g = delegating_gen()
     >>> next(g)
     0
@@ -275,7 +276,7 @@ What "RES = yield from EXP" actually do?
     >>> EXP = subgen()
     >>> def delegating_gen():
     ...     RES = yield from EXP
-    ... 
+    ...
     >>> g = delegating_gen()
     >>> next(g)
     0
@@ -290,7 +291,7 @@ Check generator type
     >>> from types import GeneratorType
     >>> def gen_func():
     ...     yield 5566
-    ... 
+    ...
     >>> g = gen_func()
     >>> isinstance(g, GeneratorType)
     True
@@ -305,7 +306,7 @@ Check Generator State
     >>> import inspect
     >>> def gen_func():
     ...     yield 9527
-    ... 
+    ...
     >>> g = gen_func()
     >>> inspect.getgeneratorstate(g)
     'GEN_CREATED'
@@ -459,10 +460,10 @@ Context manager and generator
     ...     yield l
     ...   finally:
     ...     print("exit scope")
-    ... 
+    ...
     >>> with mylist() as l:
     ...   print(l)
-    ... 
+    ...
     [1, 2, 3, 4, 5]
     exit scope
 
@@ -489,7 +490,7 @@ What @contextmanager actually doing?
                 return True
             except:
                 raise
-                
+
     # define a decorator
     def contextmanager(func):
         def run(*a, **k):
@@ -510,9 +511,9 @@ What @contextmanager actually doing?
 
 output:
 
-.. code-block:: console 
+.. code-block:: console
 
-    $ python ctx.py 
+    $ python ctx.py
     [1, 2, 3, 4, 5]
     exit scope
 
@@ -531,14 +532,14 @@ profile code block
     ...     finally:
     ...         e = time.time()
     ...         print('{} cost time: {}'.format(msg, e-s))
-    ... 
+    ...
     >>> with profile('block1'):
     ...     time.sleep(1)
-    ... 
+    ...
     block1 cost time: 1.00105595589
     >>> with profile('block2'):
     ...     time.sleep(3)
-    ... 
+    ...
     block2 cost time: 3.00104284286
 
 
@@ -556,12 +557,12 @@ profile code block
     ...     def __reversed__(self):
     ...         n = 9527
     ...         while True:
-    ...            yield n 
+    ...            yield n
     ...            n -= 1
-    ... 
+    ...
     >>> def spam():
     ...     yield from FakeGen()
-    ... 
+    ...
     >>> s = spam()
     >>> next(s)
     0
@@ -573,7 +574,7 @@ profile code block
     3
     >>> def reversed_spam():
     ...     yield from reversed(FakeGen())
-    ... 
+    ...
     >>> g = reversed_spam()
     >>> next(g)
     9527
@@ -664,7 +665,7 @@ Closure in Python - using generator
     ...         x += 1
     ...         return x
     ...     return inner_func
-    ... 
+    ...
     >>> c = closure()
     >>> c()
     5567
@@ -680,7 +681,7 @@ Closure in Python - using generator
     ...     def __call__(self):
     ...         self._x += 1
     ...         return self._x
-    ... 
+    ...
     >>> c = Closure()
     >>> c()
     5567
@@ -695,7 +696,7 @@ Closure in Python - using generator
     ...     while True:
     ...         x += 1
     ...         yield x
-    ... 
+    ...
     >>> g = closure_gen()
     >>> next(g)
     5567
@@ -715,11 +716,11 @@ Implement a simple scheduler
     ...   if n<=2:
     ...     return 1
     ...   return fib(n-1)+fib(n-2)
-    ... 
+    ...
     >>> def g_fib(n):
     ...   for _ in range(1,n+1):
     ...     yield fib(_)
-    ... 
+    ...
     >>> from collections import deque
     >>> t = [g_fib(3),g_fib(5)]
     >>> q = deque()
@@ -732,7 +733,7 @@ Implement a simple scheduler
     ...       q.append(t)
     ...     except StopIteration:
     ...       print("Task done")
-    ... 
+    ...
     >>> run()
     1
     1
@@ -774,9 +775,9 @@ Simple round-robin with blocking
              task = tasks.popleft()
              why,what = next(task)
              if why == 'recv':
-                w_read[what] = task 
+                w_read[what] = task
              elif why == 'send':
-                w_send[what] = task 
+                w_send[what] = task
              else:
                 raise RuntimeError
           except StopIteration:
@@ -790,7 +791,7 @@ Simple round-robin with blocking
        sock.listen(5)
        while True:
           # tell scheduler want block
-          yield 'recv', sock 
+          yield 'recv', sock
           conn,addr = sock.accept()
           tasks.append(client_handler(conn))
 
@@ -837,9 +838,9 @@ simple round-robin with blocking and non-blocking
              task = tasks.popleft()
              why,what = next(task)
              if why == 'recv':
-                w_read[what] = task 
+                w_read[what] = task
              elif why == 'send':
-                w_send[what] = task 
+                w_send[what] = task
              elif why == 'continue':
                 print what
                 tasks.append(task)
@@ -865,7 +866,7 @@ simple round-robin with blocking and non-blocking
        sock.bind(host)
        sock.listen(5)
        while True:
-          yield 'recv', sock 
+          yield 'recv', sock
           conn,addr = sock.accept()
           tasks.append(client_handler(conn))
 
