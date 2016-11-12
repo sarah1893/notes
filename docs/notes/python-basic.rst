@@ -560,6 +560,45 @@ Decorator
     Inside example function.
     After calling example.
 
+.. note::
+
+    ``@wraps`` preserve attributes of the original function,
+    otherwise attributes of decorated function will be replaced
+    by **wrapper function**
+
+.. code-block:: python
+
+    # without @wraps
+    >>> def decorator(func):
+    ...     def wrapper(*args, **kwargs):
+    ...         print('wrap function')
+    ...         return func(*args, **kwargs)
+    ...     return wrapper
+    ...
+    >>> @decorator
+    ... def example(*a, **kw):
+    ...     pass
+    ...
+    >>> example.__name__  # attr of function lose
+    'wrapper'
+
+    # with @wraps
+    >>> from functools import wraps
+    >>> def decorator(func):
+    ...     @wraps(func)
+    ...     def wrapper(*args, **kwargs):
+    ...         print('wrap function')
+    ...         return func(*args, **kwargs)
+    ...     return wrapper
+    ...
+    >>> @decorator
+    ... def example(*a, **kw):
+    ...     pass
+    ...
+    >>> example.__name__  # attr of function preserve
+    'example'
+
+
 Decorator with arguments
 ------------------------
 
