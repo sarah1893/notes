@@ -47,7 +47,7 @@ Produce value via generator
     >>> def prime(n):
     ...   p = 2
     ...   while n > 0:
-    ...     for _ in range(2,p):
+    ...     for _ in range(2, p):
     ...       if p % _ == 0:
     ...         break
     ...     else:
@@ -70,7 +70,7 @@ Produce value via generator
     >>> for _ in prime(5):
     ...   print(_, end=" ")
     ...
-    2 3 5 7 11
+    2 3 5 7 11 >>>
 
 Implement Iterable object via generator
 ---------------------------------------
@@ -78,7 +78,7 @@ Implement Iterable object via generator
 .. code-block:: python
     >>> from __future__ import print_function
     >>> class Count(object):
-    ...   def __init__(self,n):
+    ...   def __init__(self, n):
     ...     self._n = n
     ...   def __iter__(self):
     ...     n = self._n
@@ -94,11 +94,11 @@ Implement Iterable object via generator
     >>> for _ in Count(5):
     ...   print(_, end=" ")
     ...
-    5 4 3 2 1
+    5 4 3 2 1 >>>
     >>> for _ in reversed(Count(5)):
     ...   print(_, end=" ")
     ...
-    1 2 3 4 5
+    1 2 3 4 5 >>>
 
 Send message to generator
 -------------------------
