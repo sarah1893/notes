@@ -76,6 +76,7 @@ Implement Iterable object via generator
 ---------------------------------------
 
 .. code-block:: python
+
     >>> from __future__ import print_function
     >>> class Count(object):
     ...   def __init__(self, n):
