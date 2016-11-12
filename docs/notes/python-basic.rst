@@ -2,48 +2,27 @@
 Python basic cheatsheet
 =======================
 
-Python Naming Rule - class
-----------------------------
+Python Naming Rule
+--------------------
 
 .. code-block:: python
 
-    # PEP8 - camel style only
-
-    # good
-
-    MyClass
-
-    # bad
-
-    myClass
-    myclass
-    my_class
-
-Python Naming Rule - func, module, package, variables
-------------------------------------------------------
-
-.. code-block:: python
-
-    # PEP8 - lowercase with words separated by underscores
-
-    # good
-
-    var_underscore_separate
-
-    # bad
-
-    varCamel
-    VarCamel
-
-Python Naming Rule - summary
------------------------------
-
-.. code-block:: python
+    # see: PEP 8
 
     # for class
+    #
+    # good:
+    #   MyClass
+    # bad:
+    #   myClass, my_class
     MyClass
 
-    # func, module, package, variables
+    # for func, module, package, variables
+    #
+    # good:
+    #   var_underscore_separate
+    # bad:
+    #   varCamel, VarCamel
     var_underscore_separate
 
     # for public use
@@ -82,7 +61,7 @@ Using ``__future__`` backport features
 
     # backport python3 print_function in python2
 
-    >>> print "Hello World"  # `print` is statement in python2
+    >>> print "Hello World"  # print is a statement
     Hello World
     >>> from __future__ import print_function
     >>> print "Hello World"
@@ -90,15 +69,15 @@ Using ``__future__`` backport features
         print "Hello World"
                           ^
     SyntaxError: invalid syntax
-    >>> print("Hello World") # after backport, `print` is a function
+    >>> print("Hello World") # print become a function
     Hello World
 
     # backport python3 unicode_literals in python2
 
-    >>> type("Guido") # string default type is `str` in python2
+    >>> type("Guido") # string type is str in python2
     <type 'str'>
     >>> from __future__ import unicode_literals
-    >>> type("Guido") # after backport, string default type is `unicode`
+    >>> type("Guido") # string type become unicode
     <type 'unicode'>
 
 
