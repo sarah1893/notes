@@ -100,8 +100,8 @@ Check object attributes
     >>> dir(list)
     ['__add__', '__class__', ...]
 
-Define a function __doc__
--------------------------
+Define a function ``__doc__``
+------------------------------
 
 .. code-block:: python
 
@@ -182,8 +182,8 @@ Check all global variables
     >>> globals()
     {'args': (1, 2, 3, 4, 5), ...}
 
-Check "callable"
-----------------
+Check **callable**
+-------------------
 
 .. code-block:: python
 
@@ -258,15 +258,15 @@ Representations of your class behave
     >>> Example()
     Example __repr__
 
-Get list item "SMART"
----------------------
+Get list item **SMART**
+------------------------
 
 .. code-block:: python
 
     >>> a = [1, 2, 3, 4, 5]
     >>> a[0]
     1
-    >>>a[-1]
+    >>> a[-1]
     5
     >>> a[0:]
     [1, 2, 3, 4, 5]
@@ -304,8 +304,21 @@ Get list item "SMART"
     >>> filter(predicate, l)
     [3, 4]
 
-Get dictionary item "SMART"
----------------------------
+    # collect distinct objects
+    >>> a = [1, 2, 3, 3, 3]
+    >>> list({_ for _ in a})
+    [1, 2, 3]
+    # or
+    >>> list(set(a))
+    [1, 2, 3]
+
+    # reverse
+    >>> a = [1, 2, 3, 4, 5]
+    >>> a[::-1]
+    [5, 4, 3, 2, 1]
+
+Get dictionary item **SMART**
+------------------------------
 
 .. code-block:: python
 
@@ -335,8 +348,8 @@ Get dictionary item "SMART"
     >>> a
     {'1': 1, '3': 3, '2': 2, '4': 4}
 
-Set a list/dict "SMART"
------------------------
+Set a list/dict **SMART**
+--------------------------
 
 .. code-block:: python
 
@@ -376,8 +389,8 @@ NamedTuple
     >>> print e.a, e[1], e[1] + e.b
     1 2 4
 
-Delegating Iteration (__iter__)
---------------------------------
+``__iter__`` - Delegating Iteration
+------------------------------------
 
 .. code-block:: python
 
@@ -792,8 +805,8 @@ Callable object
     >>> ex()
     I am callable!
 
-Context Manager - "with" statement
-----------------------------------
+Context Manager - ``with`` statement
+-------------------------------------
 
 .. code-block:: python
 
@@ -832,8 +845,8 @@ Context Manager - "with" statement
                 conn.send(msg)
                 conn.close()
 
-Using @contextmanager
----------------------
+Using ``@contextmanager``
+--------------------------
 
 .. code-block:: python
 
@@ -850,8 +863,8 @@ Using @contextmanager
     with opening('example.txt') as fd:
        fd.read()
 
-Using "with" statement open file
---------------------------------
+Using ``with`` statement open file
+------------------------------------
 
 .. code-block:: python
 
@@ -908,9 +921,6 @@ Property - Managed attributes
 Computed attributes - Using property
 ------------------------------------
 
-Concept: Attribute's value is not store in memory. Computing the value only
-when we need.
-
 .. code-block:: python
 
     >>> class Example(object):
@@ -921,6 +931,11 @@ when we need.
     >>> ex = Example()
     >>> ex.square3
     8
+
+.. note::
+
+    ``@property`` compute the value of attribute only when we need.
+    Not store in memory previously.
 
 Descriptor - manage attributes
 ------------------------------
@@ -963,8 +978,8 @@ Descriptor - manage attributes
     >>> hasattr(ex3, 'x')
     False
 
-@staticmethod, @classmethod
----------------------------
+``@staticmethod``, ``@classmethod``
+-------------------------------------
 
 .. code-block:: python
 
@@ -1030,8 +1045,8 @@ Abstract method - Metaclass
     >>> ex.absmethod()
     abstract
 
-Common Use "Magic"
-------------------
+Common Use **Magic**
+---------------------
 
 .. code-block:: python
 
