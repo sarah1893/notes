@@ -614,7 +614,7 @@ C
        func sub;
     };
     int add_func(Obj *self) {
-       return self-&t;a + self->b;
+       return self->a + self->b;
     }
     int sub_func(Obj *self) {
        return self->a - self->b;
