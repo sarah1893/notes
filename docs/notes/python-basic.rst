@@ -80,6 +80,16 @@ Using ``__future__`` backport features
     >>> type("Guido") # string type become unicode
     <type 'unicode'>
 
+    # backport PEP 238 -- Changing the Division Operator
+
+    >>> 1/2
+    0
+    >>> from __future__ import division
+    >>> 1/2   # return a float (classic division)
+    0.5
+    >>> 1//2  # return a int (floor division)
+    0
+
 
 .. note::
 
