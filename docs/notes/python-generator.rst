@@ -121,8 +121,8 @@ Send message to generator
     ...
     Message: Hello World!
 
-"yield from" expression
------------------------
+``yield from`` expression
+---------------------------
 
 .. code-block:: python
 
@@ -239,8 +239,8 @@ Generate sequences
     >>> a
     ['a', 'b', range(0, 3)]
 
-What "RES = yield from EXP" actually do?
-----------------------------------------
+What ``RES = yield from EXP`` actually do?
+--------------------------------------------
 
 .. code-block:: python
 
@@ -468,8 +468,8 @@ Context manager and generator
     [1, 2, 3, 4, 5]
     exit scope
 
-What @contextmanager actually doing?
-------------------------------------
+What ``@contextmanager`` actually doing?
+------------------------------------------
 
 .. code-block:: python
 
@@ -544,8 +544,8 @@ profile code block
     block2 cost time: 3.00104284286
 
 
-'yield from' and '__iter__'
----------------------------
+``yield from`` and ``__iter__``
+--------------------------------
 
 .. code-block:: python
 
@@ -584,8 +584,8 @@ profile code block
     >>> next(g)
     9525
 
-"yield from == await" expression
---------------------------------
+``yield from == await`` expression
+------------------------------------
 
 .. code-block:: python
 
