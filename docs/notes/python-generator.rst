@@ -940,6 +940,50 @@ Asynchronous Generators
     1
     2
 
+Async generator get better performance than async iterator
+------------------------------------------------------------
+
+.. code-block:: python
+
+    # Need python-3.6 or above
+
+    >>> import time
+    >>> import asyncio
+    >>> class AsyncIter:
+    ...     def __init__(self, n):
+    ...         self._n = n
+    ...     def __aiter__(self):
+    ...         return self
+    ...     async def __anext__(self):
+    ...         _ = self._n
+    ...         if self._n == 0:
+    ...             raise StopAsyncIteration
+    ...         self._n -= 1
+    ...         return _
+    ...
+    >>> async def agen(n):
+    ...     for i in range(n):
+    ...         yield i
+    ...
+    >>> async def task_agen(n):
+    ...     s = time.time()
+    ...     async for _ in agen(n): pass
+    ...     cost = time.time() - s
+    ...     print(f"agen cost time: {cost}")
+    ...
+    >>> async def task_aiter(n):
+    ...     s = time.time()
+    ...     async for _ in AsyncIter(n): pass
+    ...     cost = time.time() - s
+    ...     print(f"aiter cost time: {cost}")
+    ...
+    >>> n = 10 ** 7
+    >>> loop = asyncio.get_event_loop()
+    >>> loop.run_until_complete(task_agen(n))
+    agen cost time: 8.422431707382202
+    >>> loop.run_until_complete(task_aiter(n))
+    aiter cost time: 46.860727071762085
+
 
 Asynchronous Comprehensions
 ---------------------------
