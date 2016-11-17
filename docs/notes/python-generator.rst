@@ -284,6 +284,36 @@ What ``RES = yield from EXP`` actually do?
     >>> next(g)
     1
 
+
+``for _ in gen()`` simulate ``yield from``
+-------------------------------------------
+
+.. code-block:: python
+
+    >>> def subgen(n):
+    ...     for _ in range(n): yield _
+    ...
+    >>> def gen(n):
+    ...     yield from subgen(n)
+    ...
+    >>> g = gen(3)
+    >>> next(g)
+    0
+    >>> next(g)
+    1
+
+    # equal to
+
+    >>> def gen(n):
+    ...     for _ in subgen(n): yield _
+    ...
+    >>> g = gen(3)
+    >>> next(g)
+    0
+    >>> next(g)
+    1
+
+
 Check generator type
 --------------------
 
@@ -883,3 +913,126 @@ simple round-robin with blocking and non-blocking
 
     tasks.append(server())
     run()
+
+
+Asynchronous Generators
+------------------------
+
+.. code-block:: python
+
+    # PEP 525
+    #
+    # Need python-3.6 or above
+
+    >>> import asyncio
+    >>> async def slow_gen(n, t):
+    ...     for _ in range(n):
+    ...         await asyncio.sleep(t)
+    ...         yield _
+    ...
+    >>> async def task(n):
+    ...     async for _ in slow_gen(n, 0.1):
+    ...         print(_)
+    ...
+    >>> loop = asyncio.get_event_loop()
+    >>> loop.run_until_complete(task(3))
+    0
+    1
+    2
+
+
+Asynchronous Comprehensions
+---------------------------
+
+.. code-block:: python
+
+    # PEP 530
+    #
+    # Need python-3.6 or above
+
+    >>> import asyncio
+    >>> async def agen(n, t):
+    ...     for _ in range(n):
+    ...         await asyncio.sleep(t)
+    ...         yield _
+    >>> async def main():
+    ...     ret = [_  async for _ in agen(5, 0.1)]
+    ...     print(*ret)
+    ...     ret = [_ async for _ in agen(5, 0.1) if _ < 3]
+    ...     print(*ret)
+    ...     ret = [_ if _ < 3 else -1 async for _ in agen(5, 0.1)]
+    ...     print(*ret)
+    ...     ret = {f'{_}': _ async for _ in agen(5, 0.1)}
+    ...     print(ret)
+
+    >>> loop.run_until_complete(main())
+    0 1 2 3 4
+    0 1 2
+    0 1 2 -1 -1
+    {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4}
+
+    # await in Comprehensions
+
+    >>> async def foo(t):
+    ...     await asyncio.sleep(t)
+    ...     return "foo"
+    ...
+    >>> async def bar(t):
+    ...     await asyncio.sleep(t)
+    ...     return "bar"
+    ...
+    >>> async def baz(t):
+    ...     await asyncio.sleep(t)
+    ...     return "baz"
+    ...
+    >>> async def gen(*f, t=0.1):
+    ...     for _ in f:
+    ...         await asyncio.sleep(t)
+    ...         yield _
+    ...
+    >>> async def await_simple_task():
+    ...     ret = [await f(0.1) for f in [foo, bar]]
+    ...     print(ret)
+    ...     ret = {await f(0.1) for f in [foo, bar]}
+    ...     print(ret)
+    ...     ret = {f.__name__: await f(0.1) for f in [foo, bar]}
+    ...     print(ret)
+    ...
+    >>> async def await_other_task():
+    ...     ret = [await f(0.1) for f in [foo, bar] if await baz(1)]
+    ...     print(ret)
+    ...     ret = {await f(0.1) for f in [foo, bar] if await baz(1)}
+    ...     print(ret)
+    ...     ret = {f.__name__: await f(0.1) for f in [foo, bar] if await baz(1)}
+    ...     print(ret)
+    ...
+    >>> async def await_aiter_task():
+    ...     ret = [await f(0.1) async for f in gen(foo, bar)]
+    ...     print(ret)
+    ...     ret = {await f(0.1) async for f in gen(foo, bar)}
+    ...     print(ret)
+    ...     ret = {f.__name__: await f(0.1) async for f in gen(foo, bar)}
+    ...     print(ret)
+    ...     ret = [await f(0.1) async for f in gen(foo, bar) if await baz(1)]
+    ...     print(ret)
+    ...     ret = {await f(0.1) async for f in gen(foo, bar) if await baz(1)}
+    ...     print(ret)
+    ...     ret = {f.__name__: await f(0.1) async for f in gen(foo, bar) if await baz(1)}
+    ...
+    >>> import asyncio
+    >>> asyncio.get_event_loop()
+    >>> loop.run_until_complete(await_simple_task())
+    ['foo', 'bar']
+    {'bar', 'foo'}
+    {'foo': 'foo', 'bar': 'bar'}
+    >>> loop.run_until_complete(await_other_task())
+    ['foo', 'bar']
+    {'bar', 'foo'}
+    {'foo': 'foo', 'bar': 'bar'}
+    >>> loop.run_until_complete(await_gen_task())
+    ['foo', 'bar']
+    {'bar', 'foo'}
+    {'foo': 'foo', 'bar': 'bar'}
+    ['foo', 'bar']
+    {'bar', 'foo'}
+    {'foo': 'foo', 'bar': 'bar'}
