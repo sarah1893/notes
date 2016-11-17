@@ -940,6 +940,102 @@ Asynchronous Generators
     1
     2
 
+Asynchronous generators can have ``try..finally`` blocks
+---------------------------------------------------------
+
+.. code-block:: python
+
+    # Need python-3.6 or above
+
+    >>> import asyncio
+    >>> async def agen(t):
+    ...     try:
+    ...         await asyncio.sleep(t)
+    ...         yield 1/0
+    ...     finally:
+    ...         print("finally part")
+    ...
+    >>> async def main(t=1):
+    ...     try:
+    ...         g = agen(t)
+    ...         await g.__anext__()
+    ...     except Exception as e:
+    ...         print(repr(e))
+    ...
+    >>> loop = asyncio.get_event_loop()
+    >>> loop.run_until_complete(main(1))
+    finally part
+    ZeroDivisionError('division by zero',)
+
+
+send value and throw exception into async generator
+----------------------------------------------------
+
+.. code-block:: python
+
+    # Need python-3.6 or above
+
+    >>> import asyncio
+    >>> async def agen(n, t=0.1):
+    ...     try:
+    ...         for _ in range(n):
+    ...             await asyncio.sleep(t)
+    ...             val = yield _
+    ...             print(f'get val: {val}')
+    ...     except RuntimeError as e:
+    ...         await asyncio.sleep(t)
+    ...         yield repr(e)
+    ...
+    >>> async def main(n):
+    ...     g = agen(n)
+    ...     ret = await g.asend(None) + await g.asend('foo')
+    ...     print(ret)
+    ...     ret = await g.athrow(RuntimeError('Get RuntimeError'))
+    ...     print(ret)
+    ...
+    >>> loop = asyncio.get_event_loop()
+    >>> loop.run_until_complete(main(5))
+    get val: foo
+    1
+    RuntimeError('Get RuntimeError',)
+
+
+Simple async round-robin
+---------------------------
+
+.. code-block:: python
+
+    # Need python-3.6 or above
+
+    >>> import asyncio
+    >>> from collections import deque
+    >>> async def agen(n, t=0.1):
+    ...     for _ in range(n):
+    ...         await asyncio.sleep(t)
+    ...         yield _
+    ...
+    >>> async def main():
+    ...     q = deque([agen(3), agen(5)])
+    ...     while q:
+    ...         try:
+    ...             g = q.popleft()
+    ...             ret = await g.__anext__()
+    ...             print(ret)
+    ...             q.append(g)
+    ...         except StopAsyncIteration:
+    ...             pass
+    ...
+    >>> loop.run_until_complete(main())
+    0
+    0
+    1
+    1
+    2
+    2
+    3
+    4
+
+
 Async generator get better performance than async iterator
 ------------------------------------------------------------
 
