@@ -1076,9 +1076,9 @@ Async generator get better performance than async iterator
     >>> n = 10 ** 7
     >>> loop = asyncio.get_event_loop()
     >>> loop.run_until_complete(task_agen(n))
-    agen cost time: 8.422431707382202
+    agen cost time: 1.2698817253112793
     >>> loop.run_until_complete(task_aiter(n))
-    aiter cost time: 46.860727071762085
+    aiter cost time: 4.168368101119995
 
 
 Asynchronous Comprehensions
