@@ -221,6 +221,7 @@ Generate sequences
 .. code-block:: python
 
     # get a list via generator
+
     >>> def chain():
     ...     for _ in 'ab':
     ...         yield _
@@ -230,14 +231,16 @@ Generate sequences
     >>> a = list(chain())
     >>> a
     ['a', 'b', 0, 1, 2]
+
     # equivalent to
+
     >>> def chain():
     ...     yield from 'ab'
-    ...     yield range(3)
+    ...     yield from range(3)
     ...
     >>> a = list(chain())
     >>> a
-    ['a', 'b', range(0, 3)]
+    ['a', 'b', 0, 1, 2]
 
 What ``RES = yield from EXP`` actually do?
 --------------------------------------------
