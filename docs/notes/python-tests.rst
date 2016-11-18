@@ -7,7 +7,7 @@ A simple Python unittest
 
 .. code-block:: python
 
-    # python unittet only run the function with prefix "test"
+    # python unittests only run the function with prefix "test"
     >>> import unittest
     >>> class TestFoo(unittest.TestCase):
     ...     def test_foo(self):
