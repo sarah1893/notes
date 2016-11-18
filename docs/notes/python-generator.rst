@@ -26,7 +26,7 @@ Glossary of Generator
     StopIteration
 
     # generator expression
-    >>> g = (_ for _ in range(2))
+    >>> g = (x for x in range(2))
     >>> g
     <generator object <genexpr> at 0x10a9c191>
     >>> next(g)
@@ -45,30 +45,29 @@ Produce value via generator
 
     >>> from __future__ import print_function
     >>> def prime(n):
-    ...   p = 2
-    ...   while n > 0:
-    ...     for _ in range(2, p):
-    ...       if p % _ == 0:
-    ...         break
-    ...     else:
-    ...       yield p
-    ...       n-=1
-    ...     p+=1
+    ...     p = 2
+    ...     while n > 0:
+    ...         for x in range(2, p):
+    ...             if p % x == 0:
+    ...                 break
+    ...         else:
+    ...             yield p
+    ...             n -= 1
+    ...         p += 1
     ...
     >>> p = prime(3)
     >>> next(p)
     2
     >>> next(p)
     3
-    >>>
     >>> next(p)
     5
     >>> next(p)
     Traceback (most recent call last):
       File "<stdin>", line 1, in <module>
     StopIteration
-    >>> for _ in prime(5):
-    ...   print(_, end=" ")
+    >>> for x in prime(5):
+    ...     print(x, end=" ")
     ...
     2 3 5 7 11 >>>
 
@@ -79,25 +78,25 @@ Implement Iterable object via generator
 
     >>> from __future__ import print_function
     >>> class Count(object):
-    ...   def __init__(self, n):
-    ...     self._n = n
-    ...   def __iter__(self):
-    ...     n = self._n
-    ...     while n>0:
-    ...       yield n
-    ...       n-=1
-    ...   def __reversed__(self):
-    ...     n = 1
-    ...     while n<=self._n:
-    ...       yield n
-    ...       n+=1
+    ...     def __init__(self, n):
+    ...         self._n = n
+    ...     def __iter__(self):
+    ...         n = self._n
+    ...         while n > 0:
+    ...             yield n
+    ...             n -= 1
+    ...     def __reversed__(self):
+    ...         n = 1
+    ...         while n <= self._n:
+    ...             yield n
+    ...             n += 1
     ...
-    >>> for _ in Count(5):
-    ...   print(_, end=" ")
+    >>> for x in Count(5):
+    ...     print(x, end=" ")
     ...
     5 4 3 2 1 >>>
-    >>> for _ in reversed(Count(5)):
-    ...   print(_, end=" ")
+    >>> for x in reversed(Count(5)):
+    ...     print(x, end=" ")
     ...
     1 2 3 4 5 >>>
 
@@ -107,17 +106,17 @@ Send message to generator
 .. code-block:: python
 
     >>> def spam():
-    ...   msg = yield
-    ...   print("Message:",msg)
+    ...     msg = yield
+    ...     print("Message:", msg)
     ...
     >>> try:
-    ...   g = spam()
-    ...   # start generator
-    ...   next(g)
-    ...   # send message to generator
-    ...   g.send("Hello World!")
+    ...     g = spam()
+    ...     # start generator
+    ...     next(g)
+    ...     # send message to generator
+    ...     g.send("Hello World!")
     ... except StopIteration:
-    ...   pass
+    ...     pass
     ...
     Message: Hello World!
 
@@ -223,10 +222,10 @@ Generate sequences
     # get a list via generator
 
     >>> def chain():
-    ...     for _ in 'ab':
-    ...         yield _
-    ...     for _ in range(3):
-    ...         yield _
+    ...     for x in 'ab':
+    ...         yield x
+    ...     for x in range(3):
+    ...         yield x
     ...
     >>> a = list(chain())
     >>> a
@@ -249,24 +248,24 @@ What ``RES = yield from EXP`` actually do?
 
     # ref: pep380
     >>> def subgen():
-    ...     for _ in range(3):
-    ...         yield _
+    ...     for x in range(3):
+    ...         yield x
     ...
     >>> EXP = subgen()
     >>> def delegating_gen():
-    ...   _i = iter(EXP)
-    ...   try:
-    ...     _y = next(_i)
-    ...   except StopIteration as _e:
-    ...     RES = _e.value
-    ...   else:
-    ...     while True:
-    ...       _s = yield _y
-    ...       try:
-    ...         _y = _i.send(_s)
-    ...       except StopIteration as _e:
-    ...           RES = _e.value
-    ...           break
+    ...     _i = iter(EXP)
+    ...     try:
+    ...         _y = next(_i)
+    ...     except StopIteration as _e:
+    ...         RES = _e.value
+    ...     else:
+    ...         while True:
+    ...             _s = yield _y
+    ...             try:
+    ...                 _y = _i.send(_s)
+    ...             except StopIteration as _e:
+    ...                 RES = _e.value
+    ...                 break
     ...
     >>> g = delegating_gen()
     >>> next(g)
@@ -294,7 +293,7 @@ What ``RES = yield from EXP`` actually do?
 .. code-block:: python
 
     >>> def subgen(n):
-    ...     for _ in range(n): yield _
+    ...     for x in range(n): yield x
     ...
     >>> def gen(n):
     ...     yield from subgen(n)
@@ -308,7 +307,7 @@ What ``RES = yield from EXP`` actually do?
     # equal to
 
     >>> def gen(n):
-    ...     for _ in subgen(n): yield _
+    ...     for x in subgen(n): yield x
     ...
     >>> g = gen(3)
     >>> next(g)
@@ -469,7 +468,7 @@ Simple compiler
 
     exp = '2 * 3 + 5 / 2'
     print(evaluate(exp))
-    exp = '+'.join([str(_) for _ in range(10000)])
+    exp = '+'.join([str(x) for x in range(10000)])
     print(evaluate(exp))
 
 output:
@@ -489,11 +488,11 @@ Context manager and generator
     >>> import contextlib
     >>> @contextlib.contextmanager
     ... def mylist():
-    ...   try:
-    ...     l = [1,2,3,4,5]
-    ...     yield l
-    ...   finally:
-    ...     print("exit scope")
+    ...     try:
+    ...         l = [1, 2, 3, 4, 5]
+    ...         yield l
+    ...     finally:
+    ...         print("exit scope")
     ...
     >>> with mylist() as l:
     ...   print(l)
@@ -508,11 +507,15 @@ What ``@contextmanager`` actually doing?
 
     # ref: PyCon 2014 - David Beazley
     # define a context manager class
+
     class GeneratorCM(object):
+
         def __init__(self,gen):
             self._gen = gen
+
         def __enter__(self):
             return next(self._gen)
+
         def __exit__(self, *exc_info):
             try:
                 if exc_info[0] is None:
@@ -535,7 +538,7 @@ What ``@contextmanager`` actually doing?
     @contextmanager
     def mylist():
         try:
-            l=[1,2,3,4,5]
+            l = [1, 2, 3, 4, 5]
             yield l
         finally:
             print "exit scope"
@@ -565,7 +568,7 @@ profile code block
     ...         yield
     ...     finally:
     ...         e = time.time()
-    ...         print('{} cost time: {}'.format(msg, e-s))
+    ...         print('{} cost time: {}'.format(msg, e - s))
     ...
     >>> with profile('block1'):
     ...     time.sleep(1)
@@ -747,26 +750,26 @@ Implement a simple scheduler
 
     # idea: write an event loop(scheduler)
     >>> def fib(n):
-    ...   if n<=2:
-    ...     return 1
-    ...   return fib(n-1)+fib(n-2)
+    ...     if n <= 2:
+    ...         return 1
+    ...     return fib(n-1) + fib(n-2)
     ...
     >>> def g_fib(n):
-    ...   for _ in range(1,n+1):
-    ...     yield fib(_)
+    ...     for x in range(1, n + 1):
+    ...         yield fib(x)
     ...
     >>> from collections import deque
-    >>> t = [g_fib(3),g_fib(5)]
+    >>> t = [g_fib(3), g_fib(5)]
     >>> q = deque()
     >>> q.extend(t)
     >>> def run():
-    ...   while q:
-    ...     try:
-    ...       t = q.popleft()
-    ...       print(next(t))
-    ...       q.append(t)
-    ...     except StopIteration:
-    ...       print("Task done")
+    ...     while q:
+    ...         try:
+    ...             t = q.popleft()
+    ...             print(next(t))
+    ...             q.append(t)
+    ...         except StopIteration:
+    ...             print("Task done")
     ...
     >>> run()
     1
@@ -787,6 +790,7 @@ Simple round-robin with blocking
 
     # ref: PyCon 2015 - David Beazley
     # skill: using task and wait queue
+
     from collections import deque
     from select import select
     import socket
@@ -796,50 +800,49 @@ Simple round-robin with blocking
     w_send = {}
 
     def run():
-       while any([tasks,w_read,w_send]):
-          while not tasks:
-             # polling tasks
-             can_r,can_s,_ = select(
-                   w_read,w_send,[])
-             for _r in can_r:
-                tasks.append(w_read.pop(_r))
-             for _w in can_s:
-                tasks.append(w_send.pop(_w))
-          try:
-             task = tasks.popleft()
-             why,what = next(task)
-             if why == 'recv':
-                w_read[what] = task
-             elif why == 'send':
-                w_send[what] = task
-             else:
-                raise RuntimeError
-          except StopIteration:
-             pass
+        while any([tasks, w_read, w_send]):
+            while not tasks:
+                # polling tasks
+                can_r, can_s,_ = select(w_read, w_send, [])
+                for _r in can_r:
+                    tasks.append(w_read.pop(_r))
+                for _w in can_s:
+                    tasks.append(w_send.pop(_w))
+            try:
+                task = tasks.popleft()
+                why,what = next(task)
+                if why == 'recv':
+                    w_read[what] = task
+                elif why == 'send':
+                    w_send[what] = task
+                else:
+                    raise RuntimeError
+            except StopIteration:
+                pass
 
     def server():
-       host = ('localhost',5566)
-       sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-       sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-       sock.bind(host)
-       sock.listen(5)
-       while True:
-          # tell scheduler want block
-          yield 'recv', sock
-          conn,addr = sock.accept()
-          tasks.append(client_handler(conn))
+        host = ('localhost',5566)
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        sock.bind(host)
+        sock.listen(5)
+        while True:
+            # tell scheduler want block
+            yield 'recv', sock
+            conn,addr = sock.accept()
+            tasks.append(client_handler(conn))
 
     def client_handler(conn):
-       while True:
-          # tell scheduler want block
-          yield 'recv', conn
-          msg = conn.recv(1024)
-          if not msg:
-             break
-          # tell scheduler want block
-          yield 'send', conn
-          conn.send(msg)
-       conn.close()
+        while True:
+            # tell scheduler want block
+            yield 'recv', conn
+            msg = conn.recv(1024)
+            if not msg:
+                break
+            # tell scheduler want block
+            yield 'send', conn
+            conn.send(msg)
+        conn.close()
 
     tasks.append(server())
     run()
@@ -859,60 +862,60 @@ simple round-robin with blocking and non-blocking
     w_send = {}
 
     def run():
-       while any([tasks,w_read,w_send]):
-          while not tasks:
-             # polling tasks
-             can_r,can_s,_ = select(
-                   w_read,w_send,[])
-             for _r in can_r:
-                tasks.append(w_read.pop(_r))
-             for _w in can_s:
-                tasks.append(w_send.pop(_w))
-          try:
-             task = tasks.popleft()
-             why,what = next(task)
-             if why == 'recv':
-                w_read[what] = task
-             elif why == 'send':
-                w_send[what] = task
-             elif why == 'continue':
-                print what
-                tasks.append(task)
-             else:
-                raise RuntimeError
-          except StopIteration:
-             pass
+        while any([tasks, w_read, w_send]):
+            while not tasks:
+                # polling tasks
+                can_r,can_s,_ = select(w_read, w_send,[])
+                for _r in can_r:
+                    tasks.append(w_read.pop(_r))
+                for _w in can_s:
+                    tasks.append(w_send.pop(_w))
+            try:
+                task = tasks.popleft()
+                why,what = next(task)
+                if why == 'recv':
+                    w_read[what] = task
+                elif why == 'send':
+                    w_send[what] = task
+                elif why == 'continue':
+                    print what
+                    tasks.append(task)
+                else:
+                    raise RuntimeError
+            except StopIteration:
+                pass
 
     def fib(n):
-       if n<=2:
-          return 1
-       return fib(n-1)+fib(n-2)
+        if n <= 2:
+            return 1
+        return fib(n-1) + fib(n-2)
 
     def g_fib(n):
-       for _ in range(1,n+1):
-          yield 'continue', fib(_)
+        for x in range(1, n + 1):
+            yield 'continue', fib(x)
+
     tasks.append(g_fib(15))
 
     def server():
-       host = ('localhost',5566)
-       sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-       sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-       sock.bind(host)
-       sock.listen(5)
-       while True:
-          yield 'recv', sock
-          conn,addr = sock.accept()
-          tasks.append(client_handler(conn))
+        host = ('localhost',5566)
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        sock.bind(host)
+        sock.listen(5)
+        while True:
+            yield 'recv', sock
+            conn,addr = sock.accept()
+            tasks.append(client_handler(conn))
 
     def client_handler(conn):
-       while True:
-          yield 'recv', conn
-          msg = conn.recv(1024)
-          if not msg:
-             break
-          yield 'send', conn
-          conn.send(msg)
-       conn.close()
+        while True:
+            yield 'recv', conn
+            msg = conn.recv(1024)
+            if not msg:
+                break
+            yield 'send', conn
+            conn.send(msg)
+        conn.close()
 
     tasks.append(server())
     run()
@@ -929,13 +932,13 @@ Asynchronous Generators
 
     >>> import asyncio
     >>> async def slow_gen(n, t):
-    ...     for _ in range(n):
+    ...     for x in range(n):
     ...         await asyncio.sleep(t)
-    ...         yield _
+    ...         yield x
     ...
     >>> async def task(n):
-    ...     async for _ in slow_gen(n, 0.1):
-    ...         print(_)
+    ...     async for x in slow_gen(n, 0.1):
+    ...         print(x)
     ...
     >>> loop = asyncio.get_event_loop()
     >>> loop.run_until_complete(task(3))
@@ -954,7 +957,7 @@ Asynchronous generators can have ``try..finally`` blocks
     >>> async def agen(t):
     ...     try:
     ...         await asyncio.sleep(t)
-    ...         yield 1/0
+    ...         yield 1 / 0
     ...     finally:
     ...         print("finally part")
     ...
@@ -981,9 +984,9 @@ send value and throw exception into async generator
     >>> import asyncio
     >>> async def agen(n, t=0.1):
     ...     try:
-    ...         for _ in range(n):
+    ...         for x in range(n):
     ...             await asyncio.sleep(t)
-    ...             val = yield _
+    ...             val = yield x
     ...             print(f'get val: {val}')
     ...     except RuntimeError as e:
     ...         await asyncio.sleep(t)
@@ -1013,9 +1016,9 @@ Simple async round-robin
     >>> import asyncio
     >>> from collections import deque
     >>> async def agen(n, t=0.1):
-    ...     for _ in range(n):
+    ...     for x in range(n):
     ...         await asyncio.sleep(t)
-    ...         yield _
+    ...         yield x
     ...
     >>> async def main():
     ...     q = deque([agen(3), agen(5)])
@@ -1054,11 +1057,11 @@ Async generator get better performance than async iterator
     ...     def __aiter__(self):
     ...         return self
     ...     async def __anext__(self):
-    ...         _ = self._n
+    ...         ret = self._n
     ...         if self._n == 0:
     ...             raise StopAsyncIteration
     ...         self._n -= 1
-    ...         return _
+    ...         return ret
     ...
     >>> async def agen(n):
     ...     for i in range(n):
@@ -1095,17 +1098,17 @@ Asynchronous Comprehensions
 
     >>> import asyncio
     >>> async def agen(n, t):
-    ...     for _ in range(n):
+    ...     for x in range(n):
     ...         await asyncio.sleep(t)
-    ...         yield _
+    ...         yield x
     >>> async def main():
-    ...     ret = [_  async for _ in agen(5, 0.1)]
+    ...     ret = [x  async for x in agen(5, 0.1)]
     ...     print(*ret)
-    ...     ret = [_ async for _ in agen(5, 0.1) if _ < 3]
+    ...     ret = [x async for x in agen(5, 0.1) if x < 3]
     ...     print(*ret)
-    ...     ret = [_ if _ < 3 else -1 async for _ in agen(5, 0.1)]
+    ...     ret = [x if x < 3 else -1 async for x in agen(5, 0.1)]
     ...     print(*ret)
-    ...     ret = {f'{_}': _ async for _ in agen(5, 0.1)}
+    ...     ret = {f'{x}': x async for x in agen(5, 0.1)}
     ...     print(ret)
 
     >>> loop.run_until_complete(main())
@@ -1129,9 +1132,9 @@ Asynchronous Comprehensions
     ...     return "baz"
     ...
     >>> async def gen(*f, t=0.1):
-    ...     for _ in f:
+    ...     for x in f:
     ...         await asyncio.sleep(t)
-    ...         yield _
+    ...         yield x
     ...
     >>> async def await_simple_task():
     ...     ret = [await f(0.1) for f in [foo, bar]]
