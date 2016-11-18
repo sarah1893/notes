@@ -8,6 +8,7 @@ Glossary of Generator
 .. code-block:: python
 
     # generator function
+
     >>> def gen_func():
     ...     yield 5566
     ...
@@ -15,6 +16,9 @@ Glossary of Generator
     <function gen_func at 0x1019273a>
 
     # generator
+    #
+    # calling the generator function returns a generator
+
     >>> g = gen_func()
     >>> g
     <generator object gen_func at 0x101238fd>
@@ -26,6 +30,9 @@ Glossary of Generator
     StopIteration
 
     # generator expression
+    #
+    # generator expression evaluating directly to a generator
+
     >>> g = (x for x in range(2))
     >>> g
     <generator object <genexpr> at 0x10a9c191>
