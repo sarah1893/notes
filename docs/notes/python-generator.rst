@@ -78,6 +78,45 @@ Produce value via generator
     ...
     2 3 5 7 11 >>>
 
+
+Unpacking Generators
+----------------------
+
+.. code-block:: python
+
+    # PEP 448
+
+    # unpacking inside a list
+
+    >>> g1 = (x for x in range(3))
+    >>> g2 = (x**2 for x in range(2))
+    >>> [1, *g1, 2, *g2]
+    [1, 0, 1, 2, 2, 0, 1]
+    >>> # equal to
+    >>> g1 = (x for x in range(3))
+    >>> g2 = (x**2 for x in range(2))
+    >>> [1] + list(g1) + [2] + list(g2)
+    [1, 0, 1, 2, 2, 0, 1]
+
+    # unpacking inside a set
+
+    >>> g = (x for x in [5, 5, 6, 6])
+    >>> {*g}
+    {5, 6}
+
+    # unpacking to variables
+
+    >>> g = (x for x in range(3))
+    >>> a, b, c = g
+    >>> print(a, b, c)
+    0 1 2
+
+    # unpacking inside a function
+
+    >>> print(*(x for x in range(3)))
+    0 1 2
+
+
 Implement Iterable object via generator
 ---------------------------------------
 
@@ -190,7 +229,6 @@ yield (from) EXPR return RES
     ...         avg = total / count
     ...     return avg
     ...
-    >>> g = average()
     >>> g = average()
     >>> next(g) # start gen
     >>> g.send(3)
