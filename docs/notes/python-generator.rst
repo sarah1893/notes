@@ -110,6 +110,12 @@ Unpacking Generators
     >>> a, b, c = g
     >>> print(a, b, c)
     0 1 2
+    >>> g = (x for x in range(6))
+    >>> a, b, *c, d = g
+    >>> print(a, b, d)
+    0 1 5
+    >>> print(c)
+    [2, 3, 4]
 
     # unpacking inside a function
 
