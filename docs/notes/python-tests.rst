@@ -654,3 +654,45 @@ Mock - using ``@patch`` substitute original method
     ...
     >>> test()
     [Errno 2] No such file or directory: '%$!?&*'
+
+
+Mock - substitute ``open``
+---------------------------
+
+.. code-block:: python
+
+    >>> import urllib
+    >>> from unittest.mock import patch, mock_open
+    >>> def send_req(url):
+    ...     with urllib.request.urlopen(url) as f:
+    ...         if f.status == 200:
+    ...             return f.read()
+    ...         raise urllib.error.URLError
+    ...
+    >>> fake_html = b'<html><h1>Mock Content</h1></html>'
+    >>> mock_urlopen = mock_open(read_data=fake_html)
+    >>> ret = mock_urlopen.return_value
+    >>> ret.status = 200
+    >>> @patch('urllib.request.urlopen', mock_urlopen)
+    ... def test_send_req_success():
+    ...     try:
+    ...         ret = send_req('http://www.mockurl.com')
+    ...         assert ret == fake_html
+    ...     except Exception as e:
+    ...         print(e)
+    ...     finally:
+    ...         print('test send_req success')
+    ...
+    >>> test_send_req_success()
+    test send_req success
+    >>> ret = mock_urlopen.return_value
+    >>> ret.status = 404
+    >>> @patch('urllib.request.urlopen', mock_urlopen)
+    ... def test_send_req_fail():
+    ...     try:
+    ...         ret = send_req('http://www.mockurl.com')
+    ...         assert ret == fake_html
+    ...     except Exception as e:
+    ...
+    >>> test_send_req_fail()
+    test fail success
