@@ -8,13 +8,15 @@ A simple Python unittest
 .. code-block:: python
 
     # python unittests only run the function with prefix "test"
+
+    >>> from __future__ import print_function
     >>> import unittest
     >>> class TestFoo(unittest.TestCase):
     ...     def test_foo(self):
     ...             self.assertTrue(True)
     ...     def fun_not_run(self):
-    ...             print "no run"
-    ... 
+    ...             print("no run")
+    ...
     >>> unittest.main()
     .
     ----------------------------------------------------------------------
@@ -25,7 +27,7 @@ A simple Python unittest
     >>> class TestFail(unittest.TestCase):
     ...     def test_false(self):
     ...             self.assertTrue(False)
-    ... 
+    ...
     >>> unittest.main()
     F
     ======================================================================
@@ -46,30 +48,32 @@ Python unittest setup & teardown hierarchy
 
 .. code-block:: python
 
+    from __future__ import print_function
+
     import unittest
 
     def fib(n):
         return 1 if n<=2 else fib(n-1)+fib(n-2)
 
     def setUpModule():
-            print "setup module" 
+            print("setup module")
     def tearDownModule():
-            print "teardown module"
+            print("teardown module")
 
     class TestFib(unittest.TestCase):
 
         def setUp(self):
-            print "setUp"
+            print("setUp")
             self.n = 10
         def tearDown(self):
-            print "tearDown"
+            print("tearDown")
             del self.n
         @classmethod
         def setUpClass(cls):
-            print "setUpClass"
+            print("setUpClass")
         @classmethod
         def tearDownClass(cls):
-            print "tearDownClass"
+            print("tearDownClass")
         def test_fib_assert_equal(self):
             self.assertEqual(fib(self.n), 55)
         def test_fib_assert_true(self):
@@ -80,7 +84,7 @@ Python unittest setup & teardown hierarchy
 
 output:
 
-.. code-block:: console 
+.. code-block:: console
 
     $ python test.py
     setup module
@@ -103,41 +107,45 @@ Different module of setUp & tearDown hierarchy
 .. code-block:: python
 
     # test_module.py
+    from __future__ import print_function
+
     import unittest
 
     class TestFoo(unittest.TestCase):
         @classmethod
         def setUpClass(self):
-            print "foo setUpClass"
+            print("foo setUpClass")
         @classmethod
         def tearDownClass(self):
-            print "foo tearDownClass"
+            print("foo tearDownClass")
         def setUp(self):
-            print "foo setUp"
+            print("foo setUp")
         def tearDown(self):
-            print "foo tearDown"
+            print("foo tearDown")
         def test_foo(self):
             self.assertTrue(True)
 
     class TestBar(unittest.TestCase):
         def setUp(self):
-            print "bar setUp"
+            print("bar setUp")
         def tearDown(self):
-            print "bar tearDown"
+            print("bar tearDown")
         def test_bar(self):
             self.assertTrue(True)
 
     # test.py
+    from __future__ import print_function
+
     from test_module import TestFoo
     from test_module import TestBar
     import test_module
     import unittest
 
     def setUpModule():
-        print "setUpModule"
+        print("setUpModule")
 
     def tearDownModule():
-        print "tearDownModule"
+        print("tearDownModule")
 
 
     if __name__ == "__main__":
@@ -173,15 +181,15 @@ Run tests via unittest.TextTestRunner
 
 .. code-block:: python
 
-    >>> import unittest  
+    >>> import unittest
     >>> class TestFoo(unittest.TestCase):
     ...     def test_foo(self):
     ...         self.assertTrue(True)
     ...     def test_bar(self):
-    ...         self.assertFalse(False)  
+    ...         self.assertFalse(False)
 
-    >>> suite = unittest.TestLoader().loadTestsFromTestCase(TestFoo)  
-    >>> unittest.TextTestRunner(verbosity=2).run(suite)  
+    >>> suite = unittest.TestLoader().loadTestsFromTestCase(TestFoo)
+    >>> unittest.TextTestRunner(verbosity=2).run(suite)
     test_bar (__main__.TestFoo) ... ok
     test_foo (__main__.TestFoo) ... ok
 
@@ -195,15 +203,15 @@ Test raise exception
 
 .. code-block:: python
 
-    >>> import unittest  
+    >>> import unittest
 
     >>> class TestRaiseException(unittest.TestCase):
     ...     def test_raise_except(self):
     ...         with self.assertRaises(SystemError):
-    ...             raise SystemError  
-    >>> suite_loader = unittest.TestLoader()  
-    >>> suite = suite_loader.loadTestsFromTestCase(TestRaiseException)  
-    >>> unittest.TextTestRunner().run(suite)  
+    ...             raise SystemError
+    >>> suite_loader = unittest.TestLoader()
+    >>> suite = suite_loader.loadTestsFromTestCase(TestRaiseException)
+    >>> unittest.TextTestRunner().run(suite)
     .
     ----------------------------------------------------------------------
     Ran 1 test in 0.000s
@@ -212,9 +220,9 @@ Test raise exception
     >>> class TestRaiseFail(unittest.TestCase):
     ...     def test_raise_fail(self):
     ...         with self.assertRaises(SystemError):
-    ...             pass  
-    >>> suite = unittest.TestLoader().loadTestsFromTestCase(TestRaiseFail)  
-    >>> unittest.TextTestRunner(verbosity=2).run(suite)  
+    ...             pass
+    >>> suite = unittest.TestLoader().loadTestsFromTestCase(TestRaiseFail)
+    >>> unittest.TextTestRunner(verbosity=2).run(suite)
     test_raise_fail (__main__.TestRaiseFail) ... FAIL
 
     ======================================================================
@@ -235,20 +243,21 @@ Pass arguments into a TestCase
 
 .. code-block:: python
 
-    >>> import unittest  
+    >>> from __future__ import print_function
+    >>> import unittest
     >>> class TestArg(unittest.TestCase):
     ...     def __init__(self, testname, arg):
     ...         super(TestArg, self).__init__(testname)
     ...         self._arg = arg
     ...     def setUp(self):
-    ...         print "setUp:", self._arg
+    ...         print("setUp:", self._arg)
     ...     def test_arg(self):
-    ...         print "test_arg:", self._arg
-    ...         self.assertTrue(True)  
+    ...         print("test_arg:", self._arg)
+    ...         self.assertTrue(True)
     ...
-    >>> suite = unittest.TestSuite()  
-    >>> suite.addTest(TestArg('test_arg', 'foo'))  
-    >>> unittest.TextTestRunner(verbosity=2).run(suite)  
+    >>> suite = unittest.TestSuite()
+    >>> suite.addTest(TestArg('test_arg', 'foo'))
+    >>> unittest.TextTestRunner(verbosity=2).run(suite)
     test_arg (__main__.TestArg) ... setUp: foo
     test_arg: foo
     ok
@@ -263,24 +272,24 @@ Group multiple testcases into a suite
 
 .. code-block:: python
 
-    >>> import unittest  
+    >>> import unittest
     >>> class TestFooBar(unittest.TestCase):
     ...     def test_foo(self):
     ...         self.assertTrue(True)
     ...     def test_bar(self):
-    ...         self.assertTrue(True)  
+    ...         self.assertTrue(True)
     ...
     >>> class TestHelloWorld(unittest.TestCase):
     ...     def test_hello(self):
     ...         self.assertEqual("Hello", "Hello")
     ...     def test_world(self):
-    ...         self.assertEqual("World", "World")  
+    ...         self.assertEqual("World", "World")
     ...
-    >>> suite_loader = unittest.TestLoader()  
-    >>> suite1 = suite_loader.loadTestsFromTestCase(TestFooBar)  
-    >>> suite2 = suite_loader.loadTestsFromTestCase(TestHelloWorld)  
-    >>> suite = unittest.TestSuite([suite1, suite2])  
-    >>> unittest.TextTestRunner(verbosity=2).run(suite)  
+    >>> suite_loader = unittest.TestLoader()
+    >>> suite1 = suite_loader.loadTestsFromTestCase(TestFooBar)
+    >>> suite2 = suite_loader.loadTestsFromTestCase(TestHelloWorld)
+    >>> suite = unittest.TestSuite([suite1, suite2])
+    >>> unittest.TextTestRunner(verbosity=2).run(suite)
     test_bar (__main__.TestFooBar) ... ok
     test_foo (__main__.TestFooBar) ... ok
     test_hello (__main__.TestHelloWorld) ... ok
@@ -296,19 +305,19 @@ Group multiple tests from different TestCase
 
 .. code-block:: python
 
-    >>> import unittest  
+    >>> import unittest
     >>> class TestFoo(unittest.TestCase):
     ...     def test_foo(self):
-    ...         assert "foo" == "foo"  
+    ...         assert "foo" == "foo"
     ...
     >>> class TestBar(unittest.TestCase):
     ...     def test_bar(self):
-    ...         assert "bar" == "bar"  
+    ...         assert "bar" == "bar"
     ...
-    >>> suite = unittest.TestSuite()  
-    >>> suite.addTest(TestFoo('test_foo'))  
-    >>> suite.addTest(TestBar('test_bar'))  
-    >>> unittest.TextTestRunner(verbosity=2).run(suite)  
+    >>> suite = unittest.TestSuite()
+    >>> suite.addTest(TestFoo('test_foo'))
+    >>> suite.addTest(TestBar('test_bar'))
+    >>> unittest.TextTestRunner(verbosity=2).run(suite)
     test_foo (__main__.TestFoo) ... ok
     test_bar (__main__.TestBar) ... ok
 
@@ -322,9 +331,9 @@ Skip some tests in the TestCase
 
 .. code-block:: python
 
-    >>> import unittest  
-    >>> RUN_FOO = False  
-    >>> DONT_RUN_BAR = False  
+    >>> import unittest
+    >>> RUN_FOO = False
+    >>> DONT_RUN_BAR = False
     >>> class TestSkip(unittest.TestCase):
     ...     def test_always_run(self):
     ...         self.assertTrue(True)
@@ -336,10 +345,10 @@ Skip some tests in the TestCase
     ...         raise RuntimeError
     ...     @unittest.skipUnless(DONT_RUN_BAR == True, "demo skipUnless")
     ...     def test_skipunless(self):
-    ...         raise RuntimeError  
+    ...         raise RuntimeError
     ...
-    >>> suite = unittest.TestLoader().loadTestsFromTestCase(TestSkip)  
-    >>> unittest.TextTestRunner(verbosity=2).run(suite)  
+    >>> suite = unittest.TestLoader().loadTestsFromTestCase(TestSkip)
+    >>> unittest.TextTestRunner(verbosity=2).run(suite)
     test_always_run (__main__.TestSkip) ... ok
     test_always_skip (__main__.TestSkip) ... skipped 'always skip this test'
     test_skipif (__main__.TestSkip) ... skipped 'demo skipIf'
@@ -356,6 +365,7 @@ Monolithic Test
 
 .. code-block:: python
 
+    >>> from __future__ import print_function
     >>> import unittest
     >>> class Monolithic(unittest.TestCase):
     ...     def step1(self):
@@ -396,14 +406,16 @@ test_foo.py
 
 .. code-block:: python
 
+    from __future__ import print_function
+
     import unittest
 
-    print conf
+    print(conf)
 
     class TestFoo(unittest.TestCase):
         def test_foo(self):
-            print conf
-            
+            print(conf)
+
         @unittest.skipIf(conf.isskip==True, "skip test")
         def test_skip(self):
             raise RuntimeError
@@ -411,6 +423,8 @@ test_foo.py
 test_bar.py
 
 .. code-block:: python
+
+    from __future__ import print_function
 
     import unittest
     import __builtin__
@@ -447,20 +461,21 @@ skip setup & teardown when the test is skipped
 
 .. code-block:: python
 
+    >>> from __future__ import print_function
     >>> import unittest
     >>> class TestSkip(unittest.TestCase):
     ...     def setUp(self):
-    ...         print "setUp"
+    ...         print("setUp")
     ...     def tearDown(self):
-    ...         print "tearDown"
+    ...         print("tearDown")
     ...     @unittest.skip("skip this test")
     ...     def test_skip(self):
     ...         raise RuntimeError
     ...     def test_not_skip(self):
-    ...         self.assertTrue(True)  
+    ...         self.assertTrue(True)
     ...
-    >>> suite = unittest.TestLoader().loadTestsFromTestCase(TestSkip)  
-    >>> unittest.TextTestRunner(verbosity=2).run(suite)  
+    >>> suite = unittest.TestLoader().loadTestsFromTestCase(TestSkip)
+    >>> unittest.TextTestRunner(verbosity=2).run(suite)
     test_not_skip (__main__.TestSkip) ... setUp
     tearDown
     ok
@@ -476,16 +491,17 @@ Re-using old test code
 
 .. code-block:: python
 
+    >>> from __future__ import print_function
     >>> import unittest
     >>> def old_func_test():
-    ...     assert "Hello" == "Hello"                                                                                                                                                                                                      
-    ... 
-    >>> def old_func_setup():                                                                                                                                                                                                              
-    ...     print "setup"
-    ... 
+    ...     assert "Hello" == "Hello"
+    ...
+    >>> def old_func_setup():
+    ...     print("setup")
+    ...
     >>> def old_func_teardown():
-    ...     print "teardown"                                                                                                                                                                                                               
-    ... 
+    ...     print("teardown")
+    ...
     >>> testcase = unittest.FunctionTestCase(old_func_test,
     ...                                      setUp=old_func_setup,
     ...                                      tearDown=old_func_teardown)
@@ -573,22 +589,21 @@ Re-using doctest to unittest
     """
     This is an example of doctest
 
-    >>> fib(10)
-    55
+        >>> fib(10)
+        55
     """
 
     def fib(n):
-        """
-        This function calculate fib number.
+        """ This function calculate fib number.
 
         example:
 
-        >>> fib(10)
-        55
-        >>> fib(-1)
-        Traceback (most recent call last):
-            ...
-        ValueError
+            >>> fib(10)
+            55
+            >>> fib(-1)
+            Traceback (most recent call last):
+                ...
+            ValueError
         """
         if n < 0:
             raise ValueError('')
