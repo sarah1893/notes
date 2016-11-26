@@ -532,14 +532,14 @@ Testing your document is right
     """
     This function calculate fib number.
 
-    example:
+    Example:
 
-    >>> fib(10)
-    55
-    >>> fib(-1)
-    Traceback (most recent call last):
-    ...
-    ValueError
+        >>> fib(10)
+        55
+        >>> fib(-1)
+        Traceback (most recent call last):
+        ...
+        ValueError
     """
     if n < 0:
         raise ValueError('')
@@ -589,14 +589,14 @@ Re-using doctest to unittest
     """
     This is an example of doctest
 
-        >>> fib(10)
-        55
+    >>> fib(10)
+    55
     """
 
     def fib(n):
         """ This function calculate fib number.
 
-        example:
+        Example:
 
             >>> fib(10)
             55
