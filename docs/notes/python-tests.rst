@@ -680,7 +680,7 @@ Mock - substitute ``open``
     ...         assert ret == fake_html
     ...     except Exception as e:
     ...         print(e)
-    ...     finally:
+    ...     else:
     ...         print('test send_req success')
     ...
     >>> test_send_req_success()
@@ -693,6 +693,7 @@ Mock - substitute ``open``
     ...         ret = send_req('http://www.mockurl.com')
     ...         assert ret == fake_html
     ...     except Exception as e:
+    ...         print('test fail success')
     ...
     >>> test_send_req_fail()
     test fail success
