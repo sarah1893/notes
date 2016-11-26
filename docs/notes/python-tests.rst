@@ -611,68 +611,46 @@ output:
 
     OK
 
-Mocking Test
-------------
 
-without mock - test will always failed
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Mock - using ``@patch`` substitute original method
+----------------------------------------------------
 
 .. code-block:: python
 
-    import unittest
-    import os
+    # python-3.3 or above
 
-    class TestFoo(unittest.TestCase):
-        def test_foo(self):
-            os.remove('!@#$%^~')
+    >>> from unittest.mock import patch
+    >>> import os
+    >>> def fake_remove(path, *a, **k):
+    ...     print("remove done")
+    ...
+    >>> @patch('os.remove', fake_remove)
+    ... def test():
+    ...     try:
+    ...         os.remove('%$!?&*') # fake os.remove
+    ...     except OSError as e:
+    ...         print(e)
+    ...     else:
+    ...         print('test success')
+    ...
+    >>> test()
+    remove done
+    test success
 
-    if __name__ == "__main__":
-        unittest.main()
+.. note::
 
-output:
-
-.. code-block:: console
-
-    $ python wo_mock_test.py 
-    E
-    ======================================================================
-    ERROR: test_foo (__main__.TestFoo)
-    ----------------------------------------------------------------------
-    Traceback (most recent call last):
-      File "mock_test.py", line 7, in test_foo
-        os.remove('!@#$%^~')
-    OSError: [Errno 2] No such file or directory: '!@#$%^~'
-
-    ----------------------------------------------------------------------
-    Ran 1 test in 0.000s
-
-with mock - substitute real object to fake object
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Without mock, above test will always fail.
 
 .. code-block:: python
 
-    import mock
-    import unittest
-    import os
-
-    def mock_os_remove(path):
-        pass
-
-    class TestFoo(unittest.TestCase):
-        @mock.patch('os.remove', mock_os_remove)
-        def test_foo(self):
-            os.remove('!@#$%^~')
-
-    if __name__ == "__main__":
-        unittest.main()
-
-output:
-
-.. code-block:: console
-
-    $ python w_mock_test.py 
-    .
-    ----------------------------------------------------------------------
-    Ran 1 test in 0.000s
-
-    OK
+    >>> import os
+    >>> def test():
+    ...     try:
+    ...         os.remove('%$!?&*')
+    ...     except OSError as e:
+    ...         print(e)
+    ...     else:
+    ...         print('test success')
+    ...
+    >>> test()
+    [Errno 2] No such file or directory: '%$!?&*'
