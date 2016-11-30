@@ -268,6 +268,40 @@ Representations of your class behave
     >>> Example()
     Example __repr__
 
+Break up a long string
+-----------------------
+
+.. code-block:: python
+
+    # original long string
+    >>> s = 'This is a very very very long python string'
+    >>> s
+    'This is a very very very long python string'
+
+    # single quote with an escaping backslash
+    >>> s = "This is a very very very " \
+    ...     "long python string"
+    >>> s
+    'This is a very very very long python string'
+
+    # using brackets
+    >>> s = ("This is a very very very "
+    ...      "long python string")
+    >>> s
+    'This is a very very very long python string'
+
+    # using '+'
+    >>> s = ("This is a very very very " +
+    ...      "long python string")
+    >>> s
+    'This is a very very very long python string'
+
+    # using triple-quote with an escaping backslash
+    >>> s = '''This is a very very very \
+    ... long python string'''
+    >>> s
+    'This is a very very very long python string'
+
 Get list item **SMART**
 ------------------------
 
