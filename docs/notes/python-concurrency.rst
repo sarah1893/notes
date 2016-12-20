@@ -536,8 +536,8 @@ Custom multiprocessing map
     print parmap(lambda x:x**x,range(1,5))
 
 
-Graceful kill all child processes via ``ctrl + c``
-----------------------------------------------------
+Graceful way to kill all child processes
+-----------------------------------------
 
 .. code-block:: python
 
