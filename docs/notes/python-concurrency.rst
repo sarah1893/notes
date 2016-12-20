@@ -535,6 +535,40 @@ Custom multiprocessing map
 
     print parmap(lambda x:x**x,range(1,5))
 
+
+Graceful kill all child processes via ``ctrl + c``
+----------------------------------------------------
+
+.. code-block:: python
+
+    from __future__ import print_function
+
+    import signal
+    import os
+    import time
+
+    from multiprocessing import Process, Pipe
+
+    NUM_PROCESS = 10
+
+    def aurora(n):
+        while True:
+            time.sleep(n)
+
+    if __name__ == "__main__":
+        procs = [Process(target=aurora, args=(x,))
+                    for x in range(NUM_PROCESS)]
+        try:
+            for p in procs:
+                p.daemon = True
+                p.start()
+            [p.join() for p in procs]
+        finally:
+            for p in procs:
+                if not p.is_alive(): continue
+                os.kill(p.pid, signal.SIGKILL)
+
+
 Simple round-robin scheduler
 ----------------------------
 
