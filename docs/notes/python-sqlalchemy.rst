@@ -1529,3 +1529,60 @@ output:
 
     Be careful. Close *session* does not mean close database connection.
     SQLAlchemy *session* generally represents the *transactions*, not connections.
+
+
+Cannot use the object after close the session
+-----------------------------------------------
+
+.. code-block:: python
+
+    from __future__ import print_function
+
+    from sqlalchemy import (
+        create_engine,
+        Column,
+        String,
+        Integer)
+
+    from sqlalchemy.orm import sessionmaker
+    from sqlalchemy.ext.declarative import declarative_base
+
+
+    url = 'sqlite://'
+    engine = create_engine(url)
+    base = declarative_base()
+
+    class Table(base):
+        __tablename__ = 'table'
+        id  = Column(Integer, primary_key=True)
+        key = Column(String)
+        val = Column(String)
+
+    base.metadata.create_all(bind=engine)
+    session = sessionmaker(bind=engine)()
+
+    try:
+        t = Table(key="key", val="val")
+        try:
+            print(t.key, t.val)
+            session.add(t)
+            session.commit()
+        except Exception as e:
+            print(e)
+            session.rollback()
+        finally:
+            session.close()
+
+        print(t.key, t.val) # exception raise from here
+    except Exception as e:
+        print("Cannot use the object after close the session")
+    finally:
+        engine.dispose()
+
+output:
+
+.. code-block:: bash
+
+    $ python sql.py
+    key val
+    Cannot use the object after close the session
