@@ -2,6 +2,25 @@
 Python Concurrency Cheatsheet
 =============================
 
+Execute a shell command
+------------------------
+
+.. code-block:: python
+
+    # get stdout, stderr, returncode
+
+    >>> from subprocess import Popen, PIPE
+    >>> args = ['time', 'echo', 'hello python']
+    >>> ret = Popen(args, stdout=PIPE, stderr=PIPE)
+    >>> out, err = ret.communicate()
+    >>> out
+    b'hello python\n'
+    >>> err
+    b'        0.00 real         0.00 user         0.00 sys\n'
+    >>> ret.returncode
+    0
+
+
 Create a thread via "threading"
 -------------------------------
 
