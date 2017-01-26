@@ -1153,3 +1153,31 @@ Common Use **Magic**
     __and__(self, other)
     __or__(self, other)
     __xor__(self, other)
+
+
+Parsing csv string
+--------------------
+
+.. code-block:: python
+
+    # python2 and python3 compatible
+
+    >>> try:
+    ...     from StringIO import StringIO # for py2
+    ... except ImportError:
+    ...     from io import StringIO # for py3
+    ...
+    >>> import csv
+    >>> s = "foo,bar,baz"
+    >>> f = StringIO(s)
+    >>> for x in csv.reader(f): print(x)
+    ...
+    ['foo', 'bar', 'baz']
+
+    # or
+
+    >>> import csv
+    >>> s = "foo,bar,baz"
+    >>> for x in csv.reader([s]): print(x)
+    ...
+    ['foo', 'bar', 'baz']
