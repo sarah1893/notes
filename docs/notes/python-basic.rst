@@ -252,6 +252,37 @@ Get function/class name
     >>> o = ClassB("Hello")
     __new__ Hello
 
+
+The diamond problem
+--------------------
+
+.. code-block:: python
+
+    # The problem of multiple inheritance in searching a method
+
+    >>> def foo_a(self):
+    ...     print("This is ClsA")
+    ...
+    >>> def foo_b(self):
+    ...     print("This is ClsB")
+    ...
+    >>> def foo_c(self):
+    ...     print("This is ClsC")
+    ...
+    >>> class Type(type):
+    ...     def __repr__(cls):
+    ...         return cls.__name__
+    ...
+    >>> ClsA = Type("ClsA", (object,), {'foo': foo_a})
+    >>> ClsB = Type("ClsB", (ClsA,), {'foo': foo_b})
+    >>> ClsC = Type("ClsC", (ClsA,), {'foo': foo_c})
+    >>> ClsD = Type("ClsD", (ClsB, ClsC), {})
+    >>> ClsD.mro()
+    [ClsD, ClsB, ClsC, ClsA, <type 'object'>]
+    >>> ClsD().foo()
+    This is ClsB
+
+
 Representations of your class behave
 ------------------------------------
 
