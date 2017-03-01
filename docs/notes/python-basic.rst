@@ -716,7 +716,7 @@ Decorator with arguments
     >>> def decorator_with_argument(val):
     ...   def decorator(func):
     ...     @wraps(func)
-    ...     def wrapper(*args, **kargs):
+    ...     def wrapper(*args, **kwargs):
     ...       print "Val is {0}".format(val)
     ...       return func(*args, **kwargs)
     ...     return wrapper
