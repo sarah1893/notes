@@ -1,8 +1,8 @@
 alabaster==0.7.10
-Babel==2.3.4
+Babel==2.4.0
 click==6.7
 docutils==0.13.1
-Flask==0.12
+Flask==0.12.1
 Flask-SSLify==0.1.5
 gunicorn==19.7.1
 imagesize==0.7.1
@@ -10,7 +10,7 @@ itsdangerous==0.24
 Jinja2==2.9.5
 MarkupSafe==1.0
 Pygments==2.2.0
-pytz==2016.10
+pytz==2017.2
 requests==2.13.0
 six==1.10.0
 snowballstemmer==1.2.1
