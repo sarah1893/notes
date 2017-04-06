@@ -241,7 +241,7 @@ Get function/class name
     __new__ Hello
     __init__ Hello
 
-    # init won't be invoke
+    # __init__ won't be invoke
     >>> class ClassB(object):
     ...     def __new__(cls, arg):
     ...         print '__new__ ' + arg
