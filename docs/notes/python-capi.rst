@@ -2,6 +2,49 @@
 Python C API cheatsheet
 =======================
 
+Performance of ctypes
+----------------------
+
+.. code-block:: c
+
+    // fib.c
+    unsigned int fib(unsigned int n)
+    {
+        if ( n < 2) {
+            return n;
+        }
+        return fib(n-1) + fib(n-2);
+    }
+
+
+Building a libfib.dylib (Mac OSX)
+
+.. code-block:: bash
+
+    clang -Wall -Werror -shared -fPIC -o libfib.dylib fib.c
+
+Comparing the performance
+
+.. code-block:: python
+
+    >>> import time
+    >>> from ctypes import *
+    >>> def fib(n):
+    ...     if n < 2:
+    ...         return n
+    ...     return fib(n-1) + fib(n-2)
+    ...
+    >>> s = time.time(); fib(35); e = time.time()
+    9227465
+    >>> print("cost time: {} sec".format(e - s))
+    cost time: 4.09563493729 sec
+    >>> libfib = CDLL("./libfib.dylib")
+    >>> s = time.time(); libfib.fib(35); e = time.time()
+    9227465
+    >>> print("cost time: {} sec".format(e - s))
+    cost time: 0.0819959640503 sec
+
+
 Error handling when use ctypes
 -------------------------------
 
