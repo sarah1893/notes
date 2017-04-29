@@ -241,8 +241,8 @@ output:
     Is ext4? True
 
 
-Using sendfile
----------------
+Doing Zero-copy via sendfile
+-----------------------------
 
 .. code-block:: python
 
