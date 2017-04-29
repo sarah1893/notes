@@ -262,7 +262,7 @@ Using sendfile
 
     # check linux version
     ver = platform.release()
-    if tuple(ver) < (2,6,33):
+    if tuple(map(int, ver.split('.'))) < (2,6,33):
         raise OSError("Upgrade kernel after 2.6.33")
 
     # check input arguments
@@ -299,9 +299,8 @@ output:
 
 .. code-block:: console
 
-    $ python sendfile.py /etc/resolv.conf resolve.conf; cat resolve.conf
+    $ python3 sendfile.py /etc/resolv.conf resolve.conf; cat resolve.conf
     nameserver	192.168.1.1
-    domain	zyxel.com
 
 
 PyObject header
