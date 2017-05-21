@@ -2,7 +2,7 @@ alabaster==0.7.10
 Babel==2.4.0
 click==6.7
 docutils==0.13.1
-Flask==0.12.1
+Flask==0.12.2
 Flask-SSLify==0.1.5
 gunicorn==19.7.1
 imagesize==0.7.1
@@ -11,9 +11,9 @@ Jinja2==2.9.6
 MarkupSafe==1.0
 Pygments==2.2.0
 pytz==2017.2
-requests==2.13.0
+requests==2.14.2
 six==1.10.0
 snowballstemmer==1.2.1
-Sphinx==1.5.5
+Sphinx==1.6.1
 sphinx-rtd-theme==0.2.4
-Werkzeug==0.12.1
+Werkzeug==0.12.2
