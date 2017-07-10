@@ -457,6 +457,18 @@ Set a list/dict **SMART**
 
 .. code-block:: python
 
+    # set comprehension
+    >>> a = [1, 2, 5, 6, 6, 6, 7]
+    >>> s = {x for x in a}
+    >>> s
+    set([1, 2, 5, 6, 7])
+    >>> s = {x for x in a if x > 3}
+    >>> s
+    set([5, 6, 7])
+    >>> s = {x if x > 3 else -1 for x in a}
+    >>> s
+    set([6, 5, -1, 7])
+
     # uniquify list
     >>> a = [1, 2, 2, 2, 3, 4, 5, 5]
     >>> a
@@ -466,13 +478,13 @@ Set a list/dict **SMART**
     [1, 2, 3, 4, 5]
 
     # union two set
-    >>> a = set([1,2,2,2,3])
-    >>> b = set([5,5,6,6,7])
+    >>> a = set([1, 2, 2, 2, 3])
+    >>> b = set([5, 5, 6, 6, 7])
     >>> a | b
     set([1, 2, 3, 5, 6, 7])
     # or
-    >>> a = [1,2,2,2,3]
-    >>> b = [5,5,6,6,7]
+    >>> a = [1, 2, 2, 2, 3]
+    >>> b = [5, 5, 6, 6, 7]
     >>> set(a + b)
     set([1, 2, 3, 5, 6, 7])
 
@@ -488,8 +500,8 @@ Set a list/dict **SMART**
     set([1, 2, 3, 4, 5, 6])
 
     # intersection two set
-    >>> a = set([1,2,2,2,3])
-    >>> b = set([1,5,5,6,6,7])
+    >>> a = set([1, 2, 2, 2, 3])
+    >>> b = set([1, 5, 5, 6, 6, 7])
     >>> a & b
     set([1])
 
