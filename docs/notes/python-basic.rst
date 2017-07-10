@@ -451,6 +451,79 @@ Set a list/dict **SMART**
     >>> map(fn, range(5))
     [0, 1, 4, 9, 16]
 
+
+``set`` operations
+-------------------
+
+.. code-block:: python
+
+    # uniquify list
+    >>> a = [1, 2, 2, 2, 3, 4, 5, 5]
+    >>> a
+    [1, 2, 2, 2, 3, 4, 5, 5]
+    >>> ua = list(set(a))
+    >>> ua
+    [1, 2, 3, 4, 5]
+
+    # union two set
+    >>> a = set([1,2,2,2,3])
+    >>> b = set([5,5,6,6,7])
+    >>> a | b
+    set([1, 2, 3, 5, 6, 7])
+    # or
+    >>> a = [1,2,2,2,3]
+    >>> b = [5,5,6,6,7]
+    >>> set(a + b)
+    set([1, 2, 3, 5, 6, 7])
+
+    # append item to set
+    >>> a = set([1, 2, 3, 3, 3])
+    >>> a.add(5)
+    >>> a
+    set([1, 2, 3, 5])
+    # or
+    >>> a = set([1, 2, 3, 3, 3])
+    >>> a |= set([1, 2, 3, 4, 5, 6])
+    >>> a
+    set([1, 2, 3, 4, 5, 6])
+
+    # intersection two set
+    >>> a = set([1,2,2,2,3])
+    >>> b = set([1,5,5,6,6,7])
+    >>> a & b
+    set([1])
+
+    # get two list common items
+    >>> a = [1, 1, 2, 3]
+    >>> b = [1, 3, 5, 5, 6, 6]
+    >>> com = list(set(a) & set(b))
+    >>> com
+    [1, 3]
+
+    # b contains a
+    >>> a = set([1, 2])
+    >>> b = set([1, 2, 5, 6])
+    >>> a <=b
+    True
+
+    # a contains b
+    >>> a = set([1, 2, 5, 6])
+    >>> b = set([1, 5, 6])
+    >>> a >= b
+    True
+
+    # set diff
+    >>> a = set([1, 2, 3])
+    >>> b = set([1, 5, 6, 7, 7])
+    >>> a - b
+    set([2, 3])
+
+    # symmetric diff
+    >>> a = set([1,2,3])
+    >>> b = set([1, 5, 6, 7, 7])
+    >>> a ^ b
+    set([2, 3, 5, 6, 7])
+
 NamedTuple
 ----------
 
