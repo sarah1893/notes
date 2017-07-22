@@ -20,3 +20,33 @@ How to run the server
     $ python app.py
 
     # URL: localhost:5000
+
+Cheat Sheets
+==============
+
+- `basic`_
+- `unicode`_
+- `generator`_
+- `regular expression`_
+- `socket`_
+- `crypto`_
+- `concurrency`_
+- `sqlalchemy`_
+- `asyncio`_
+- `tests`_
+- `c api`_
+- `c style`_
+
+
+.. _basic: docs/notes/python-basic.rst 
+.. _unicode: docs/notes/python-unicode.rst
+.. _generator: docs/notes/python-generator.rst
+.. _regular expression: docs/notes/python-rexp.rst
+.. _socket: docs/notes/python-socket.rst
+.. _crypto: docs/notes/python-crypto.rst
+.. _concurrency: docs/notes/python-concurrency.rst
+.. _sqlalchemy: docs/notes/python-sqlalchemy.rst
+.. _asyncio: docs/notes/python-asyncio.rst
+.. _tests: docs/notes/python-tests.rst
+.. _c api: docs/notes/python-capi.rst
+.. _c style: docs/notes/python-cstyle.rst
