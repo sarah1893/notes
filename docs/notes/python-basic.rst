@@ -1400,3 +1400,16 @@ Using annotation to check type
         print(test4(123, "b", c=5566))
     except TypeError as e:
         print(e)
+
+
+output:
+
+.. code-block:: console
+
+    9527
+    9487
+    Hello Python3
+    [9487, 'bb', 'cc']
+    type(ret) is '<class 'str'>', not '<class 'int'>'
+    type(b) is '<class 'str'>', not '<class 'int'>'
+    type(c) is '<class 'str'>', not '<class 'int'>'
