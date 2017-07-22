@@ -1316,3 +1316,87 @@ Parsing csv string
     >>> for x in csv.reader([s]): print(x)
     ...
     ['foo', 'bar', 'baz']
+
+
+Using annotation to check type
+-------------------------------
+
+.. code-block:: python
+
+    # need python3 (PEP: 3107)
+    from functools import wraps
+
+    import inspect
+
+    ANNO_EMPTY = inspect._empty
+
+    def check_args(sig, *a, **k):
+        bind = sig.bind(*a, **k)
+        params = sig.parameters
+        for name, val in bind.arguments.items():
+            anno = params[name].annotation
+            if anno is ANNO_EMPTY:
+                continue
+            if isinstance(val, anno):
+                continue
+            atype = type(val)
+            raise TypeError(f"type({name}) is '{anno}', not '{atype}'")
+
+
+    def check_ret(sig, ret):
+        anno = sig.return_annotation
+        if anno is ANNO_EMPTY:
+            return ret
+        elif isinstance(ret, anno):
+            return ret
+
+        rtype = type(ret)
+        raise TypeError(f"type(ret) is '{anno}', not '{rtype}'")
+
+
+
+    def typechecked(func):
+        sig = inspect.signature(func)
+
+        @wraps(func)
+        def wrapper(*a, **k):
+            check_args(sig, *a, **k)
+            return check_ret(sig, func(*a, **k))
+        return wrapper
+
+
+    @typechecked
+    def test1(a: int)->int:
+        return a
+
+    @typechecked
+    def test2(a: int):
+        return a
+
+    @typechecked
+    def test3(a)->str:
+        return a
+
+    @typechecked
+    def test4(a, b: str, c: str="c")->list:
+        return [a, b, c]
+
+    print(test1(9527))
+    print(test2(9487))
+    print(test3("Hello Python3"))
+    print(test4(9487, "bb", c="cc"))
+
+    try:
+        print(test3(9487))
+    except TypeError as e:
+        print(e)
+
+    try:
+        print(test4(5566, 9527))
+    except TypeError as e:
+        print(e)
+
+    try:
+        print(test4(123, "b", c=5566))
+    except TypeError as e:
+        print(e)
