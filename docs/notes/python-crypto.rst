@@ -131,6 +131,113 @@ generate RSA keyfile without passphrase
     ...     encryption_algorithm=serialization.NoEncryption()))
 
 
+simple RSA encrypt via pem file
+--------------------------------
+
+.. code-block:: python
+
+    from __future__ import print_function, unicode_literals
+
+    import base64
+    import sys
+
+    from Crypto.PublicKey import RSA
+    from Crypto.Cipher import PKCS1_v1_5
+
+    key_text = sys.stdin.read()
+
+    # import key via rsa module
+    pubkey = RSA.importKey(key_text)
+
+    # create a cipher via PKCS1.5
+    cipher = PKCS1_v1_5.new(pubkey)
+
+    # encrypt
+    cipher_text = cipher.encrypt(b"Hello RSA!")
+
+    # do base64 encode
+    cipher_text = base64.b64encode(cipher_text)
+    print(cipher_text.decode('utf-8'))
+
+output:
+
+.. code-block:: bash
+
+    $ openssl genrsa -out private.key 2048
+    $ openssl rsa -in private.key -pubout -out public.key
+    $ cat public.key                                |\
+    > python3 rsa.py                                |\
+    > openssl base64 -d -A                          |\
+    > openssl rsautl -decrypt -inkey private.key
+    Hello RSA!
+
+
+simple RSA encrypt via RSA module
+----------------------------------
+
+.. code-block:: python
+
+    from __future__ import print_function, unicode_literals
+
+    import base64
+    import sys
+
+    from Crypto.PublicKey import RSA
+    from Crypto.Cipher import PKCS1_v1_5
+    from Crypto.PublicKey.RSA import construct
+
+    # prepare public key
+    e = int('10001', 16)
+    n = int(sys.stdin.read(), 16)
+    pubkey = construct((n, e))
+
+    # create a cipher via PKCS1.5
+    cipher = PKCS1_v1_5.new(pubkey)
+
+    # encrypt
+    cipher_text = cipher.encrypt(b"Hello RSA!")
+
+    # do base64 encode
+    cipher_text = base64.b64encode(cipher_text)
+    print(cipher_text.decode('utf-8'))
+
+output:
+
+.. code-block:: bash
+
+    $ openssl genrsa -out private.key 2048
+    $ openssl rsa -in private.key -pubout -out public.key
+    $ # check (n, e)
+    $ openssl rsa -pubin -inform PEM -text -noout < public.key
+    Public-Key: (2048 bit)
+    Modulus:
+        00:93:d5:58:0c:18:cf:91:f0:74:af:1b:40:09:73:
+        0c:d8:13:23:6c:44:60:0d:83:71:e6:f9:61:85:e5:
+        b2:d0:8a:73:5c:02:02:51:9a:4f:a7:ab:05:d5:74:
+        ff:4d:88:3d:e2:91:b8:b0:9f:7e:a9:a3:b2:3c:99:
+        1c:9a:42:4d:ac:2f:6a:e7:eb:0f:a7:e0:a5:81:e5:
+        98:49:49:d5:15:3d:53:42:12:08:db:b0:e7:66:2d:
+        71:5b:ea:55:4e:2d:9b:40:79:f8:7d:6e:5d:f4:a7:
+        d8:13:cb:13:91:c9:ac:5b:55:62:70:44:25:50:ca:
+        94:de:78:5d:97:e8:a9:33:66:4f:90:10:00:62:21:
+        b6:60:52:65:76:bd:a3:3b:cf:2a:db:3f:66:5f:0d:
+        a3:35:ff:29:34:26:6d:63:a2:a6:77:96:5a:84:c7:
+        6a:0c:4f:48:52:70:11:8f:85:11:a0:78:f8:60:4b:
+        5d:d8:4b:b2:64:e5:ec:99:72:c5:a8:1b:ab:5c:09:
+        e1:80:70:91:06:22:ba:97:33:56:0b:65:d8:f3:35:
+        66:f8:f9:ea:b9:84:64:8e:3c:14:f7:3d:1f:2c:67:
+        ce:64:cf:f9:c5:16:6b:03:a1:7a:c7:fa:4c:38:56:
+        ee:e0:4d:5f:ec:46:7e:1f:08:7c:e6:45:a1:fc:17:
+        1f:91
+    Exponent: 65537 (0x10001)
+    $ openssl rsa -pubin -in public.key -modulus -noout |\
+    > cut -d'=' -f 2                                    |\
+    > python3 rsa.py                                    |\
+    > openssl base64 -d -A                              |\
+    > openssl rsautl -decrypt -inkey private.key
+    Hello RSA!
+
+
 HMAC - check integrity of a message
 -------------------------------------
 
