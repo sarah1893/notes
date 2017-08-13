@@ -279,6 +279,90 @@ output:
     Hello openssl RSA encrypt
 
 
+simple RSA encrypt with OAEP
+-----------------------------
+
+.. code-block:: python
+
+    from __future__ import print_function, unicode_literals
+
+    import base64
+    import sys
+
+    from Crypto.PublicKey import RSA
+    from Crypto.Cipher import PKCS1_OAEP
+
+    # read key file
+    key_text = sys.stdin.read()
+
+    # create a public key object
+    pubkey = RSA.importKey(key_text)
+
+    # create a cipher object
+    cipher = PKCS1_OAEP.new(pubkey)
+
+    # encrypt plain text
+    cipher_text = cipher.encrypt(b"Hello RSA OAEP!")
+
+    # encode via base64
+    cipher_text = base64.b64encode(cipher_text)
+    print(cipher_text.decode('utf-8'))
+
+output:
+
+.. code-block:: bash
+
+    $ openssl genrsa -out private.key 2048
+    $ openssl rsa -in private.key -pubout -out public.key
+    $ cat public.key         |\
+    > python3 rsa.py         |\
+    > openssl base64 -d -A   |\
+    > openssl rsautl -decrypt -oaep -inkey private.key
+    Hello RSA OAEP!
+
+
+simple RSA decrypt with OAEP
+-----------------------------
+
+.. code-block:: python
+
+    from __future__ import print_function, unicode_literals
+
+    import base64
+    import sys
+
+    from Crypto.PublicKey import RSA
+    from Crypto.Cipher import PKCS1_OAEP
+
+    # read key file
+    with open('private.key') as f: key_text = f.read()
+
+    # create a private key object
+    privkey = RSA.importKey(key_text)
+
+    # create a cipher object
+    cipher = PKCS1_OAEP.new(privkey)
+
+    # decode base64
+    cipher_text = base64.b64decode(sys.stdin.read())
+
+    # decrypt
+    plain_text = cipher.decrypt(cipher_text)
+    print(plain_text.decode('utf-8').strip())
+
+output:
+
+.. code-block:: bash
+
+    $ openssl genrsa -out private.key 2048
+    $ openssl rsa -in private.key -pubout -out public.key
+    $ echo "Hello RSA encrypt via OAEP"                      |\
+    > openssl rsautl -encrypt -pubin -oaep -inkey public.key |\
+    > openssl base64 -e -A                                   |\
+    > python3 rsa.py
+    Hello RSA encrypt via OAEP
+
+
 HMAC - check integrity of a message
 -------------------------------------
 
