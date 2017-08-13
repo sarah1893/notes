@@ -237,6 +237,47 @@ output:
     > openssl rsautl -decrypt -inkey private.key
     Hello RSA!
 
+simple RSA encrypt via pem file
+--------------------------------
+
+.. code-block:: python
+
+    from __future__ import print_function, unicode_literals
+
+    import base64
+    import sys
+
+    from Crypto.PublicKey import RSA
+    from Crypto.Cipher import PKCS1_v1_5
+
+    # read key file
+    with open('private.key') as f: key_text = f.read()
+
+    # create a private key object
+    privkey = RSA.importKey(key_text)
+
+    # create a cipher object
+    cipher = PKCS1_v1_5.new(privkey)
+
+    # decode base64
+    cipher_text = base64.b64decode(sys.stdin.read())
+
+    # decrypt
+    plain_text = cipher.decrypt(cipher_text, None)
+    print(plain_text.decode('utf-8').strip())
+
+output:
+
+.. code-block:: bash
+
+    $ openssl genrsa -out private.key 2048
+    $ openssl rsa -in private.key -pubout -out public.key
+    $ echo "Hello openssl RSA encrypt"                 |\
+    > openssl rsautl -encrypt -pubin -inkey public.key |\
+    > openssl base64 -e -A                             |\
+    > python3 rsa.py
+    Hello openssl RSA encrypt
+
 
 HMAC - check integrity of a message
 -------------------------------------
