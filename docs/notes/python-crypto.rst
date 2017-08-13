@@ -237,7 +237,7 @@ output:
     > openssl rsautl -decrypt -inkey private.key
     Hello RSA!
 
-simple RSA encrypt via pem file
+simple RSA decrypt via pem file
 --------------------------------
 
 .. code-block:: python
