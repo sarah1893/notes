@@ -131,6 +131,45 @@ generate RSA keyfile without passphrase
     ...     encryption_algorithm=serialization.NoEncryption()))
 
 
+sign a file by a given private key
+-----------------------------------
+
+.. code-block:: python
+
+    from __future__ import print_function, unicode_literals
+
+    from Crypto.PublicKey import RSA
+    from Crypto.Signature import PKCS1_v1_5
+    from Crypto.Hash import SHA256
+
+
+    def signer(privkey, data):
+        rsakey = RSA.importKey(privkey)
+        signer = PKCS1_v1_5.new(rsakey)
+        digest = SHA256.new()
+        digest.update(data)
+        return signer.sign(digest)
+
+
+    with open('private.key', 'rb') as f: key = f.read()
+    with open('foo.tgz', 'rb') as f: data = f.read()
+
+    sign = signer(key, data)
+    with open('foo.tgz.sha256', 'wb') as f: f.write(sign)
+
+output:
+
+.. code-block:: bash
+
+    # gernerate public & private key
+    $ openssl genrsa -out private.key 2048
+    $ openssl rsa -in private.key -pubout -out public.key
+
+    $ python3 sign.py
+    $ openssl dgst -sha256 -verify public.key -signature foo.tgz.sha256 foo.tgz
+    Verified OK
+
+
 verify a file from a signed digest
 -----------------------------------
 
@@ -178,7 +217,7 @@ output:
     Verified OK
 
     # do verification via openssl
-    $ openssl dgst -sha256 -verify public.key -signature foo.tgz.sha256 foo.tgz 
+    $ openssl dgst -sha256 -verify public.key -signature foo.tgz.sha256 foo.tgz
     Verified OK
 
 
