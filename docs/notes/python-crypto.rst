@@ -131,6 +131,57 @@ generate RSA keyfile without passphrase
     ...     encryption_algorithm=serialization.NoEncryption()))
 
 
+verify a file from a signed digest
+-----------------------------------
+
+.. code-block:: python
+
+    from __future__ import print_function, unicode_literals
+
+    import sys
+
+    from Crypto.PublicKey import RSA
+    from Crypto.Signature import PKCS1_v1_5
+    from Crypto.Hash import SHA256
+
+    def verifier(pubkey, sig, data):
+        rsakey = RSA.importKey(key)
+        signer = PKCS1_v1_5.new(rsakey)
+        digest = SHA256.new()
+
+        digest.update(data)
+        return signer.verify(digest, sig)
+
+
+    with open("public.key", 'rb') as f: key = f.read()
+    with open("foo.tgz.sha256", 'rb') as f: sig = f.read()
+    with open("foo.tgz", 'rb') as f: data = f.read()
+
+    if verifier(key, sig, data):
+        print("Verified OK")
+    else:
+        print("Verification Failure")
+
+output:
+
+.. code-block:: bash
+
+    # gernerate public & private key
+    $ openssl genrsa -out private.key 2048
+    $ openssl rsa -in private.key -pubout -out public.key
+
+    # do verification
+    $ cat /dev/urandom | head -c 512 | base64 > foo.txt
+    $ tar -zcf foo.tgz foo.txt
+    $ openssl dgst -sha256 -sign private.key -out foo.tgz.sha256 foo.tgz
+    $ python3 verify.py
+    Verified OK
+
+    # do verification via openssl
+    $ openssl dgst -sha256 -verify public.key -signature foo.tgz.sha256 foo.tgz 
+    Verified OK
+
+
 simple RSA encrypt via pem file
 --------------------------------
 
