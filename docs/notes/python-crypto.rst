@@ -456,44 +456,6 @@ output:
     recv msg: b"I'm attacker!" not trust!
 
 
-Simple Diffie-Hellman key exchange
-------------------------------------
-
-.. code-block:: python
-
-    """
-    p (public know)
-    n (public know)
-    Alice                               Bob
-
-    alice_y = 23                        bob_y = 16
-    alice_x = (n ** alice_y) % p  --->
-                                  <---  bob_x = (n ** bob_y) % p
-    k = (bob_x ** alice_y) %p           k = (alice_x ** bob_y) % p
-    """
-
-    >>> import socket
-    >>> alice, bob = socket.socketpair()
-    >>> p = 353       # public know
-    >>> n = 3         # public know
-    >>> alice_y = 23  # only alice know
-    >>> bob_y = 16    # only bob know
-    >>> alice_x = (n ** alice_y) % p
-    >>> num_bytes = alice.send(alice_x.to_bytes(4, 'big'))
-    >>> msg = bob.recv(1024)
-    >>> bob_recv_x = int.from_bytes(msg, 'big')
-    >>> bob_x = (n ** bob_y) % p
-    >>> num_bytes = bob.send(bob_x.to_bytes(4, 'big'))
-    >>> msg = alice.recv(1024)
-    >>> alice_recv_x = int.from_bytes(msg, 'big')
-    >>> alice_key = (alice_recv_x ** alice_y) % p
-    >>> bob_key = (bob_recv_x ** bob_y) % p
-    >>> alice_key
-    136
-    >>> bob_key
-    136
-
-
 AES CBC mode encrypt and decrypt
 ----------------------------------
 
@@ -632,44 +594,76 @@ output:
     Encrypt plaintext via AES-CBC from a given password
 
 
-AES CTR mode encrypt and decrypt
----------------------------------
+AES CBC mode decrypt via password
+----------------------------------
 
 .. code-block:: python
 
-    >>> import os
-    >>> from cryptography.hazmat.backends import default_backend
-    >>> from cryptography.hazmat.primitives.ciphers import (
-    ... Cipher,
-    ... algorithms,
-    ... modes)
-    >>> backend = default_backend()
-    >>> key = os.urandom(32)
-    >>> nonce = os.urandom(16)
-    >>> # CTR mode does not require padding
-    >>> cipher = Cipher(algorithms.AES(key),
-    ...                 modes.CTR(nonce),
-    ...                 backend=backend)
-    >>> encryptor = cipher.encryptor()
-    >>> p_text = b"Hello Encrypt"
-    >>> ct = encryptor.update(p_text) + encryptor.finalize()
-    >>> ct
-    b'o\xb3;\x079\xde\x86@\xec^o\x1f\x9f'
-    >>> decryptor = cipher.decryptor()
-    >>> pt = decryptor.update(ct) + decryptor.finalize()
-    >>> pt
-    b'Hello Encrypt'
+    from __future__ import print_function, unicode_literals
 
-Require padding or not
-~~~~~~~~~~~~~~~~~~~~~~~
+    import struct
+    import base64
+    import sys
 
-================================   ===================
-   mode                             require padding
-================================   ===================
-  CBC(initialization_vector)            YES
-  CTR(nonce)                            NO
-  OFB(initialization_vector)            NO
-  CFB(initialization_vector)            NO
-  CFB8(initialization_vector)           NO
-  GCM(initialization_vector)            NO
-================================   ===================
+    from hashlib import md5, sha1
+    from Crypto.Cipher import AES
+    from Crypto.Random.random import getrandbits
+
+    # AES CBC requires blocks to be aligned on 16-byte boundaries.
+    BS = 16
+
+    unpad = lambda s : s[0:-s[-1]]
+
+    def EVP_ByteToKey(pwd, md, salt, key_len, iv_len):
+        buf = md(pwd + salt).digest()
+        d = buf
+        while len(buf) < (iv_len + key_len):
+            d = md(d + pwd + salt).digest()
+            buf += d
+        return buf[:key_len], buf[key_len:key_len + iv_len]
+
+
+    def aes_decrypt(pwd, ciphertext, md):
+        ciphertext = base64.b64decode(ciphertext)
+
+        # check magic
+        if ciphertext[:8] != b'Salted__':
+            raise Exception("bad magic number")
+
+        # get salt
+        salt = ciphertext[8:16]
+
+        # get key, iv
+        key, iv = EVP_ByteToKey(pwd, md, salt, 32, 16)
+
+        # decrypt
+        cipher = AES.new(key, AES.MODE_CBC, iv)
+        return unpad(cipher.decrypt(ciphertext[16:])).strip()
+
+
+    if len(sys.argv) != 2: raise Exception("usage: CMD [md]")
+
+    md = globals()[sys.argv[1]]
+
+    ciphertext = sys.stdin.read().encode('utf-8')
+    pwd = b"password"
+
+    print(aes_decrypt(pwd, ciphertext, md).decode('utf-8'))
+
+output:
+
+.. code-block:: bash
+
+    # with md5 digest
+    $ echo "Decrypt ciphertext via AES-CBC from a given password" |\
+    > openssl aes-256-cbc -e -md md5 -salt -A -k password         |\
+    > openssl base64 -e -A                                        |\
+    > python3 aes.py md5
+    Decrypt ciphertext via AES-CBC from a given password
+
+    # with sha1 digest
+    $ echo "Decrypt ciphertext via AES-CBC from a given password" |\
+    > openssl aes-256-cbc -e -md sha1 -salt -A -k password        |\
+    > openssl base64 -e -A                                        |\
+    > python3 aes.py sha1
+    Decrypt ciphertext via AES-CBC from a given password
