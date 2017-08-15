@@ -2,7 +2,7 @@
 Python cryptography cheatsheet
 ==============================
 
-simple https server
+Simple https server
 ---------------------
 
 .. code-block:: python
@@ -35,7 +35,7 @@ simple https server
     >>> httpd.serve_forever()
 
 
-check certificate information
+Check certificate information
 -------------------------------
 
 .. code-block:: python
@@ -109,7 +109,7 @@ output:
     emailAddress: test@example.com
 
 
-generate RSA keyfile without passphrase
+Generate RSA keyfile without passphrase
 -----------------------------------------
 
 .. code-block:: python
@@ -131,7 +131,7 @@ generate RSA keyfile without passphrase
     ...     encryption_algorithm=serialization.NoEncryption()))
 
 
-sign a file by a given private key
+Sign a file by a given private key
 -----------------------------------
 
 .. code-block:: python
@@ -170,7 +170,7 @@ output:
     Verified OK
 
 
-verify a file from a signed digest
+Verify a file from a signed digest
 -----------------------------------
 
 .. code-block:: python
@@ -221,7 +221,7 @@ output:
     Verified OK
 
 
-simple RSA encrypt via pem file
+Simple RSA encrypt via pem file
 --------------------------------
 
 .. code-block:: python
@@ -262,7 +262,7 @@ output:
     Hello RSA!
 
 
-simple RSA encrypt via RSA module
+Simple RSA encrypt via RSA module
 ----------------------------------
 
 .. code-block:: python
@@ -327,7 +327,7 @@ output:
     > openssl rsautl -decrypt -inkey private.key
     Hello RSA!
 
-simple RSA decrypt via pem file
+Simple RSA decrypt via pem file
 --------------------------------
 
 .. code-block:: python
@@ -369,7 +369,7 @@ output:
     Hello openssl RSA encrypt
 
 
-simple RSA encrypt with OAEP
+Simple RSA encrypt with OAEP
 -----------------------------
 
 .. code-block:: python
@@ -411,7 +411,7 @@ output:
     Hello RSA OAEP!
 
 
-simple RSA decrypt with OAEP
+Simple RSA decrypt with OAEP
 -----------------------------
 
 .. code-block:: python
@@ -546,62 +546,68 @@ output:
     recv msg: b"I'm attacker!" not trust!
 
 
-AES CBC mode encrypt and decrypt
+Using AES CBC mode encrypt a file
 ----------------------------------
 
 .. code-block:: python
 
+    from __future__ import print_function, unicode_literals
+
+    import struct
+    import sys
     import os
+
     from cryptography.hazmat.primitives import padding
     from cryptography.hazmat.backends import default_backend
     from cryptography.hazmat.primitives.ciphers import (
-            Cipher,
-            algorithms,
-            modes)
+        Cipher,
+        algorithms,
+        modes)
 
     backend = default_backend()
     key = os.urandom(32)
-    iv = os.urandom(16)
+    iv  = os.urandom(16)
 
-    cipher = Cipher(algorithms.AES(key),
-                    modes.CBC(iv),
-                    backend=backend)
+    def encrypt(ptext):
+        pad = padding.PKCS7(128).padder()
+        ptext = pad.update(ptext) + pad.finalize()
 
-    # PS. CBC mode need padding
-
-    def encrypt(p_text, cipher):
-        # add padding to plain text
-        padder = padding.PKCS7(128).padder() # 128 bit
-        text = padder.update(p_text) + padder.finalize()
-
-        # encrypt plain text
+        alg = algorithms.AES(key)
+        mode = modes.CBC(iv)
+        cipher = Cipher(alg, mode, backend=backend)
         encryptor = cipher.encryptor()
-        c_text = encryptor.update(text) + encryptor.finalize()
-        return c_text
+        ctext = encryptor.update(ptext) + encryptor.finalize()
 
-    def decrypt(c_text, cipher):
-        # decrypt plain text with padding
-        decryptor = cipher.decryptor()
-        text = decryptor.update(c_text) + decryptor.finalize()
+        return ctext
 
-        # remove padding
-        unpadder = padding.PKCS7(128).unpadder() # 128 bit
-        p_text = unpadder.update(text) + unpadder.finalize()
-        return p_text
+    print("key: {}".format(key.hex()))
+    print("iv: {}".format(iv.hex()))
 
-    text = b"Hello Encrypt"
-    c_text = encrypt(text, cipher)
-    print(c_text)
-    p_text = decrypt(c_text, cipher)
-    print(p_text)
+    if len(sys.argv) != 3:
+        raise Exception("usage: cmd [file] [enc file]")
+
+    # read plain from file
+    with open(sys.argv[1], 'rb') as f:
+        plaintext = f.read()
+
+    # encrypt file
+    ciphertext = encrypt(plaintext)
+    with open(sys.argv[2], 'wb') as f:
+        f.write(ciphertext)
 
 output:
 
 .. code-block:: bash
 
-    $ python3 aes_cbc.py
-    b',n\xcb\xd3\x95\xfayvX\xa6q\\\x19\xdb\x12C'
-    b'Hello Encrypt'
+    $ echo "Encrypt file via AES-CBC" > test.txt
+    $ python3 aes.py test.txt test.enc
+    key: f239d9609e3f318b7afda7e4bb8db5b8734f504cf67f55e45dfe75f90d24fefc
+    iv: 8d6383b469f100d25293fb244ccb951e
+    $ openssl aes-256-cbc -d -in test.enc -out secrets.txt.new            \
+    > -K f239d9609e3f318b7afda7e4bb8db5b8734f504cf67f55e45dfe75f90d24fefc \
+    > -iv 8d6383b469f100d25293fb244ccb951e
+    $ cat secrets.txt.new
+    Encrypt file via AES-CBC
 
 
 AES CBC mode encrypt via password
