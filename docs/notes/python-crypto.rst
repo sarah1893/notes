@@ -586,7 +586,7 @@ Using AES CBC mode encrypt a file
     if len(sys.argv) != 3:
         raise Exception("usage: cmd [file] [enc file]")
 
-    # read plain from file
+    # read plain text from file
     with open(sys.argv[1], 'rb') as f:
         plaintext = f.read()
 
@@ -647,7 +647,7 @@ Using AES CBC mode decrypt a file
     if len(sys.argv) != 4:
         raise Exception("usage: cmd [key] [iv] [file]")
 
-    # read plain from file
+    # read cipher text from file
     with open(sys.argv[3], 'rb') as f:
         ciphertext = f.read()
 
