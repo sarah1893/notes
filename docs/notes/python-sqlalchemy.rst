@@ -352,7 +352,7 @@ SQL Expression Language
 
     print repr(table.c.f_name != 'ed')
 
-    # comparsion operator
+    # comparison operator
     print repr(table.c.id > 3)
 
     # or expression
