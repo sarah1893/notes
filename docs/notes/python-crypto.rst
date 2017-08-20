@@ -109,6 +109,166 @@ output:
     emailAddress: test@example.com
 
 
+Generate a self-signed certificate
+-----------------------------------
+
+.. code-block:: python
+
+    from __future__ import print_function, unicode_literals
+
+    import time
+
+    from datetime import datetime, timedelta
+    from OpenSSL import crypto
+
+    # load private key
+    ftype = crypto.FILETYPE_PEM
+    with open('key.pem', 'rb') as f: k = f.read()
+    k = crypto.load_privatekey(ftype, k)
+
+    now    = datetime.now()
+    expire = now + timedelta(days=365)
+
+    # country (countryName, C)
+    # state or province name (stateOrProvinceName, ST)
+    # locality (locality, L)
+    # organization (organizationName, O)
+    # organizational unit (organizationalUnitName, OU)
+    # common name (commonName, CN)
+
+    cert = crypto.X509()
+    cert.get_subject().C  = "TW"
+    cert.get_subject().ST = "Taiwan"
+    cert.get_subject().L  = "Taipei"
+    cert.get_subject().O  = "pysheeet"
+    cert.get_subject().OU = "cheat sheet"
+    cert.get_subject().CN = "pythonsheets.com"
+    cert.set_serial_number(1000)
+    cert.set_notBefore(now.strftime("%Y%m%d%H%M%SZ").encode())
+    cert.set_notAfter(expire.strftime("%Y%m%d%H%M%SZ").encode())
+    cert.set_issuer(cert.get_subject())
+    cert.set_pubkey(k)
+    cert.sign(k, 'sha1')
+
+    with open('cert.pem', "wb") as f:
+        f.write(crypto.dump_certificate(ftype, cert))
+
+output:
+
+.. code-block:: bash
+
+    $ openssl genrsa -out key.pem 2048
+    Generating RSA private key, 2048 bit long modulus
+    .............+++
+    ..................................+++
+    e is 65537 (0x10001)
+    $ python3 x509.py
+    $ openssl x509 -subject -issuer -noout -in cert.pem 
+    subject= /C=TW/ST=Taiwan/L=Taipei/O=pysheeet/OU=cheat sheet/CN=pythonsheets.com
+    issuer= /C=TW/ST=Taiwan/L=Taipei/O=pysheeet/OU=cheat sheet/CN=pythonsheets.com    
+
+
+Prepare a Certificate Signing Request (csr)
+--------------------------------------------
+
+.. code-block:: python
+
+    from __future__ import print_function, unicode_literals
+
+    import time
+    from OpenSSL import crypto
+
+    # load private key
+    ftype = crypto.FILETYPE_PEM
+    with open('key.pem', 'rb') as f: key = f.read()
+    key = crypto.load_privatekey(ftype, key)
+    req    = crypto.X509Req()
+
+    alt_name  = [ b"DNS:www.pythonsheeets.com",
+                  b"DNS:doc.pythonsheeets.com" ]
+    key_usage = [ b"Digital Signature",
+                  b"Non Repudiation",
+                  b"Key Encipherment" ]
+
+    # country (countryName, C)
+    # state or province name (stateOrProvinceName, ST)
+    # locality (locality, L)
+    # organization (organizationName, O)
+    # organizational unit (organizationalUnitName, OU)
+    # common name (commonName, CN)
+
+    req.get_subject().C  = "TW"
+    req.get_subject().ST = "Taiwan"
+    req.get_subject().L  = "Taipei"
+    req.get_subject().O  = "pysheeet"
+    req.get_subject().OU = "cheat sheet"
+    req.get_subject().CN = "pythonsheets.com"
+    req.add_extensions([
+        crypto.X509Extension( b"basicConstraints",
+                              False,
+                              b"CA:FALSE"),
+        crypto.X509Extension( b"keyUsage",
+                              False,
+                              b",".join(key_usage)),
+        crypto.X509Extension( b"subjectAltName",
+                              False,
+                              b",".join(alt_name))
+    ])
+
+    req.set_pubkey(key)
+    req.sign(key, "sha256")
+
+    csr = crypto.dump_certificate_request(ftype, req)
+    with open("cert.csr", 'wb') as f: f.write(csr)
+
+output:
+
+.. code-block:: bash
+
+    # create a root ca
+    $ openssl genrsa -out ca-key.pem 2048
+    Generating RSA private key, 2048 bit long modulus
+    .....+++
+    .......................................+++
+    e is 65537 (0x10001)
+    $ openssl req -x509 -new -nodes -key ca-key.pem \
+    > -days 10000 -out ca.pem -subj "/CN=root-ca"
+
+    # prepare a csr
+    $ openssl genrsa -out key.pem 2048
+    Generating RSA private key, 2048 bit long modulus
+    ....+++
+    ......................................+++
+    e is 65537 (0x10001)
+    $ python3 x509.py
+
+    # prepare openssl.cnf
+    cat <<EOF > openssl.cnf
+    > [req]
+    > req_extensions = v3_req
+    > distinguished_name = req_distinguished_name
+    > [req_distinguished_name]
+    > [ v3_req ]
+    > basicConstraints = CA:FALSE
+    > keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+    > subjectAltName = @alt_names
+    > [alt_names]
+    > DNS.1 = www.pythonsheets.com
+    > DNS.2 = doc.pythonsheets.com
+    > EOF
+
+    # sign a csr
+    $ openssl x509 -req -in cert.csr -CA ca.pem \
+    > -CAkey ca-key.pem -CAcreateserial -out cert.pem \
+    > -days 365 -extensions v3_req -extfile openssl.cnf
+    Signature ok
+    subject=/C=TW/ST=Taiwan/L=Taipei/O=pysheeet/OU=cheat sheet/CN=pythonsheets.com
+    Getting CA Private Key
+
+    # check
+    $ openssl x509 -in cert.pem -text -noout
+
+
 Generate RSA keyfile without passphrase
 -----------------------------------------
 
