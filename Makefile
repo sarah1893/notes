@@ -1,7 +1,10 @@
 REQUIREMENT = requirements.txt
 
-.PHONY: build
+.PHONY: build test
 build: html
 
 %:
 	cd docs && make $@
+
+test:
+	flake8 app.py

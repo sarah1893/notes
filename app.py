@@ -3,11 +3,12 @@ This is a simple cheatsheet webapp.
 """
 import os
 
-from flask import Flask, send_from_directory
+from flask import Flask, abort, send_from_directory
 from flask_sslify import SSLify
 
 DIR = os.path.dirname(os.path.realpath(__file__))
 ROOT = os.path.join(DIR, 'docs', '_build', 'html')
+
 
 def find_key(token):
     if token == os.environ.get("ACME_TOKEN"):
@@ -39,7 +40,8 @@ def index_redirection():
 @app.route("/.well-known/acme-challenge/<token>")
 def acme(token):
     key = find_key(token)
-    if key is None: abort(404)
+    if key is None:
+        abort(404)
     return key
 
 
