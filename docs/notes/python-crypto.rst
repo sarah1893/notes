@@ -96,7 +96,7 @@ output:
     State or Province Name (full name) [Some-State]:Taiwan
     Locality Name (eg, city) []:Taipei
     Organization Name (eg, company) [Internet Widgits Pty Ltd]:personal
-    Organizational Unit Name (eg, section) []:perfonal
+    Organizational Unit Name (eg, section) []:personal
     Common Name (e.g. server FQDN or YOUR name) []:localhost
     Email Address []:test@example.com
     $ python3 cert.py
@@ -104,7 +104,7 @@ output:
     stateOrProvinceName: Taiwan
     localityName: Taipei
     organizationName: personal
-    organizationalUnitName: perfonal
+    organizationalUnitName: personal
     commonName: localhost
     emailAddress: test@example.com
 
