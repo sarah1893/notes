@@ -116,8 +116,6 @@ Generate a self-signed certificate
 
     from __future__ import print_function, unicode_literals
 
-    import time
-
     from datetime import datetime, timedelta
     from OpenSSL import crypto
 
@@ -175,7 +173,6 @@ Prepare a Certificate Signing Request (csr)
 
     from __future__ import print_function, unicode_literals
 
-    import time
     from OpenSSL import crypto
 
     # load private key
