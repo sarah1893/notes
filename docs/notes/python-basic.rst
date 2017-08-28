@@ -116,15 +116,15 @@ Define a function ``__doc__``
 .. code-block:: python
 
     # Define a function document
-    >>> def Example():
+    >>> def example():
     ...   """ This is an example function """
     ...   print "Example function"
     ...
-    >>> Example.__doc__
+    >>> example.__doc__
     ' This is an example function '
 
     # Or using help function
-    >>> help(Example)
+    >>> help(example)
 
 Check instance type
 -------------------
