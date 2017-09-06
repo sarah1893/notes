@@ -728,9 +728,9 @@ Decorator
     >>> def decorator(func):
     ...   @wraps(func)
     ...   def wrapper(*args, **kwargs):
-    ...     print "Before calling {}.".format(func.__name___)
+    ...     print "Before calling {}.".format(func.__name__)
     ...     ret = func(*args, **kwargs)
-    ...     print "After calling {}.".format(func.__name___)
+    ...     print "After calling {}.".format(func.__name__)
     ...     return ret
     ...   return wrapper
     ...
