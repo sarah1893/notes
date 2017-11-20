@@ -583,8 +583,7 @@ Simple Non-blocking TLS/SSL socket via selectors
 
     def do_handshake(sslconn, sel):
         sslconn.do_handshake()
-        sel.unregister(sslconn)
-        sel.register(sslconn, selectors.EVENT_READ, read)
+        sel.modify(sslconn, selectors.EVENT_READ, read)
 
 
     def read(sslconn, sel):
