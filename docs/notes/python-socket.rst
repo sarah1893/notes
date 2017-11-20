@@ -139,8 +139,8 @@ output:
     Hello World
 
 
-Simple SSL TCP Echo Server
----------------------------
+Simple TLS/SSL TCP Echo Server
+--------------------------------
 
 .. code-block:: python
 
@@ -539,6 +539,106 @@ output: (bash 1)
     $ nc localhost 5566
     Hi
     Hi
+
+
+Simple Non-blocking TLS/SSL socket via selectors
+--------------------------------------------------
+
+.. code-block:: python
+
+    import socket
+    import selectors
+    import contextlib
+    import ssl
+
+    from functools import partial
+
+    sslctx = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+    sslctx.load_cert_chain(certfile="cert.pem", keyfile="key.pem")
+
+    @contextlib.contextmanager
+    def Server(host,port):
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            s.bind((host,port))
+            s.listen(10)
+            sel = selectors.DefaultSelector()
+            yield s, sel
+        except socket.error:
+            print("Get socket error")
+            raise
+        finally:
+            if s: s.close()
+            if sel: sel.close()
+
+
+    def accept(s, sel):
+        conn, _ = s.accept()
+        sslconn = sslctx.wrap_socket(conn,
+                                     server_side=True,
+                                     do_handshake_on_connect=False)
+        sel.register(sslconn, selectors.EVENT_READ, do_handshake)
+
+
+    def do_handshake(sslconn, sel):
+        sslconn.do_handshake()
+        sel.unregister(sslconn)
+        sel.register(sslconn, selectors.EVENT_READ, read)
+
+
+    def read(sslconn, sel):
+        msg = sslconn.recv(1024)
+        if msg:
+            sel.modify(sslconn,
+                       selectors.EVENT_WRITE,
+                       partial(write, msg=msg))
+        else:
+            sel.unregister(sslconn)
+            sslconn.close()
+
+
+    def write(sslconn, sel, msg=None):
+        if msg:
+            sslconn.send(msg)
+        sel.modify(sslconn, selectors.EVENT_READ, read)
+
+
+    host = 'localhost'
+    port = 5566
+    try:
+        with Server(host, port) as (s,sel):
+            sel.register(s, selectors.EVENT_READ, accept)
+            while True:
+                events = sel.select()
+                for sel_key, m in events:
+                    handler = sel_key.data
+                    handler(sel_key.fileobj, sel)
+    except KeyboardInterrupt:
+        pass
+
+
+output:
+
+.. code-block:: console
+
+    # console 1
+    $ openssl genrsa -out key.pem 2048
+    $ openssl req -x509 -new -nodes -key key.pem -days 365 -out cert.pem
+    $ python3 ssl_tcp_server.py &
+    $ openssl s_client -connect localhost:5566
+    ...
+    ---
+    Hello TLS
+    Hello TLS
+
+    # console 2
+    $ openssl s_client -connect localhost:5566
+    ...
+    ---
+    Hello SSL
+    Hello SSL
+
 
 "socketpair" - Similar to PIPE
 ------------------------------
