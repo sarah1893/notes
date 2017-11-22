@@ -476,7 +476,7 @@ output: (bash 2)
     Ker Ker
 
 
-Simple Asynchronous TCP Server - select
+Simple Asynchronous TCP Server - epoll
 ---------------------------------------
 
 .. code-block:: python
