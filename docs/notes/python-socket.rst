@@ -87,13 +87,13 @@ Simple TCP Echo Server
             sock.bind((self._host,self._port))
             sock.listen(10)
             self._sock = sock
-            return self._sock 
+            return self._sock
         def __exit__(self,*exc_info):
             if exc_info[0]:
                 import traceback
                 traceback.print_exception(*exc_info)
             self._sock.close()
-          
+
     if __name__ == '__main__':
         host = 'localhost'
         port = 5566
@@ -109,7 +109,7 @@ output:
 .. code-block:: console
 
     $ nc localhost 5566
-    Hello World 
+    Hello World
     Hello World
 
 Simple TCP Echo Server Via SocketServer
@@ -124,7 +124,7 @@ Simple TCP Echo Server Via SocketServer
     ...     data = self.request.recv(1024)
     ...     print self.client_address
     ...     self.request.sendall(data)
-    ... 
+    ...
     >>> host = ('localhost',5566)
     >>> s = SocketServer.TCPServer(
     ...   host, handler)
@@ -217,7 +217,7 @@ Simple UDP Echo Server
 
 output:
 
-.. code-block:: console 
+.. code-block:: console
 
     $ nc -u localhost 5566
     Hello World
@@ -236,7 +236,7 @@ Simple UDP Echo Server Via SocketServer
     ...     m,s = self.request
     ...     s.sendto(m,self.client_address)
     ...     print self.client_address
-    ... 
+    ...
     >>> host = ('localhost',5566)
     >>> s = SocketServer.UDPServer(
     ...   host, handler)
@@ -449,10 +449,10 @@ Simple Asynchronous TCP Server - select
                 else:
                     msg = _.recv(1024)
                     ml[_.fileno()] = msg
-                    wl.append(_) 
+                    wl.append(_)
             # process ready to write
             for _ in w:
-                msg = ml[_.fileno()] 
+                msg = ml[_.fileno()]
                 _.send(msg)
                 wl.remove(_)
                 del ml[_.fileno()]
@@ -732,13 +732,175 @@ output: (bash 2)
     Hello Awesome Python
 
 
+Simple Asynchronous TCP Server - kqueue
+----------------------------------------
+
+.. code-block:: python
+
+    from __future__ import print_function, unicode_literals
+
+    import socket
+    import select
+    import contextlib
+
+    if not hasattr(select, 'kqueue'):
+        print("Not support kqueue")
+        exit(1)
+
+
+    host = 'localhost'
+    port = 5566
+
+    con = {}
+    req = {}
+    resp = {}
+
+    @contextlib.contextmanager
+    def Server(host,port):
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            s.setblocking(False)
+            s.bind((host,port))
+            s.listen(10)
+            yield s
+        except socket.error:
+            print("Get socket error")
+            raise
+        finally:
+            if s: s.close()
+
+
+    @contextlib.contextmanager
+    def Kqueue():
+        try:
+            kq = select.kqueue()
+            yield kq
+        finally:
+            kq.close()
+            for fd, c in con.items(): c.close()
+
+
+    def accept(server, kq):
+        conn, addr = server.accept()
+        conn.setblocking(False)
+        fd = conn.fileno()
+        ke = select.kevent(conn.fileno(),
+                           select.KQ_FILTER_READ,
+                           select.KQ_EV_ADD)
+        kq.control([ke], 0)
+        req[fd] = conn
+        con[fd] = conn
+
+
+    def recv(fd, kq):
+        if fd not in req:
+            return
+
+        conn = req[fd]
+        msg = conn.recv(1024)
+        if msg:
+            resp[fd] = msg
+            # remove read event
+            ke = select.kevent(fd,
+                               select.KQ_FILTER_READ,
+                               select.KQ_EV_DELETE)
+            kq.control([ke], 0)
+            # add write event
+            ke = select.kevent(fd,
+                               select.KQ_FILTER_WRITE,
+                               select.KQ_EV_ADD)
+            kq.control([ke], 0)
+            req[fd] = conn
+            con[fd] = conn
+        else:
+            conn.close()
+            del con[fd]
+
+        del req[fd]
+
+
+    def send(fd, kq):
+        if fd not in resp:
+            return
+
+        conn = con[fd]
+        msg = resp[fd]
+        b = 0
+        total = len(msg)
+        while total > b:
+            l = conn.send(msg)
+            msg = msg[l:]
+            b += l
+
+        del resp[fd]
+        req[fd] = conn
+        # remove write event
+        ke = select.kevent(fd,
+                           select.KQ_FILTER_WRITE,
+                           select.KQ_EV_DELETE)
+        kq.control([ke], 0)
+        # add read event
+        ke = select.kevent(fd,
+                           select.KQ_FILTER_READ,
+                           select.KQ_EV_ADD)
+        kq.control([ke], 0)
+
+
+    try:
+        with Server(host, port) as server, Kqueue() as kq:
+
+            max_events = 1024
+            timeout = 1
+
+            ke = select.kevent(server.fileno(),
+                               select.KQ_FILTER_READ,
+                               select.KQ_EV_ADD)
+
+            kq.control([ke], 0)
+            while True:
+                events = kq.control(None, max_events, timeout)
+                for e in events:
+                    fd = e.ident
+                    if fd == server.fileno():
+                        accept(server, kq)
+                    elif e.filter == select.KQ_FILTER_READ:
+                        recv(fd, kq)
+                    elif e.filter == select.KQ_FILTER_WRITE:
+                        send(fd, kq)
+    except KeyboardInterrupt:
+        pass
+
+output: (bash 1)
+
+.. code-block:: console
+
+    $ python3 kqueue.py &
+    [1] 3036
+    $ nc localhost 5566
+    Hello kqueue
+    Hello kqueue
+    Hello Python Socket Programming
+    Hello Python Socket Programming
+
+output: (bash 2)
+
+.. code-block:: console
+
+    $ nc localhost 5566
+    Hello Python
+    Hello Python
+    Hello Awesome Python
+    Hello Awesome Python
+
+
 High-Level API - selectors
 --------------------------
 
 .. code-block:: python
 
     # Pyton3.4+ only
-    # Reference: selectors 
+    # Reference: selectors
     import selectors
     import socket
     import contextlib
@@ -760,7 +922,7 @@ High-Level API - selectors
                 s.close()
 
     def read_handler(conn, sel):
-        msg = conn.recv(1024) 
+        msg = conn.recv(1024)
         if msg:
             conn.send(msg)
         else:
@@ -786,7 +948,7 @@ output: (bash 1)
 .. code-block:: console
 
     $ nc localhost 5566
-    Hello 
+    Hello
     Hello
 
 output: (bash 1)
@@ -945,7 +1107,7 @@ Sniffer IP packets
 
 .. code-block:: python
 
-    from ctypes import * 
+    from ctypes import *
     import socket
     import struct
 
@@ -1003,7 +1165,7 @@ Sniffer IP packets
 
     host = '0.0.0.0'
     s = socket.socket(socket.AF_INET,
-                      socket.SOCK_RAW, 
+                      socket.SOCK_RAW,
                       socket.IPPROTO_ICMP)
     s.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
     s.bind((host, 0))
@@ -1050,7 +1212,7 @@ Sniffer ARP packet
 .. code-block:: python
 
     """
-    Ehternet Packet Header 
+    Ehternet Packet Header
 
     struct ethhdr {
         unsigned char h_dest[ETH_ALEN];   /* destination eth addr */
