@@ -216,6 +216,7 @@ Set ciphers on TLS/SSL TCP Echo Server
     finally:
         sock.close()
 
+output:
 
 .. code-block:: bash
 
