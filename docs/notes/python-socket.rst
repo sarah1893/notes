@@ -1160,6 +1160,53 @@ output:
     Hi! Parent!
     ...
 
+using sendfile do copy
+------------------------
+
+.. code-block:: python
+
+    # need python 3.3 or above
+    from __future__ import print_function, unicode_literals
+
+    import os
+    import sys
+
+    if len(sys.argv) != 3:
+        print("Usage: cmd src dst")
+        exit(1)
+
+    src = sys.argv[1]
+    dst = sys.argv[2]
+
+    with open(src, 'r') as s, open(dst, 'w') as d:
+        st = os.fstat(s.fileno())
+
+        offset = None
+        count = 4096
+        s_len = st.st_size
+
+        sfd = s.fileno()
+        dfd = d.fileno()
+
+        while s_len > 0:
+            ret = os.sendfile(dfd, sfd, offset, count)
+            s_len -= ret
+
+output:
+
+.. code-block:: console
+
+    $ dd if=/dev/zero of=dd.in bs=1M count=1024
+    1024+0 records in
+    1024+0 records out
+    1073741824 bytes (1.1 GB, 1.0 GiB) copied, 1.47732 s, 727 MB/s
+    $ python3 sendfile.py dd.in dd.out
+    $ md5sum dd.in
+    cd573cfaace07e7949bc0c46028904ff  dd.in
+    $ md5sum dd.out
+    cd573cfaace07e7949bc0c46028904ff  dd.out
+
+
 Sniffer IP packets
 ------------------
 
