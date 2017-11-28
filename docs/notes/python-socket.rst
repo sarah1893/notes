@@ -1181,7 +1181,7 @@ using sendfile do copy
     with open(src, 'r') as s, open(dst, 'w') as d:
         st = os.fstat(s.fileno())
 
-        offset = None
+        offset = 0
         count = 4096
         s_len = st.st_size
 
@@ -1190,21 +1190,22 @@ using sendfile do copy
 
         while s_len > 0:
             ret = os.sendfile(dfd, sfd, offset, count)
+            offset += ret
             s_len -= ret
 
 output:
 
 .. code-block:: console
 
-    $ dd if=/dev/zero of=dd.in bs=1M count=1024
+    $ dd if=/dev/urandom of=dd.in bs=1M count=1024
     1024+0 records in
     1024+0 records out
-    1073741824 bytes (1.1 GB, 1.0 GiB) copied, 1.47732 s, 727 MB/s
+    1073741824 bytes (1.1 GB, 1.0 GiB) copied, 108.02 s, 9.9 MB/s
     $ python3 sendfile.py dd.in dd.out
     $ md5sum dd.in
-    cd573cfaace07e7949bc0c46028904ff  dd.in
+    e79afdd6aba71b7174142c0bbc289674  dd.in
     $ md5sum dd.out
-    cd573cfaace07e7949bc0c46028904ff  dd.out
+    e79afdd6aba71b7174142c0bbc289674  dd.out
 
 
 Sniffer IP packets
