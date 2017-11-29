@@ -1307,6 +1307,47 @@ output:
     eadfd96c85976b1f46385e89dfd9c4a8  dd.out
 
 
+Linux kernel Crypto API - AF_ALG
+---------------------------------
+
+.. code-block:: python
+
+    # need python 3.6 or above & Linux >=2.6.38
+    import socket
+    import hashlib
+    import contextlib
+
+    @contextlib.contextmanager
+    def create_alg(typ, name):
+        s = socket.socket(socket.AF_ALG, socket.SOCK_SEQPACKET, 0)
+        try:
+            s.bind((typ, name))
+            yield s
+        finally:
+            s.close()
+
+    msg = b'Python is awesome!'
+
+    with create_alg('hash', 'sha256') as algo:
+        op, _ = algo.accept()
+        with op:
+            op.sendall(msg)
+            data = op.recv(512)
+            print(data.hex())
+
+            # check data
+            h = hashlib.sha256(msg).digest()
+            if h != data:
+                raise Exception(f"sha256({h}) != af_alg({data})")
+
+output:
+
+.. code-block:: console
+
+    $ python3 af_alg.py
+    9d50bcac2d5e33f936ec2db7dc7b6579cba8e1b099d77c31d8564df46f66bdf5
+
+
 Sniffer IP packets
 ------------------
 
