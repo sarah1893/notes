@@ -2,6 +2,10 @@
 Python generator cheatsheet
 ===========================
 
+.. contents::
+    :backlinks: none
+
+
 Glossary of Generator
 ---------------------
 

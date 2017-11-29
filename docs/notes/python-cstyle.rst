@@ -1,6 +1,10 @@
 Python Design Pattern in C
 ==========================
 
+.. contents::
+    :backlinks: none
+
+
 Decorator in C
 --------------
 

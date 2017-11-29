@@ -2,6 +2,10 @@
 Python cryptography cheatsheet
 ==============================
 
+.. contents::
+    :backlinks: none
+
+
 Simple https server
 ---------------------
 

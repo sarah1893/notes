@@ -2,6 +2,10 @@
 Python C API cheatsheet
 =======================
 
+.. contents::
+    :backlinks: none
+
+
 Performance of ctypes
 ----------------------
 

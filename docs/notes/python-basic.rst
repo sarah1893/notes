@@ -2,6 +2,10 @@
 Python basic cheatsheet
 =======================
 
+.. contents::
+    :backlinks: none
+
+
 Python Naming Rule
 --------------------
 

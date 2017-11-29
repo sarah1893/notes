@@ -2,6 +2,10 @@
 Python Concurrency Cheatsheet
 =============================
 
+.. contents::
+    :backlinks: none
+
+
 Execute a shell command
 ------------------------
 

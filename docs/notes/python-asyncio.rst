@@ -1,6 +1,10 @@
 Python asyncio cheatsheet
 =========================
 
+.. contents::
+    :backlinks: none
+
+
 What is @asyncio.coroutine?
 ---------------------------
 

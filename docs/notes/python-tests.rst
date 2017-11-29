@@ -2,6 +2,10 @@
 Python test cheatsheet
 ======================
 
+.. contents::
+    :backlinks: none
+
+
 A simple Python unittest
 ------------------------
 

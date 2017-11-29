@@ -2,6 +2,10 @@
 Python Regular Expression cheatsheet
 ====================================
 
+.. contents::
+    :backlinks: none
+
+
 Compare HTML tags
 -----------------
 

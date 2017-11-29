@@ -1,6 +1,10 @@
 Python SQLAlchemy Cheatsheet
 =============================
 
+.. contents::
+    :backlinks: none
+
+
 Set a database URL
 -------------------
 

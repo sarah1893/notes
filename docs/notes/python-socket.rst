@@ -2,6 +2,10 @@
 Python socket cheatsheet
 ========================
 
+.. contents::
+    :backlinks: none
+
+
 Get Hostname
 ------------
 
