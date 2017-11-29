@@ -1,7 +1,7 @@
 Python SQLAlchemy Cheatsheet
 =============================
 
-.. contents::
+.. contents:: Table of Contents
     :backlinks: none
 
 

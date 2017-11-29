@@ -1,7 +1,7 @@
 Python Design Pattern in C
 ==========================
 
-.. contents::
+.. contents:: Table of Contents
     :backlinks: none
 
 

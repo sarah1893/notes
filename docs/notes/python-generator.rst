@@ -2,7 +2,7 @@
 Python generator cheatsheet
 ===========================
 
-.. contents::
+.. contents:: Table of Contents
     :backlinks: none
 
 

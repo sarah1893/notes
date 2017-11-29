@@ -2,7 +2,7 @@
 Python basic cheatsheet
 =======================
 
-.. contents::
+.. contents:: Table of Contents
     :backlinks: none
 
 

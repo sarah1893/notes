@@ -2,7 +2,7 @@
 Python Regular Expression cheatsheet
 ====================================
 
-.. contents::
+.. contents:: Table of Contents
     :backlinks: none
 
 

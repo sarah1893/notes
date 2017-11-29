@@ -2,7 +2,7 @@
 Python socket cheatsheet
 ========================
 
-.. contents::
+.. contents:: Table of Contents
     :backlinks: none
 
 
