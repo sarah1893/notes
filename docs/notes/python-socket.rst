@@ -1766,12 +1766,12 @@ Compare the performance of AF_ALG to cryptography
     # profile cryptography (no zero-copy)
     with open(plain, 'rb') as pf:
 
-        pf.seek(0)
         aesgcm = AESGCM(key)
 
         s = time.time()
 
         for _ in range(count):
+            pf.seek(0, 0)
             plaintext = pf.read()
             ciphertext = aesgcm.encrypt(iv, plaintext, assoc)
             plaintext = aesgcm.decrypt(iv, ciphertext, assoc)
@@ -1788,9 +1788,8 @@ output:
 .. code-block:: console
 
     $ python3 aes-gcm.py
-    total cost time: 13.353013038635254. [AF_ALG]
-    total cost time: 38.86438322067261. [cryptography]
-
+    total cost time: 15.317010641098022. [AF_ALG]
+    total cost time: 50.256704807281494. [cryptography]
 
 
 Sniffer IP packets
