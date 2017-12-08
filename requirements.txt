@@ -16,5 +16,5 @@ six==1.11.0
 snowballstemmer==1.2.1
 Sphinx==1.6.5
 sphinx-rtd-theme==0.2.4
-Werkzeug==0.12.2
+Werkzeug==0.13
 flake8==3.5.0
