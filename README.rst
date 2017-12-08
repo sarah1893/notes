@@ -21,6 +21,14 @@ How to run the server
 
     # URL: localhost:5000
 
+PDF Version
+============
+
+`pdf`_
+
+.. _pdf: https://media.readthedocs.org/pdf/pysheeet/latest/pysheeet.pdf
+
+
 Cheat Sheets
 ==============
 
