@@ -396,6 +396,17 @@ Get list item **SMART**
     >>> a[::-1]
     [5, 4, 3, 2, 1]
 
+    # be careful
+    >>> a = [[]] * 3
+    >>> b = [[] for _ in range(3)]
+    >>> a[0].append("Hello")
+    >>> a
+    [['Hello'], ['Hello'], ['Hello']]
+    >>> b[0].append("Python")
+    >>> b
+    [['Python'], [], []]
+
+
 Get dictionary item **SMART**
 ------------------------------
 
