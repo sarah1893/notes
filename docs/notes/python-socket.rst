@@ -163,6 +163,66 @@ output:
     Hello IPv6
     Hello IPv6
 
+Disable IPv6 Only
+------------------
+
+.. code-block:: python
+
+    #!/usr/bin/env python3
+
+    import contextlib
+    import socket
+
+    host = "::"
+    port = 5566
+
+    @contextlib.contextmanager
+    def server(host: str, port: int):
+        s = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, 0)
+        try:
+            s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            s.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, 0)
+            s.bind((host, port))
+            s.listen(10)
+            yield s
+        finally:
+            s.close()
+
+
+    with server(host, port) as s:
+        try:
+            while True:
+                conn, addr = s.accept()
+                remote = conn.getpeername()
+                print(remote)
+                msg = conn.recv(1024)
+
+                if msg:
+                    conn.send(msg)
+
+                conn.close()
+        except KeyboardInterrupt:
+            pass
+
+output:
+
+.. code-block:: bash
+
+    $ python3 ipv6.py
+    [1] 23914
+    $ nc -4 127.0.0.1 5566
+    ('::ffff:127.0.0.1', 42604, 0, 0)
+    Hello IPv4
+    Hello IPv4
+    $ nc -6 ::1 5566
+    ('::1', 50882, 0, 0)
+    Hello IPv6
+    Hello IPv6
+    $ nc -6 fe80::a00:27ff:fe9b:50ee%enp0s3 5566
+    ('fe80::a00:27ff:fe9b:50ee%enp0s3', 42042, 0, 2)
+    Hello IPv6
+    Hello IPv6
+
 
 Simple TCP Echo Server Via SocketServer
 ---------------------------------------
