@@ -8,6 +8,9 @@ Development Status
      :target: https://requires.io/github/crazyguitar/pysheeet/requirements/?branch=master
      :alt: Requirements Status
 
+.. image:: https://img.shields.io/badge/License-MIT-blue.svg
+     :target: https://raw.githubusercontent.com/crazyguitar/pysheeet/master/LICENSE
+
 How to run the server
 =======================
 
