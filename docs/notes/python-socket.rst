@@ -2013,62 +2013,62 @@ Sniffer TCP packet
     """
     Based on RFC-793, the following figure shows the TCP header format:
 
-        0                   1                   2                   3
-        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-        |          Source Port          |       Destination Port        |
-        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-        |                        Sequence Number                        |
-        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-        |                    Acknowledgment Number                      |
-        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-        |  Data |           |U|A|P|R|S|F|                               |
-        | Offset| Reserved  |R|C|S|S|Y|I|            Window             |
-        |       |           |G|K|H|T|N|N|                               |
-        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-        |           Checksum            |         Urgent Pointer        |
-        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-        |                    Options                    |    Padding    |
-        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-        |                             data                              |
-        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |          Source Port          |       Destination Port        |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                        Sequence Number                        |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                    Acknowledgment Number                      |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |  Data |           |U|A|P|R|S|F|                               |
+    | Offset| Reserved  |R|C|S|S|Y|I|            Window             |
+    |       |           |G|K|H|T|N|N|                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |           Checksum            |         Urgent Pointer        |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                    Options                    |    Padding    |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                             data                              |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
     In linux api (uapi/linux/tcp.h), it defines the TCP header:
 
-        struct tcphdr {
-            __be16  source;
-            __be16  dest;
-            __be32  seq;
-            __be32  ack_seq;
-        #if defined(__LITTLE_ENDIAN_BITFIELD)
-            __u16   res1:4,
-                    doff:4,
-                    fin:1,
-                    syn:1,
-                    rst:1,
-                    psh:1,
-                    ack:1,
-                    urg:1,
-                    ece:1,
-                    cwr:1;
-        #elif defined(__BIG_ENDIAN_BITFIELD)
-            __u16   doff:4,
-                    res1:4,
-                    cwr:1,
-                    ece:1,
-                    urg:1,
-                    ack:1,
-                    psh:1,
-                    rst:1,
-                    syn:1,
-                    fin:1;
-        #else
-        #error      "Adjust your <asm/byteorder.h> defines"
-        #endif
-            __be16  window;
-            __sum16 check;
-            __be16  urg_ptr;
-        };
+    struct tcphdr {
+        __be16  source;
+        __be16  dest;
+        __be32  seq;
+        __be32  ack_seq;
+    #if defined(__LITTLE_ENDIAN_BITFIELD)
+        __u16   res1:4,
+                doff:4,
+                fin:1,
+                syn:1,
+                rst:1,
+                psh:1,
+                ack:1,
+                urg:1,
+                ece:1,
+                cwr:1;
+    #elif defined(__BIG_ENDIAN_BITFIELD)
+        __u16   doff:4,
+                res1:4,
+                cwr:1,
+                ece:1,
+                urg:1,
+                ack:1,
+                psh:1,
+                rst:1,
+                syn:1,
+                fin:1;
+    #else
+    #error      "Adjust your <asm/byteorder.h> defines"
+    #endif
+        __be16  window;
+        __sum16 check;
+        __be16  urg_ptr;
+    };
     """
     import sys
     import socket
@@ -2134,7 +2134,7 @@ Sniffer TCP packet
                 if not data:
                     continue
 
-                print("----------------- TCP_HEADER -------------------")
+                print("------------ TCP_HEADER --------------")
                 print(f"Source Port:           {source}")
                 print(f"Destination Port:      {dest}")
                 print(f"Sequence Number:       {seq}")
@@ -2151,7 +2151,7 @@ Sniffer TCP packet
                 print(f"Window:                {window}")
                 print(f"Checksum:              {check}")
                 print(f"Urgent Point:          {urg_ptr}")
-                print("-------------------- DATA ----------------------")
+                print("--------------- DATA -----------------")
                 print(data)
 
     except KeyboardInterrupt:
@@ -2161,7 +2161,8 @@ output:
 
 .. code-block:: console
 
-    ----------------- TCP_HEADER -------------------
+    $ python3.6 tcp.py
+    ------------ TCP_HEADER --------------
     Source Port:           38352
     Destination Port:      8000
     Sequence Number:       2907801591
@@ -2178,7 +2179,7 @@ output:
     Window:                342
     Checksum:              65142
     Urgent Point:          0
-    -------------------- DATA ----------------------
+    --------------- DATA -----------------
     b'GET / HTTP/1.1\r\nHost: localhost:8000\r\nUser-Agent: curl/7.47.0\r\nAccept: */*\r\n\r\n'
 
 Sniffer ARP packet
