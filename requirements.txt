@@ -5,7 +5,7 @@ docutils==0.14
 Flask==0.12.2
 Flask-SSLify==0.1.5
 gunicorn==19.7.1
-imagesize==0.7.1
+imagesize==1.0.0
 itsdangerous==0.24
 Jinja2==2.10
 MarkupSafe==1.0
