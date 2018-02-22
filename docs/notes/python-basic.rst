@@ -1397,6 +1397,65 @@ output:
     mem usage: 100659200 Byte
 
 
+Using annotation for type hints
+--------------------------------
+
+.. code-block:: python
+
+    #!/usr/bin/env python3
+
+    # need python3.5 or above (PEP: 484, 526, 3107)
+
+    from functools import wraps
+
+    from typing import (
+        Dict,
+        Tuple,
+        List,
+        Set,
+        Generator,
+        Type,
+        TypeVar
+    )
+
+    # use annotation to do type hints (without type check)
+    def func(n: int) -> int:
+        return n
+
+    def func(s: str) -> str:
+        return s
+
+    def func(d: Dict) -> Dict:
+        return d
+
+    def func(l: List) -> List:
+        return l
+
+    def func(t: Tuple) -> Tuple:
+        return t
+
+    def func(s: Set) -> Set:
+        return s
+
+    def func(g: Generator) -> Generator:
+        return g
+
+    class C(object):
+        pass
+
+    TC = TypeVar('C', bound=C)
+
+    def func(cls: Type) -> TC:
+        print("cls is Type? ", isinstance(cls, Type))
+        return cls()
+
+    # Based on TypeVar document, isinstance() and issubclass()
+    # should not be used with types. Thus, we us type(c) is C
+    # to check the type of instance
+    c = func(C)
+    print("return the instance of class C? ", type(c) is C)
+
+
 Using annotation to check type
 -------------------------------
 
