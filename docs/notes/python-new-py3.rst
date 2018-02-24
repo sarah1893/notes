@@ -156,6 +156,46 @@ Python 3
     >>> a != "Python2"
     True
 
+Not allow ``from module import *`` inside function
+---------------------------------------------------
+
+New in Python 3.0
+
+.. code-block:: python
+
+    >>> def f():
+    ...     from os import *
+    ...
+      File "<stdin>", line 1
+    SyntaxError: import * only allowed at module level
+
+
+Add ``nonlocal`` keyword
+-------------------------
+
+New in Python 3.0
+
+PEP 3104_ - Access to Names in Outer Scopes
+
+
+.. note::
+
+    ``nonlocal`` allow assigning directly to a variable in an
+    outer (but non-global) scope
+
+.. code-block:: python
+
+    >>> def outf():
+    ...     o = "out"
+    ...     def inf():
+    ...         nonlocal o
+    ...         o = "change out"
+    ...     inf()
+    ...     print(o)
+    ...
+    >>> outf()
+    change out
+
 
 Extended iterable unpacking
 ----------------------------
@@ -514,6 +554,7 @@ New in Python 3.5
 .. _3120: https://www.python.org/dev/peps/pep-3120/
 .. _3131: https://www.python.org/dev/peps/pep-3131/
 .. _3135: https://www.python.org/dev/peps/pep-3135/
+.. _3104: https://www.python.org/dev/peps/pep-3104/
 .. _3132: https://www.python.org/dev/peps/pep-3132/
 .. _448: https://www.python.org/dev/peps/pep-0448/
 .. _3107: https://www.python.org/dev/peps/pep-3107/
