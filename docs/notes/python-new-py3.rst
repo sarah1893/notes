@@ -300,6 +300,50 @@ New in Python 3.6
     {'foo': 'bar'}
 
 
+Core support for typing module and generic types
+-------------------------------------------------
+
+New in Python 3.7
+
+- PEP 560_ - Core support for typing module and generic types
+
+Before Python 3.7
+
+.. code-block:: python
+
+    >>> from typing import Generic, TypeVar
+    >>> from typing import Iterable
+    >>> T = TypeVar('T')
+    >>> class C(Generic[T]): ...
+    ...
+    >>> def func(l: Iterable[C[int]]) -> None:
+    ...     for i in l:
+    ...         print(i)
+    ...
+    >>> func([1,2,3])
+    1
+    2
+    3
+
+Python 3.7 or above
+
+.. code-block:: python
+
+    >>> from typing import Iterable
+    >>> class C:
+    ...     def __class_getitem__(cls, item):
+    ...         return f"{cls.__name__}[{item.__name__}]"
+    ...
+    >>> def func(l: Iterable[C[int]]) -> None:
+    ...     for i in l:
+    ...         print(i)
+    ...
+    >>> func([1,2,3])
+    1
+    2
+    3
+
+
 Format byte string
 -------------------
 
@@ -549,6 +593,76 @@ New in Python 3.5
     Arr([124])
 
 
+Data Classes
+-------------
+
+New in Python 3.7
+
+PEP 557_ - Data Classes
+
+.. code-block:: python
+
+    >>> from dataclasses import dataclass
+    >>> @dataclass
+    ... class DCls(object):
+    ...     x: str
+    ...     y: str
+    ...
+    >>> d = DCls("foo", "bar")
+    >>> d
+    DCls(x='foo', y='bar')
+    >>> d = DCls(x="foo", y="baz")
+    >>> d
+    DCls(x='foo', y='baz')
+    >>> d.z = "bar"
+
+    # immutable
+
+    >>> from dataclasses import dataclass
+    >>> from dataclasses import FrozenInstanceError
+    >>> @dataclass(frozen=True)
+    ... class DCls(object):
+    ...     x: str
+    ...     y: str
+    ...
+    >>> try:
+    ...     d.x = "baz"
+    ... except FrozenInstanceError as e:
+    ...     print(e)
+    ...
+    cannot assign to field 'x'
+    >>> try:
+    ...     d.z = "baz"
+    ... except FrozenInstanceError as e:
+    ...     print(e)
+    ...
+    cannot assign to field 'z'
+
+
+Built-in ``breakpoint()``
+--------------------------
+
+New in Python 3.7
+
+- PEP 553_ - Built-in breakpoint()
+
+.. code-block:: python
+
+    >>> for x in range(3):
+    ...     print(x)
+    ...     breakpoint()
+    ...
+    0
+    > <stdin>(1)<module>()->None
+    (Pdb) c
+    1
+    > <stdin>(1)<module>()->None
+    (Pdb) c
+    2
+    > <stdin>(1)<module>()->None
+    (Pdb) c
+
+
 .. _3105: https://www.python.org/dev/peps/pep-3105/
 .. _3138: https://www.python.org/dev/peps/pep-3138/
 .. _3120: https://www.python.org/dev/peps/pep-3120/
@@ -566,3 +680,6 @@ New in Python 3.5
 .. _525: https://www.python.org/dev/peps/pep-0525/
 .. _530: https://www.python.org/dev/peps/pep-0530/
 .. _465: https://www.python.org/dev/peps/pep-0465/
+.. _557: https://www.python.org/dev/peps/pep-0557/
+.. _553: https://www.python.org/dev/peps/pep-0553/
+.. _560: https://www.python.org/dev/peps/pep-0560/
