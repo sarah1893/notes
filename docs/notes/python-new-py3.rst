@@ -254,14 +254,14 @@ New in Python 3.3
     [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
 
 
-Asynchronous Generators
-------------------------
+``async`` and ``await`` syntax
+-------------------------------
 
-New in Python 3.6
+New in Python 3.5
 
-- PEP 525_ - Asynchronous Generators
+- PEP 492_ - Coroutines with async and await syntax
 
-Before Python 3.6
+Before Python 3.5
 
 .. code-block:: python
 
@@ -286,7 +286,7 @@ Before Python 3.6
     1
     1
 
-Python 3.6 or above
+Python 3.5 or above
 
 .. code-block:: python
 
@@ -308,6 +308,34 @@ Python 3.6 or above
     0
     1
     1
+
+
+Asynchronous generators
+------------------------
+
+New in Python 3.6
+
+- PEP 525_ - Asynchronous Generators
+
+.. code-block:: python
+
+    >>> import asyncio
+    >>> async def fib(n: int):
+    ...     a, b = 0, 1
+    ...     for _ in range(n):
+    ...         await asyncio.sleep(1)
+    ...         yield a
+    ...         b, a = a + b , b
+    ...
+    >>> async def coro(n: int):
+    ...     async for f in fib(n):
+    ...         print(f, end=" ")
+    ...     else:
+    ...         print()
+    ...
+    >>> loop = asyncio.get_event_loop()
+    >>> loop.run_until_complete(coro(5))
+    0 1 1 2 3
 
 
 Matrix multiplication
@@ -364,5 +392,6 @@ New in Python 3.5
 .. _461: https://www.python.org/dev/peps/pep-0461/
 .. _498: https://www.python.org/dev/peps/pep-0498/
 .. _380: https://www.python.org/dev/peps/pep-0380/
+.. _492: https://www.python.org/dev/peps/pep-0492/
 .. _525: https://www.python.org/dev/peps/pep-0525/
 .. _465: https://www.python.org/dev/peps/pep-0465/
