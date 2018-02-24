@@ -14,9 +14,10 @@ New in Python 3.0
 
 - PEP 3105_ - Make print a function
 
+Python 2
+
 .. code-block:: python
 
-    # python2
     >>> print "print is a statement"
     print is a statement
     >>> for x in range(3):
@@ -24,7 +25,10 @@ New in Python 3.0
     ...
     0 1 2
 
-    # python3
+Python 3
+
+.. code-block:: python
+
     >>> print("print is a function")
     print is a function
     >>> print()
@@ -45,9 +49,10 @@ New in Python 3.0
 - PEP 3120_ - Using UTF-8 as the default source encoding
 - PEP 3131_ - Supporting Non-ASCII Identifiers
 
+Python 2
+
 .. code-block:: python
 
-    # python2
     >>> s = 'Café'  # byte string
     >>> s
     'Caf\xc3\xa9'
@@ -61,7 +66,10 @@ New in Python 3.0
     >>> len([_c for _c in 'Café'])
     5
 
-    # python3
+Python 3
+
+.. code-block:: python
+
     >>> s = 'Café'
     >>> s
     'Café'
@@ -174,9 +182,9 @@ New in Python 3.6
 
 - PEP 525_ - Asynchronous Generators
 
-.. code-block:: python
+Before Python 3.6
 
-    # before python 3.6
+.. code-block:: python
 
     >>> import asyncio
     >>> @asyncio.coroutine
@@ -199,7 +207,9 @@ New in Python 3.6
     1
     1
 
-    # after python 3.6
+Python 3.6 or above
+
+.. code-block:: python
 
     >>> import asyncio
     >>> async def fib(n: int):
