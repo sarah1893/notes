@@ -36,6 +36,7 @@ Cheat Sheets
 ==============
 
 - `basic`_
+- `new in python3`_
 - `unicode`_
 - `generator`_
 - `regular expression`_
@@ -50,6 +51,7 @@ Cheat Sheets
 
 
 .. _basic: docs/notes/python-basic.rst 
+.. _new in python3: docs/notes/python-new-py3.rst
 .. _unicode: docs/notes/python-unicode.rst
 .. _generator: docs/notes/python-generator.rst
 .. _regular expression: docs/notes/python-rexp.rst
