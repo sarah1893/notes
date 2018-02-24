@@ -145,6 +145,27 @@ New in Python 3.6
     >>> f'{123.567:1.3}'
     '1.24e+02'
 
+Generator delegation
+----------------------
+
+New in Python 3.3
+
+- PEP 380_ - Syntax for Delegating to a Subgenerator
+
+.. code-block:: python
+
+    >>> def fib(n: int):
+    ...     a, b = 0, 1
+    ...     for _ in range(n):
+    ...         yield a
+    ...         b, a = a + b, b
+    ...
+    >>> def delegate(n: int):
+    ...     yield from fib(10)
+    ... 
+    >>> list(delegate(10))
+    [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
+
 
 Asynchronous Generators
 ------------------------
@@ -207,4 +228,5 @@ New in Python 3.6
 .. _3107: https://www.python.org/dev/peps/pep-3107/
 .. _526: https://www.python.org/dev/peps/pep-0526/
 .. _498: https://www.python.org/dev/peps/pep-0498/
+.. _380: https://www.python.org/dev/peps/pep-0380/
 .. _525: https://www.python.org/dev/peps/pep-0525/
