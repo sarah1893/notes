@@ -234,7 +234,7 @@ Simple TCP Echo Server Via SocketServer
     >>> class handler(bh):
     ...   def handle(self):
     ...     data = self.request.recv(1024)
-    ...     print self.client_address
+    ...     print(self.client_address)
     ...     self.request.sendall(data)
     ...
     >>> host = ('localhost',5566)
@@ -405,7 +405,7 @@ Simple UDP Echo Server Via SocketServer
     ...   def handle(self):
     ...     m,s = self.request
     ...     s.sendto(m,self.client_address)
-    ...     print self.client_address
+    ...     print(self.client_address)
     ...
     >>> host = ('localhost',5566)
     >>> s = SocketServer.UDPServer(
@@ -1241,7 +1241,7 @@ output:
     try:
         pid = os.fork()
     except OSError:
-        print "Fork Error"
+        print("Fork Error")
         raise
 
     if pid:
@@ -1250,7 +1250,7 @@ output:
         while True:
             p_s.sendall("Hi! Child!")
             msg = p_s.recv(1024)
-            print msg
+            print(msg)
             time.sleep(3)
         os.wait()
     else:
@@ -1258,7 +1258,7 @@ output:
         p_s.close()
         while True:
             msg = c_s.recv(1024)
-            print msg
+            print(msg)
             c_s.sendall("Hi! Parent!")
 
 output:
@@ -1639,7 +1639,7 @@ output:
 
 .. code-block:: console
 
-	$ $ python3 aes_gcm.py
+	$ python3 aes_gcm.py
 	2e27b67234e01bcb0ab6b451f4f870ce
 	b'Hello AES-GCM'
 
@@ -1958,7 +1958,7 @@ Sniffer IP packets
             try:
                 self.proto = PROTO_MAP[self.ip_p]
             except KeyError:
-                print "{} Not in map".format(self.ip_p)
+                print("{} Not in map".format(self.ip_p))
                 raise
 
     host = '0.0.0.0'
@@ -1968,14 +1968,14 @@ Sniffer IP packets
     s.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
     s.bind((host, 0))
 
-    print "Sniffer start..."
+    print("Sniffer start...")
     try:
         while True:
             buf = s.recvfrom(65535)[0]
             ip_header = IP(buf[:20])
-            print '{0}: {1} -> {2}'.format(ip_header.proto,
+            print('{0}: {1} -> {2}'.format(ip_header.proto,
                                            ip_header.src,
-                                           ip_header.dst)
+                                           ip_header.dst))
     except KeyboardInterrupt:
         s.close()
 
@@ -2231,32 +2231,32 @@ Sniffer ARP packet
         ethtype = eth[2]
         if ethtype != '\x08\x06': continue
 
-        print "---------------- ETHERNET_FRAME ----------------"
-        print "Dest MAC:        ", binascii.hexlify(eth[0])
-        print "Source MAC:      ", binascii.hexlify(eth[1])
-        print "Type:            ", binascii.hexlify(ethtype)
-        print "----------------- ARP_HEADER -------------------"
-        print "Hardware type:   ", binascii.hexlify(arp[0])
-        print "Protocol type:   ", binascii.hexlify(arp[1])
-        print "Hardware size:   ", binascii.hexlify(arp[2])
-        print "Protocol size:   ", binascii.hexlify(arp[3])
-        print "Opcode:          ", binascii.hexlify(arp[4])
-        print "Source MAC:      ", binascii.hexlify(arp[5])
-        print "Source IP:       ", socket.inet_ntoa(arp[6])
-        print "Dest MAC:        ", binascii.hexlify(arp[7])
-        print "Dest IP:         ", socket.inet_ntoa(arp[8])
-        print "------------------------------------------------\n"
+        print("-------------- ETHERNET_FRAME -------------")
+        print("Dest MAC:        ", binascii.hexlify(eth[0]))
+        print("Source MAC:      ", binascii.hexlify(eth[1]))
+        print("Type:            ", binascii.hexlify(ethtype))
+        print("--------------- ARP_HEADER ----------------")
+        print("Hardware type:   ", binascii.hexlify(arp[0]))
+        print("Protocol type:   ", binascii.hexlify(arp[1]))
+        print("Hardware size:   ", binascii.hexlify(arp[2]))
+        print("Protocol size:   ", binascii.hexlify(arp[3]))
+        print("Opcode:          ", binascii.hexlify(arp[4]))
+        print("Source MAC:      ", binascii.hexlify(arp[5]))
+        print("Source IP:       ", socket.inet_ntoa(arp[6]))
+        print("Dest MAC:        ", binascii.hexlify(arp[7]))
+        print("Dest IP:         ", socket.inet_ntoa(arp[8]))
+        print("-------------------------------------------")
 
 output:
 
 .. code-block:: console
 
     $ python arp.py
-    ---------------- ETHERNET_FRAME ----------------
+    -------------- ETHERNET_FRAME -------------
     Dest MAC:         ffffffffffff
     Source MAC:       f0257252f5ca
     Type:             0806
-    ----------------- ARP_HEADER -------------------
+    --------------- ARP_HEADER ----------------
     Hardware type:    0001
     Protocol type:    0800
     Hardware size:    06
@@ -2266,4 +2266,4 @@ output:
     Source IP:        140.112.91.254
     Dest MAC:         000000000000
     Dest IP:          140.112.91.20
-    ------------------------------------------------
+    -------------------------------------------
