@@ -328,6 +328,39 @@ New in Python 3.6
     ...         b, a = a + b , b
     ...
     >>> async def coro(n: int):
+    ...     ag = fib(n)
+    ...     f = await ag.asend(None)
+    ...     print(f)
+    ...     f = await ag.asend(None)
+    ...     print(f)
+    ...
+    >>> loop = asyncio.get_event_loop()
+    >>> loop.run_until_complete(coro(5))
+    0
+    1
+
+
+Asynchronous comprehensions
+----------------------------
+
+New in Python 3.6
+
+- PEP 530_ - Asynchronous Comprehensions
+
+.. code-block:: python
+
+    >>> import asyncio
+    >>> async def fib(n: int):
+    ...     a, b = 0, 1
+    ...     for _ in range(n):
+    ...         await asyncio.sleep(1)
+    ...         yield a
+    ...         b, a = a + b , b
+    ...
+
+    # async for ... else
+
+    >>> async def coro(n: int):
     ...     async for f in fib(n):
     ...         print(f, end=" ")
     ...     else:
@@ -336,6 +369,26 @@ New in Python 3.6
     >>> loop = asyncio.get_event_loop()
     >>> loop.run_until_complete(coro(5))
     0 1 1 2 3
+
+    # async for in list
+
+    >>> async def coro(n: int):
+    ...     return [f async for f in fib(n)]
+    ...
+    >>> loop.run_until_complete(coro(5))
+    [0, 1, 1, 2, 3]
+
+    # await in list
+
+    >>> async def slowfmt(n: int) -> str:
+    ...     await asyncio.sleep(0.5)
+    ...     return f'{n}'
+    ...
+    >>> async def coro(n: int):
+    ...     return [await slowfmt(f) async for f in fib(n)]
+    ...
+    >>> loop.run_until_complete(coro(5))
+    ['0', '1', '1', '2', '3']
 
 
 Matrix multiplication
@@ -394,4 +447,5 @@ New in Python 3.5
 .. _380: https://www.python.org/dev/peps/pep-0380/
 .. _492: https://www.python.org/dev/peps/pep-0492/
 .. _525: https://www.python.org/dev/peps/pep-0525/
+.. _530: https://www.python.org/dev/peps/pep-0530/
 .. _465: https://www.python.org/dev/peps/pep-0465/
