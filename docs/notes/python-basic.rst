@@ -122,7 +122,7 @@ Define a function ``__doc__``
     # Define a function document
     >>> def example():
     ...   """ This is an example function """
-    ...   print "Example function"
+    ...   print("Example function")
     ...
     >>> example.__doc__
     ' This is an example function '
@@ -148,7 +148,7 @@ Check, Get, Set attribute
     ...   def __init__(self):
     ...     self.name = "ex"
     ...   def printex(self):
-    ...     print "This is an example"
+    ...     print("This is an example")
     ...
 
     # Check object has attributes
@@ -181,7 +181,7 @@ Check inheritance
     ...   def __init__(self):
     ...     self.name = "ex"
     ...   def printex(self):
-    ...     print "This is an Example"
+    ...     print("This is an Example")
     ...
     >>> issubclass(Example, object)
     True
@@ -203,7 +203,7 @@ Check **callable**
 
     >>> a = 10
     >>> def fun():
-    ...   print "I am callable"
+    ...   print("I am callable")
     ...
     >>> callable(a)
     False
@@ -236,10 +236,10 @@ Get function/class name
     # __init__ will invoke
     >>> class ClassA(object):
     ...     def __new__(cls, arg):
-    ...         print '__new__ ' + arg
+    ...         print('__new__ ' + arg)
     ...         return object.__new__(cls, arg)
     ...     def __init__(self, arg):
-    ...         print '__init__ ' + arg
+    ...         print('__init__ ' + arg)
     ...
     >>> o = ClassA("Hello")
     __new__ Hello
@@ -248,10 +248,10 @@ Get function/class name
     # __init__ won't be invoke
     >>> class ClassB(object):
     ...     def __new__(cls, arg):
-    ...         print '__new__ ' + arg
+    ...         print('__new__ ' + arg)
     ...         return object
     ...     def __init__(self, arg):
-    ...         print '__init__ ' + arg
+    ...         print('__init__ ' + arg)
     ...
     >>> o = ClassB("Hello")
     __new__ Hello
@@ -298,7 +298,7 @@ Representations of your class behave
     ...    def __repr__(self):
     ...       return "Example __repr__"
     ...
-    >>> print str(Example())
+    >>> print(str(Example()))
     Example __str__
     >>> Example()
     Example __repr__
@@ -363,11 +363,12 @@ Get list item **SMART**
     [1, 3]
 
     # Get index and item in loop
-    >>> a = range(3)
-    >>> for idx, item in enumerate(a):
-    ...   print (idx,item),
+    >>> for i, v in enumerate(range(3)):
+    ...     print((i, v))
     ...
-    (0, 0) (1, 1) (2, 2)
+    (0, 0)
+    (1, 1)
+    (2, 2)
 
     # Transfer two list into tuple list
     >>> a = [1, 2, 3, 4, 5]
@@ -561,7 +562,7 @@ NamedTuple
     >>> from collections import namedtuple
     >>> Example = namedtuple("Example",'a b c')
     >>> e = Example(1, 2, 3)
-    >>> print e.a, e[1], e[1] + e.b
+    >>> print(e.a, e[1], e[1] + e.b)
     1 2 4
 
 ``__iter__`` - Delegating Iteration
@@ -571,16 +572,19 @@ NamedTuple
 
     # __iter__ return an iterator object
     # Be careful: list is an "iterable" object not an "iterator"
-    >>> class Example(object):
-    ...    def __init__(self,list_):
-    ...       self._list = list_
-    ...    def __iter__(self):
-    ...      return iter(self._list)
+    >>> class Iter(object):
+    ...     def __init__(self, list_):
+    ...         self._list = list_
+    ...     def __iter__(self):
+    ...         return iter(self._list)
     ...
-    >>> ex = Example([1, 2, 3, 4, 5])
-    >>> for _ in ex: print _,
+    >>> it = Iter([1, 2, 3])
+    >>> for i in it:
+    ...     print(i)
     ...
-    1 2 3 4 5
+    1
+    2
+    3
 
 Using Generator as Iterator
 ---------------------------
@@ -588,17 +592,23 @@ Using Generator as Iterator
 .. code-block:: python
 
     # see: PEP289
-    >>> a = (_ for _ in range(10))
-    >>> for _ in a: print _,
+    >>> for x in g:
+    ...     print(x, end=' ')
+    ... else:
+    ...     print()
     ...
     0 1 2 3 4 5 6 7 8 9
 
     # equivalent to
     >>> def generator():
-    ...   for _ in range(10):
-    ...     yield _
+    ...     for x in range(10):
+    ...         yield x
     ...
-    >>> for _ in generator(): print _,
+    >>> g = generator()
+    >>> for x in g:
+    ...     print(x, end=' ')
+    ... else:
+    ...     print()
     ...
     0 1 2 3 4 5 6 7 8 9
 
@@ -684,7 +694,10 @@ Emulating a dictionary
     >>> del emud['2']  # __delitem__
     >>> emud
     EmuDict: {'1': 1, '3': 3, '5': 5}
-    >>> for _ in emud: print emud[_],  # __iter__
+    >>> for _ in emud:
+    ...     print(emud[_], end=' ')  # __iter__
+    ... else:
+    ...     print()
     ...
     1 3 5
     >>> '1' in emud  # __contains__
@@ -743,15 +756,15 @@ Decorator
     >>> def decorator(func):
     ...   @wraps(func)
     ...   def wrapper(*args, **kwargs):
-    ...     print "Before calling {}.".format(func.__name__)
+    ...     print("Before calling {}.".format(func.__name__))
     ...     ret = func(*args, **kwargs)
-    ...     print "After calling {}.".format(func.__name__)
+    ...     print("After calling {}.".format(func.__name__))
     ...     return ret
     ...   return wrapper
     ...
     >>> @decorator
     ... def example():
-    ...   print "Inside example function."
+    ...   print("Inside example function.")
     ...
     >>> example()
     Before calling example.
@@ -760,7 +773,7 @@ Decorator
 
     # equivalent to
     ... def example():
-    ...   print "Inside example function."
+    ...   print("Inside example function.")
     ...
     >>> example = decorator(example)
     >>> example()
@@ -817,14 +830,14 @@ Decorator with arguments
     ...   def decorator(func):
     ...     @wraps(func)
     ...     def wrapper(*args, **kwargs):
-    ...       print "Val is {0}".format(val)
+    ...       print("Val is {0}".format(val))
     ...       return func(*args, **kwargs)
     ...     return wrapper
     ...   return decorator
     ...
     >>> @decorator_with_argument(10)
     ... def example():
-    ...   print "This is example function."
+    ...   print("This is example function.")
     ...
     >>> example()
     Val is 10
@@ -832,7 +845,7 @@ Decorator with arguments
 
     # equivalent to
     >>> def example():
-    ...   print "This is example function."
+    ...   print("This is example function.")
     ...
     >>> example = decorator_with_argument(10)(example)
     >>> example()
@@ -846,31 +859,34 @@ for: exp else: exp
 
     # see document: More Control Flow Tools
     # forloop’s else clause runs when no break occurs
-    >>> for _ in range(5):
-    ...   print _,
+    >>> for x in range(5):
+    ...     print(x, end=' ')
     ... else:
-    ...   print "\nno break occurred"
+    ...     print("\nno break occurred")
     ...
     0 1 2 3 4
     no break occurred
-    >>> for _ in range(5):
-    ...   if _ % 2 == 0:
-    ...     print "break occurred"
-    ...     break
+    >>> for x in range(5):
+    ...     if x % 2 == 0:
+    ...         print("break occurred")
+    ...         break
     ... else:
-    ...   print "no break occurred"
+    ...     print("no break occurred")
     ...
     break occurred
 
     # above statement equivalent to
-    flag = False
-    for _ in range(5):
-        if _ % 2 == 0:
-            flag = True
-            print "break occurred"
-            break
-    if flag == False:
-        print "no break occurred"
+    >>> flag = False
+    >>> for x in range(5):
+    ...     if x % 2 == 0:
+    ...         flag = True
+    ...         print("break occurred")
+    ...         break
+    ...
+    ... if flag == False:
+    ...     print("no break occurred")
+    ...
+    break occurred
 
 try: exp else: exp
 ------------------
@@ -879,11 +895,11 @@ try: exp else: exp
 
     # No exception occur will go into else.
     >>> try:
-    ...   print "No exception"
+    ...     print("No exception")
     ... except:
-    ...   pass
+    ...     pass
     ... else:
-    ...   print "No exception occurred"
+    ...     print("No exception occurred")
     ...
     No exception
     No exception occurred
@@ -917,9 +933,9 @@ Option arguments - (\*args, \*\*kwargs)
 .. code-block:: python
 
     >>> def example(a, b=None, *args, **kwargs):
-    ...   print a, b
-    ...   print args
-    ...   print kwargs
+    ...     print(a, b)
+    ...     print(args)
+    ...     print(kwargs)
     ...
     >>> example(1, "var", 2, 3, word="hello")
     1 var
@@ -972,7 +988,7 @@ Callable object
 
     >>> class CallableObject(object):
     ...   def example(self, *args, **kwargs):
-    ...     print "I am callable!"
+    ...     print("I am callable!")
     ...   def __call__(self, *args, **kwargs):
     ...     self.example(*args, **kwargs)
     ...
@@ -1016,7 +1032,7 @@ Context Manager - ``with`` statement
             while True:
                 conn, addr = s.accept()
                 msg = conn.recv(1024)
-                print msg
+                print(msg)
                 conn.send(msg)
                 conn.close()
 
@@ -1182,12 +1198,12 @@ Descriptor - manage attributes
     >>> class example(object):
     ...   @classmethod
     ...   def clsmethod(cls):
-    ...     print "I am classmethod"
+    ...     print("I am classmethod")
     ...   @staticmethod
     ...   def stmethod():
-    ...     print "I am staticmethod"
+    ...     print("I am staticmethod")
     ...   def instmethod(self):
-    ...     print "I am instancemethod"
+    ...     print("I am instancemethod")
     ...
     >>> ex = example()
     >>> ex.clsmethod()
@@ -1220,7 +1236,7 @@ Abstract method - Metaclass
     ...
     >>> class example(base):
     ...   def absmethod(self):
-    ...     print "abstract"
+    ...     print("abstract")
     ...
     >>> ex = example()
     >>> ex.absmethod()
@@ -1233,7 +1249,7 @@ Abstract method - Metaclass
     ...
     >>> class example(base):
     ...   def absmethod(self):
-    ...     print "abstract"
+    ...     print("abstract")
     ...
     >>> ex = example()
     >>> ex.absmethod()
