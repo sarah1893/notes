@@ -10,7 +10,7 @@ New in Python3 cheatsheet
 ``print`` is a function
 -------------------------
 
-New in Python 3.0
+**New in Python 3.0**
 
 - PEP 3105_ - Make print a function
 
@@ -43,7 +43,7 @@ Python 3
 String is unicode
 -------------------
 
-New in Python 3.0
+**New in Python 3.0**
 
 - PEP 3138_ - String representation in Python 3000
 - PEP 3120_ - Using UTF-8 as the default source encoding
@@ -85,7 +85,7 @@ Python 3
 New Super
 ----------
 
-New in Python 3.0
+**New in Python 3.0**
 
 - PEP 3135_ - New Super
 
@@ -135,7 +135,7 @@ Python 3
 Remove ``<>``
 --------------
 
-New in Python 3.0
+**New in Python 3.0**
 
 Python 2
 
@@ -159,7 +159,7 @@ Python 3
 Not allow ``from module import *`` inside function
 ---------------------------------------------------
 
-New in Python 3.0
+**New in Python 3.0**
 
 .. code-block:: python
 
@@ -173,7 +173,7 @@ New in Python 3.0
 Add ``nonlocal`` keyword
 -------------------------
 
-New in Python 3.0
+**New in Python 3.0**
 
 PEP 3104_ - Access to Names in Outer Scopes
 
@@ -200,7 +200,7 @@ PEP 3104_ - Access to Names in Outer Scopes
 Extended iterable unpacking
 ----------------------------
 
-New in Python 3.0
+**New in Python 3.0**
 
 - PEP 3132_ - Extended Iterable Unpacking
 
@@ -218,7 +218,7 @@ New in Python 3.0
 General unpacking
 ------------------
 
-New in Python 3.5
+**New in Python 3.5**
 
 - PEP 448_ - Additional Unpacking Generalizations
 
@@ -256,7 +256,7 @@ Python 3
 Function annotations
 --------------------
 
-New in Python 3.0
+**New in Python 3.0**
 
 - PEP 3107_ - Function Annotations
 
@@ -277,7 +277,7 @@ New in Python 3.0
 Variable annotations
 --------------------
 
-New in Python 3.6
+**New in Python 3.6**
 
 - PEP 526_ - Syntax for Variable Annotations
 
@@ -303,7 +303,7 @@ New in Python 3.6
 Core support for typing module and generic types
 -------------------------------------------------
 
-New in Python 3.7
+**New in Python 3.7**
 
 - PEP 560_ - Core support for typing module and generic types
 
@@ -347,7 +347,7 @@ Python 3.7 or above
 Format byte string
 -------------------
 
-New in Python 3.5
+**New in Python 3.5**
 
 - PEP 461_ - Adding ``%`` formatting to bytes and bytearray
 
@@ -371,7 +371,7 @@ New in Python 3.5
 fstring
 --------
 
-New in Python 3.6
+**New in Python 3.6**
 
 - PEP 498_ - Literal String Interpolation
 
@@ -394,7 +394,7 @@ New in Python 3.6
 Generator delegation
 ----------------------
 
-New in Python 3.3
+**New in Python 3.3**
 
 - PEP 380_ - Syntax for Delegating to a Subgenerator
 
@@ -416,7 +416,7 @@ New in Python 3.3
 ``async`` and ``await`` syntax
 -------------------------------
 
-New in Python 3.5
+**New in Python 3.5**
 
 - PEP 492_ - Coroutines with async and await syntax
 
@@ -472,7 +472,7 @@ Python 3.5 or above
 Asynchronous generators
 ------------------------
 
-New in Python 3.6
+**New in Python 3.6**
 
 - PEP 525_ - Asynchronous Generators
 
@@ -502,7 +502,7 @@ New in Python 3.6
 Asynchronous comprehensions
 ----------------------------
 
-New in Python 3.6
+**New in Python 3.6**
 
 - PEP 530_ - Asynchronous Comprehensions
 
@@ -553,7 +553,7 @@ New in Python 3.6
 Matrix multiplication
 ----------------------
 
-New in Python 3.5
+**New in Python 3.5**
 
 - PEP 465_ - A dedicated infix operator for matrix multiplication
 
@@ -596,7 +596,7 @@ New in Python 3.5
 Data Classes
 -------------
 
-New in Python 3.7
+**New in Python 3.7**
 
 PEP 557_ - Data Classes
 
@@ -642,7 +642,7 @@ PEP 557_ - Data Classes
 Built-in ``breakpoint()``
 --------------------------
 
-New in Python 3.7
+**New in Python 3.7**
 
 - PEP 553_ - Built-in breakpoint()
 
