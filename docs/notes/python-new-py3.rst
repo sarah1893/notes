@@ -391,6 +391,62 @@ fstring
     >>> f'{123.567:1.3}'
     '1.24e+02'
 
+
+Suppressing exception
+----------------------
+
+**New in Python 3.3**
+
+- PEP 409_ - Suppressing exception context
+
+Without ``raise Exception from None``
+
+.. code-block:: python
+
+    >>> def func():
+    ...     try:
+    ...         1 / 0
+    ...     except ZeroDivisionError:
+    ...         raise ArithmeticError
+    ...
+    >>> func()
+    Traceback (most recent call last):
+      File "<stdin>", line 3, in func
+    ZeroDivisionError: division by zero
+
+    During handling of the above exception, another exception occurred:
+
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+      File "<stdin>", line 5, in func
+    ArithmeticError
+
+With ``raise Exception from None``
+
+.. code-block:: python
+
+    >>> def func():
+    ...     try:
+    ...         1 / 0
+    ...     except ZeroDivisionError:
+    ...         raise ArithmeticError from None
+    ...
+    >>> func()
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+      File "<stdin>", line 5, in func
+    ArithmeticError
+
+    # debug
+
+    >>> try:
+    ...     func()
+    ... except ArithmeticError as e:
+    ...     print(e.__context__)
+    ...
+    division by zero
+
+
 Generator delegation
 ----------------------
 
@@ -675,6 +731,7 @@ Built-in ``breakpoint()``
 .. _526: https://www.python.org/dev/peps/pep-0526/
 .. _461: https://www.python.org/dev/peps/pep-0461/
 .. _498: https://www.python.org/dev/peps/pep-0498/
+.. _409: https://www.python.org/dev/peps/pep-0409/
 .. _380: https://www.python.org/dev/peps/pep-0380/
 .. _492: https://www.python.org/dev/peps/pep-0492/
 .. _525: https://www.python.org/dev/peps/pep-0525/
