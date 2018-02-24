@@ -82,6 +82,61 @@ Python 3
     >>> len([_c for _c in 'Café'])
     4
 
+Extended iterable unpacking
+----------------------------
+
+New in Python 3.0
+
+- PEP 3132_ - Extended Iterable Unpacking
+
+.. code-block:: python
+
+    >>> a, *b, c = range(5)
+    >>> a, b, c
+    (0, [1, 2, 3], 4)
+    >>> for a, *b in [(1, 2, 3), (4, 5, 6, 7)]:
+    ...     print(a, b)
+    ...
+    1 [2, 3]
+    4 [5, 6, 7]
+
+General unpacking
+------------------
+
+New in Python 3.5
+
+- PEP 448_ - Additional Unpacking Generalizations
+
+Python 2
+
+.. code-block:: python
+
+    >>> def func(*a, **k):
+    ...     print(a)
+    ...     print(k)
+    ...
+    >>> func(*[1,2,3,4,5], **{"foo": "bar"})
+    (1, 2, 3, 4, 5)
+    {'foo': 'bar'}
+
+Python 3
+
+.. code-block:: python
+
+    >>> print(*[1, 2, 3], 4, *[5, 6])
+    1 2 3 4 5 6
+    >>> [*range(4), 4]
+    [0, 1, 2, 3, 4]
+    >>> {"foo": "Foo", "bar": "Bar", **{"baz": "baz"}}
+    {'foo': 'Foo', 'bar': 'Bar', 'baz': 'baz'}
+    >>> def func(*a, **k):
+    ...     print(a)
+    ...     print(k)
+    ...
+    >>> func(*[1], *[4,5], **{"foo": "FOO"}, **{"bar": "BAR"})
+    (1, 4, 5)
+    {'foo': 'FOO', 'bar': 'BAR'}
+
 
 Function annotations
 --------------------
@@ -130,6 +185,30 @@ New in Python 3.6
     {'foo': 'bar'}
 
 
+Format byte string
+-------------------
+
+New in Python 3.5
+
+- PEP 461_ - Adding ``%`` formatting to bytes and bytearray
+
+.. code-block:: python
+
+    >>> b'abc %b %b' % (b'foo', b'bar')
+    b'abc foo bar'
+    >>> b'%d %f' % (1, 3.14)
+    b'1 3.140000'
+    >>> class Cls(object):
+    ...     def __repr__(self):
+    ...         return "repr"
+    ...     def __str__(self):
+    ...         return "str"
+    ...
+    'repr'
+    >>> b'%a' % Cls()
+    b'repr'
+
+
 fstring
 --------
 
@@ -170,7 +249,7 @@ New in Python 3.3
     ...
     >>> def delegate(n: int):
     ...     yield from fib(10)
-    ... 
+    ...
     >>> list(delegate(10))
     [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
 
@@ -231,12 +310,59 @@ Python 3.6 or above
     1
 
 
+Matrix multiplication
+----------------------
+
+New in Python 3.5
+
+- PEP 465_ - A dedicated infix operator for matrix multiplication
+
+.. code-block:: python
+
+    >>> # "@" represent matrix multiplication
+    >>> class Arr:
+    ...     def __init__(self, *arg):
+    ...         self._arr = arg
+    ...     def __matmul__(self, other):
+    ...         if not isinstance(other, Arr):
+    ...             raise TypeError
+    ...         if len(self) != len(other):
+    ...             raise ValueError
+    ...         return sum([x*y for x, y in zip(self._arr, other._arr)])
+    ...     def __imatmul__(self, other):
+    ...         if not isinstance(other, Arr):
+    ...             raise TypeError
+    ...         if len(self) != len(other):
+    ...             raise ValueError
+    ...         res = sum([x*y for x, y in zip(self._arr, other._arr)])
+    ...         self._arr = [res]
+    ...         return self
+    ...     def __len__(self):
+    ...         return len(self._arr)
+    ...     def __str__(self):
+    ...         return self.__repr__()
+    ...     def __repr__(self):
+    ...         return "Arr({})".format(repr(self._arr))
+    ...
+    >>> a = Arr(9, 5, 2, 7)
+    >>> b = Arr(5, 5, 6, 6)
+    >>> a @ b  # __matmul__
+    124
+    >>> a @= b  # __imatmul__
+    >>> a
+    Arr([124])
+
+
 .. _3105: https://www.python.org/dev/peps/pep-3105/
 .. _3138: https://www.python.org/dev/peps/pep-3138/
 .. _3120: https://www.python.org/dev/peps/pep-3120/
 .. _3131: https://www.python.org/dev/peps/pep-3131/
+.. _3132: https://www.python.org/dev/peps/pep-3132/
+.. _448: https://www.python.org/dev/peps/pep-0448/
 .. _3107: https://www.python.org/dev/peps/pep-3107/
 .. _526: https://www.python.org/dev/peps/pep-0526/
+.. _461: https://www.python.org/dev/peps/pep-0461/
 .. _498: https://www.python.org/dev/peps/pep-0498/
 .. _380: https://www.python.org/dev/peps/pep-0380/
 .. _525: https://www.python.org/dev/peps/pep-0525/
+.. _465: https://www.python.org/dev/peps/pep-0465/
