@@ -82,6 +82,81 @@ Python 3
     >>> len([_c for _c in 'Café'])
     4
 
+New Super
+----------
+
+New in Python 3.0
+
+- PEP 3135_ - New Super
+
+Python 2
+
+.. code-block:: python
+
+    >>> class ParentCls(object):
+    ...     def foo(self):
+    ...         print "call parent"
+    ...
+    >>> class ChildCls(ParentCls):
+    ...     def foo(self):
+    ...         super(ChildCls, self).foo()
+    ...         print "call child"
+    ...
+    >>> p = ParentCls()
+    >>> c = ChildCls()
+    >>> p.foo()
+    call parent
+    >>> c.foo()
+    call parent
+    call child
+
+Python 3
+
+.. code-block:: python
+
+    >>> class ParentCls(object):
+    ...     def foo(self):
+    ...         print("call parent")
+    ...
+    >>> class ChildCls(ParentCls):
+    ...     def foo(self):
+    ...         super().foo()
+    ...         print("call child")
+    ...
+    >>> p = ParentCls()
+    >>> c = ChildCls()
+    >>> p.foo()
+    call parent
+    >>> c.foo()
+    call parent
+    call child
+
+
+Remove ``<>``
+--------------
+
+New in Python 3.0
+
+Python 2
+
+.. code-block:: python
+
+    >>> a = "Python2"
+    >>> a <> "Python3"
+    True
+
+    # equal to !=
+    >>> a != "Python3"
+    True
+
+Python 3
+
+.. code-block:: python
+
+    >>> a != "Python2"
+    True
+
+
 Extended iterable unpacking
 ----------------------------
 
@@ -438,6 +513,7 @@ New in Python 3.5
 .. _3138: https://www.python.org/dev/peps/pep-3138/
 .. _3120: https://www.python.org/dev/peps/pep-3120/
 .. _3131: https://www.python.org/dev/peps/pep-3131/
+.. _3135: https://www.python.org/dev/peps/pep-3135/
 .. _3132: https://www.python.org/dev/peps/pep-3132/
 .. _448: https://www.python.org/dev/peps/pep-0448/
 .. _3107: https://www.python.org/dev/peps/pep-3107/
