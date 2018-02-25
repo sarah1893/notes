@@ -463,7 +463,7 @@ Generator delegation
     ...         b, a = a + b, b
     ...
     >>> def delegate(n: int):
-    ...     yield from fib(10)
+    ...     yield from fib(n)
     ...
     >>> list(delegate(10))
     [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
