@@ -153,8 +153,10 @@ Python 3
 
 .. code-block:: python
 
+    >>> a = "Python3"
     >>> a != "Python2"
     True
+
 
 Not allow ``from module import *`` inside function
 ---------------------------------------------------
