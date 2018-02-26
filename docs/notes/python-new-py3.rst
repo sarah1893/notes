@@ -82,6 +82,43 @@ Python 3
     >>> len([_c for _c in 'Café'])
     4
 
+
+Division Operator
+------------------
+
+**New in Python 3.0**
+
+- PEP 238_ - Changing the Division Operator
+
+Python2
+
+.. code-block:: python
+
+    >>> 1 / 2
+    0
+    >>> 1 // 2
+    0
+    >>> 1. / 2
+    0.5
+
+    # back port "true division" to python2
+
+    >>> from __future__ import division
+    >>> 1 / 2
+    0.5
+    >>> 1 // 2
+    0
+
+Python3
+
+.. code-block:: python
+
+    >>> 1 / 2
+    0.5
+    >>> 1 // 2
+    0
+
+
 New Super
 ----------
 
@@ -725,6 +762,7 @@ Built-in ``breakpoint()``
 .. _3138: https://www.python.org/dev/peps/pep-3138/
 .. _3120: https://www.python.org/dev/peps/pep-3120/
 .. _3131: https://www.python.org/dev/peps/pep-3131/
+.. _238: https://www.python.org/dev/peps/pep-0238/
 .. _3135: https://www.python.org/dev/peps/pep-3135/
 .. _3104: https://www.python.org/dev/peps/pep-3104/
 .. _3132: https://www.python.org/dev/peps/pep-3132/
