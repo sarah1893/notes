@@ -118,6 +118,29 @@ Python3
     >>> 1 // 2
     0
 
+Keyword-Only Arguments
+-----------------------
+
+**New in Python 3.0**
+
+- PEP 3102_ - Keyword-Only Arguments
+
+.. code-block:: python
+
+    >>> def f(a, b, *, kw):
+    ...     print(a, b, kw)
+    ...
+    >>> f(1, 2, 3)
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    TypeError: f() takes 2 positional arguments but 3 were given
+    >>> f(1, 2)
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    TypeError: f() missing 1 required keyword-only argument: 'kw'
+    >>> f(1, 2, kw=3)
+    1 2 3
+
 
 New Super
 ----------
@@ -763,6 +786,7 @@ Built-in ``breakpoint()``
 .. _3120: https://www.python.org/dev/peps/pep-3120/
 .. _3131: https://www.python.org/dev/peps/pep-3131/
 .. _238: https://www.python.org/dev/peps/pep-0238/
+.. _3102: https://www.python.org/dev/peps/pep-3102/
 .. _3135: https://www.python.org/dev/peps/pep-3135/
 .. _3104: https://www.python.org/dev/peps/pep-3104/
 .. _3132: https://www.python.org/dev/peps/pep-3132/
