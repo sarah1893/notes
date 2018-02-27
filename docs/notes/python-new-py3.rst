@@ -718,6 +718,8 @@ Data Classes
 
 PEP 557_ - Data Classes
 
+Mutable Data Class
+
 .. code-block:: python
 
     >>> from dataclasses import dataclass
@@ -734,7 +736,9 @@ PEP 557_ - Data Classes
     DCls(x='foo', y='baz')
     >>> d.z = "bar"
 
-    # immutable
+Immutable Data Class
+
+.. code-block:: python
 
     >>> from dataclasses import dataclass
     >>> from dataclasses import FrozenInstanceError
