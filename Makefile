@@ -8,4 +8,4 @@ build: html
 
 test: clean build
 	flake8 app.py app_test.py
-	python app_test.py
+	coverage run app_test.py && coverage report --fail-under=80 -m app.py app_test.py

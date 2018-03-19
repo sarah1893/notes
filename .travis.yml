@@ -12,4 +12,7 @@ script:
   - make test
   - make clean && make
 
+after_script:
+  - coveralls
+
 sudo: false

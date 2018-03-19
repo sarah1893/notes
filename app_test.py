@@ -4,6 +4,7 @@ import os
 
 from flask_testing import LiveServerTestCase
 
+from app import find_key
 from app import ROOT
 from app import app
 
@@ -26,6 +27,23 @@ class PysheeetTest(LiveServerTestCase):
             u = url + '/notes/' + h
             resp = requests.get(u)
             self.assertEqual(resp.status_code, 200)
+
+    def test_find_key(self):
+        token = 'token'
+        key = "key"
+        os.environ['ACME_TOKEN'] = token
+        os.environ['ACME_KEY'] = key
+        self.assertEqual(find_key(token), key)
+
+        del os.environ['ACME_TOKEN']
+        del os.environ['ACME_KEY']
+
+        os.environ['ACME_TOKEN_ENV'] = token
+        os.environ['ACME_KEY_ENV'] = key
+        self.assertEqual(find_key(token), key)
+
+        del os.environ['ACME_TOKEN_ENV']
+        del os.environ['ACME_KEY_ENV']
 
     def test_acme(self):
         # remove env ACME_TOKEN*

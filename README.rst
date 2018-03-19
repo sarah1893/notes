@@ -4,6 +4,9 @@ Development Status
 .. image:: https://travis-ci.org/crazyguitar/pysheeet.svg?branch=master
     :target: https://travis-ci.org/crazyguitar/pysheeet
 
+.. image:: https://coveralls.io/repos/github/crazyguitar/pysheeet/badge.svg?branch=master
+    :target: https://coveralls.io/github/crazyguitar/pysheeet?branch=master
+
 .. image:: https://requires.io/github/crazyguitar/pysheeet/requirements.svg?branch=master
      :target: https://requires.io/github/crazyguitar/pysheeet/requirements/?branch=master
      :alt: Requirements Status
