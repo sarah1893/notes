@@ -6,5 +6,6 @@ build: html
 %:
 	cd docs && make $@
 
-test:
-	flake8 app.py
+test: clean build
+	flake8 app.py app_test.py
+	python app_test.py
