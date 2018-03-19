@@ -11,6 +11,10 @@ Development Status
      :target: https://requires.io/github/crazyguitar/pysheeet/requirements/?branch=master
      :alt: Requirements Status
 
+.. image:: https://api.codeclimate.com/v1/badges/99c25ab8e85742a05c0b/maintainability
+   :target: https://codeclimate.com/github/crazyguitar/pysheeet/maintainability
+   :alt: Maintainability
+
 .. image:: https://img.shields.io/badge/License-MIT-blue.svg
      :target: https://raw.githubusercontent.com/crazyguitar/pysheeet/master/LICENSE
 
