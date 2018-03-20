@@ -9,3 +9,4 @@ gunicorn==19.7.1
 requests==2.18.4
 Sphinx==1.7.1
 flake8==3.5.0
+Werkzeug==0.14.1
