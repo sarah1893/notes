@@ -1,6 +1,5 @@
-"""
-This is a simple cheatsheet webapp.
-"""
+"""This is a simple cheatsheet webapp."""
+
 import os
 
 from flask import Flask, abort, send_from_directory
@@ -11,6 +10,7 @@ ROOT = os.path.join(DIR, 'docs', '_build', 'html')
 
 
 def find_key(token):
+    """Find the key from the environment variable."""
     if token == os.environ.get("ACME_TOKEN"):
         return os.environ.get("ACME_KEY")
     for k, v in os.environ.items():
@@ -27,18 +27,19 @@ if 'DYNO' in os.environ:
 
 @app.route('/<path:path>')
 def static_proxy(path):
-    """Static files proxy"""
+    """Find static files."""
     return send_from_directory(ROOT, path)
 
 
 @app.route('/')
 def index_redirection():
-    """Redirecting index file"""
+    """Redirecting index file."""
     return send_from_directory(ROOT, 'index.html')
 
 
 @app.route("/.well-known/acme-challenge/<token>")
 def acme(token):
+    """Find the acme-key from environment variable."""
     key = find_key(token)
     if key is None:
         abort(404)
