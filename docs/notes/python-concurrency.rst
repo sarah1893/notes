@@ -237,7 +237,7 @@ Simplest synchronization primitive lock
     ...   lock.acquire()
     ...   print "task{0} get".format(id)
     ...   lock.release()
-    ... 
+    ...
     >>> t1=Thread(target=getlock,args=(1,))
     >>> t2=Thread(target=getlock,args=(2,))
     >>> t1.start();t2.start()
@@ -248,7 +248,7 @@ Simplest synchronization primitive lock
     >>> def getlock(id):
     ...   with lock:
     ...     print "task%d get" % id
-    ... 
+    ...
     >>> t1=Thread(target=getlock,args=(1,))
     >>> t2=Thread(target=getlock,args=(2,))
     >>> t1.start();t2.start()
@@ -273,13 +273,13 @@ Happen when more than one mutex lock.
     ...     time.sleep(3)
     ...     with lock2:
     ...       print "No deadlock"
-    ... 
+    ...
     >>> def task2():
     ...   with lock2:
     ...     print "get lock2"
     ...     with lock1:
     ...       print "No deadlock"
-    ... 
+    ...
     >>> t1=threading.Thread(target=task1)
     >>> t2=threading.Thread(target=task2)
     >>> t1.start();t2.start()
@@ -371,7 +371,7 @@ output:
 
 .. code-block:: console
 
-    python semaphore.py 
+    python semaphore.py
     0 acquire sema
     1 acquire sema
     2 acquire sema
@@ -509,7 +509,7 @@ Solving GIL problem via processes
     ...     if n <= 2:
     ...         return 1
     ...     return fib(n-1) + fib(n-2)
-    ... 
+    ...
     >>> def profile(func):
     ...     def wrapper(*args, **kwargs):
     ...         import time
@@ -518,16 +518,16 @@ Solving GIL problem via processes
     ...         end   = time.time()
     ...         print end - start
     ...     return wrapper
-    ... 
+    ...
     >>> @profile
     ... def nomultiprocess():
     ...     map(fib,[35]*5)
-    ... 
+    ...
     >>> @profile
     ... def hasmultiprocess():
     ...     pool = Pool(5)
     ...     pool.map(fib,[35]*5)
-    ... 
+    ...
     >>> nomultiprocess()
     23.8454811573
     >>> hasmultiprocess()
@@ -549,8 +549,8 @@ Custom multiprocessing map
 
     def parmap(f,X):
         pipe=[Pipe() for x in X]
-        proc=[Process(target=spawn(f), 
-              args=(c,x)) 
+        proc=[Process(target=spawn(f),
+              args=(c,x))
               for x,(p,c) in izip(X,pipe)]
         [p.start() for p in proc]
         [p.join() for p in proc]
@@ -601,7 +601,7 @@ Simple round-robin scheduler
     ...   if n <= 2:
     ...     return 1
     ...   return fib(n-1)+fib(n-2)
-    ... 
+    ...
     >>> def gen_fib(n):
     ...   for _ in range(1,n+1):
     ...     yield fib(_)
@@ -618,7 +618,7 @@ Simple round-robin scheduler
     ...       tasks.append(task)
     ...     except StopIteration:
     ...       print "done"
-    ... 
+    ...
     >>> run(tasks)
     1
     1
@@ -776,6 +776,36 @@ PoolExecutor
     9227465
     pocess cost: 5.538189888000488
 
+
+How to use ``ThreadPoolExecutor``?
+------------------------------------
+
+.. code-block:: python
+
+    from concurrent.futures import ThreadPoolExecutor
+
+    def fib(n):
+        if n <= 2:
+            return 1
+        return fib(n - 1) + fib(n - 2)
+
+    with ThreadPoolExecutor(max_workers=3) as ex:
+        futs = []
+        for x in range(3):
+            futs.append(ex.submit(fib, 30+x))
+
+        res = [fut.result() for fut in futs]
+
+    print(res)
+
+output:
+
+.. code-block:: console
+
+    $ python3 thread_pool_ex.py
+    [832040, 1346269, 2178309]
+
+
 What "with ThreadPoolExecutor" doing?
 -------------------------------------
 
@@ -804,7 +834,7 @@ output:
 
 .. code-block:: console
 
-    $ python3 thread_pool_exec.py 
+    $ python3 thread_pool_exec.py
     832040
     832040
 
