@@ -33,6 +33,8 @@ class PysheeetTest(LiveServerTestCase):
         self.key = "key"
         os.environ['ACME_TOKEN'] = self.token
         os.environ['ACME_KEY'] = self.key
+        os.environ['FLASK_ENV'] = 'development'
+        os.environ['FLASK_DEBUG'] = "1"
         app.config['TESTING'] = True
         return app
 
