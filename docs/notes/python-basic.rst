@@ -233,7 +233,7 @@ Get function/class name
 
 .. code-block:: python
 
-    # __init__ will invoke
+    # __init__ will be invoked
     >>> class ClassA(object):
     ...     def __new__(cls, arg):
     ...         print('__new__ ' + arg)
@@ -245,7 +245,7 @@ Get function/class name
     __new__ Hello
     __init__ Hello
 
-    # __init__ won't be invoke
+    # __init__ won't be invoked
     >>> class ClassB(object):
     ...     def __new__(cls, arg):
     ...         print('__new__ ' + arg)
