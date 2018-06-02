@@ -17,10 +17,10 @@ Set a database URL
                    'password': 'postgres',
                    'host': '192.168.99.100',
                    'port': 5432}
-    print URL(**postgres_db)
+    print(URL(**postgres_db))
 
     sqlite_db = {'drivername': 'sqlite', 'database': 'db.sqlite'}
-    print URL(**sqlite_db)
+    print(URL(**sqlite_db))
 
 output:
 
@@ -56,12 +56,12 @@ Sqlalchemy Support DBAPI - PEP249
     result = engine.execute('SELECT * FROM '
                             '"EX1"')
     for _r in result:
-       print _r
+       print(_r)
 
     # delete *
     engine.execute('DELETE from "EX1" where id=1;')
     result = engine.execute('SELECT * FROM "EX1"')
-    print result.fetchall()
+    print(result.fetchall())
 
 
 Transaction and Connect Object
@@ -108,7 +108,7 @@ Metadata - Generating Database Schema
     # Create all tables
     metadata.create_all()
     for _t in metadata.tables:
-       print "Table: ", _t
+       print("Table: ", _t)
 
 Inspect - Get Database Information
 ------------------------------------
@@ -124,10 +124,10 @@ Inspect - Get Database Information
     inspector = inspect(engine)
 
     # Get table information
-    print inspector.get_table_names()
+    print(inspector.get_table_names())
 
     # Get column information
-    print inspector.get_columns('EX1')
+    print(inspector.get_columns('EX1'))
 
 
 Reflection - Loading Table from Existing Database
@@ -144,11 +144,11 @@ Reflection - Loading Table from Existing Database
 
     # Create a MetaData instance
     metadata = MetaData()
-    print metadata.tables
+    print(metadata.tables)
 
     # reflect db schema to MetaData
     metadata.reflect(bind=engine)
-    print metadata.tables
+    print(metadata.tables)
 
 Get Table from MetaData
 ------------------------
@@ -164,11 +164,11 @@ Get Table from MetaData
 
     # Create MetaData instance
     metadata = MetaData(engine, reflect=True)
-    print metadata.tables
+    print(metadata.tables)
 
     # Get Table
     ex_table = metadata.tables['Example']
-    print ex_table
+    print(ex_table)
 
 
 Create all Tables Store in "MetaData"
@@ -255,7 +255,8 @@ Create table with same columns
 
     # check table exists
     ins = inspect(engine)
-    for _t in ins.get_table_names(): print _t
+    for _t in ins.get_table_names():
+        print(_t)
 
 
 Drop a Table
@@ -284,11 +285,11 @@ Drop a Table
 
     table.create(engine)
     inspector = inspect(engine)
-    print 'Test' in inspector.get_table_names()
+    print('Test' in inspector.get_table_names())
 
     table.drop(engine)
     inspector = inspect(engine)
-    print 'Test' in inspector.get_table_names()
+    print('Test' in inspector.get_table_names())
 
 output:
 
@@ -315,20 +316,20 @@ Some Table Object Operation
               Column('key', String),
               Column('val', Integer))
     # Get Table Name
-    print t.name
+    print(t.name)
 
     # Get Columns
-    print t.columns.keys()
+    print(t.columns.keys())
 
     # Get Column
     c = t.c.key
-    print c.name
+    print(c.name)
     # Or
     c = t.columns.key
-    print c.name
+    print(c.name)
 
     # Get Table from Column
-    print c.table
+    print(c.table)
 
 
 SQL Expression Language
@@ -350,32 +351,32 @@ SQL Expression Language
                   Column('l_name', String),
                   Column('f_name', String))
     # sql expression binary object
-    print repr(table.c.l_name == 'ed')
+    print(repr(table.c.l_name == 'ed'))
     # exhbit sql expression
-    print str(table.c.l_name == 'ed')
+    print(str(table.c.l_name == 'ed'))
 
-    print repr(table.c.f_name != 'ed')
+    print(repr(table.c.f_name != 'ed'))
 
     # comparison operator
-    print repr(table.c.id > 3)
+    print(repr(table.c.id > 3))
 
     # or expression
-    print (table.c.id > 5) | (table.c.id < 2)
+    print((table.c.id > 5) | (table.c.id < 2))
     # Equal to
-    print or_(table.c.id > 5, table.c.id < 2)
+    print(or_(table.c.id > 5, table.c.id < 2))
 
     # compare to None produce IS NULL
-    print (table.c.l_name == None)
+    print(table.c.l_name == None)
     # Equal to
-    print (table.c.l_name.is_(None))
+    print(table.c.l_name.is_(None))
 
     # + means "addition"
-    print (table.c.id + 5)
+    print(table.c.id + 5)
     # or means "string concatenation"
-    print (table.c.l_name + "some name")
+    print(table.c.l_name + "some name")
 
     # in expression
-    print (table.c.l_name.in_(['a','b']))
+    print(table.c.l_name.in_(['a','b']))
 
 insert() - Create an "INSERT" Statement
 ----------------------------------------
@@ -435,13 +436,15 @@ select() - Create a "SELECT" Statement
     select_st = select([table]).where(
        table.c.l_name == 'Hello')
     res = conn.execute(select_st)
-    for _row in res: print _row
+    for _row in res:
+        print(_row)
 
     # or equal to
     select_st = table.select().where(
        table.c.l_name == 'Hello')
     res = conn.execute(select_st)
-    for _row in res: print _row
+    for _row in res:
+        print(_row)
 
     # combine with "OR"
     select_st = select([
@@ -450,14 +453,16 @@ select() - Create a "SELECT" Statement
           table.c.l_name == 'Hello',
           table.c.l_name == 'Hi'))
     res = conn.execute(select_st)
-    for _row in res: print _row
+    for _row in res:
+        print(_row)
 
     # combine with "ORDER_BY"
     select_st = select([table]).where(or_(
           table.c.l_name == 'Hello',
           table.c.l_name == 'Hi')).order_by(table.c.f_name)
     res = conn.execute(select_st)
-    for _row in res: print _row
+    for _row in res:
+        print(_row)
 
 join() - Joined Two Tables via "JOIN" Statement
 ------------------------------------------------
@@ -497,7 +502,8 @@ join() - Joined Two Tables via "JOIN" Statement
     sel_st = select(
        [user_t.c.l_name, email_t.c.email]).select_from(join_obj)
     res = conn.execute(sel_st)
-    for _row in res: print _row
+    for _row in res:
+        print(_row)
 
 Delete Rows from Table
 ------------------------
@@ -517,18 +523,20 @@ Delete Rows from Table
     # select * from user_t
     sel_st = user_t.select()
     res = conn.execute(sel_st)
-    for _row in res: print _row
+    for _row in res:
+        print(_row)
 
     # delete l_name == 'Hello'
     del_st = user_t.delete().where(
           user_t.c.l_name == 'Hello')
-    print '----- delete -----'
+    print('----- delete -----')
     res = conn.execute(del_st)
 
     # check rows has been delete
     sel_st = user_t.select()
     res = conn.execute(sel_st)
-    for _row in res: print _row
+    for _row in res:
+        (print _row)
 
 Check Table Existing
 ----------------------
@@ -553,15 +561,18 @@ Check Table Existing
     Modal.metadata.create_all(engine)
 
     # check register table exist to Modal
-    for _t in Modal.metadata.tables: print _t
+    for _t in Modal.metadata.tables:
+        print(_t)
 
     # check all table in database
     meta = MetaData(engine, reflect=True)
-    for _t in meta.tables: print _t
+    for _t in meta.tables:
+        print(_t)
 
     # check table names exists via inspect
     ins = inspect(engine)
-    for _t in ins.get_table_names(): print _t
+    for _t in ins.get_table_names():
+        print(_t)
 
 Create multiple tables at once
 -------------------------------
@@ -600,7 +611,7 @@ Create multiple tables at once
     for _t in tables: create_table(_t, metadata)
 
     inspector = inspect(engine)
-    print inspector.get_table_names()
+    print(inspector.get_table_names())
 
 output:
 
@@ -647,7 +658,8 @@ Create tables with dynamic columns (Table)
                  Column('val', String))
 
     inspector = inspect(engine)
-    for _t in inspector.get_table_names(): print _t
+    for _t in inspector.get_table_names():
+        print(_t)
 
 output:
 
@@ -703,7 +715,7 @@ Object Relational add data
             session.add(row)
         session.commit()
     except SQLAlchemyError as e:
-        print e
+        print(e)
     finally:
         session.close()
 
@@ -753,7 +765,7 @@ Object Relational update data
         # update row to database
         row = session.query(TestTable).filter(
               TestTable.key == 'hello').first()
-        print 'original:', row.key, row.val
+        print('original:', row.key, row.val)
         row.key = "Hello"
         row.val = "World"
         session.commit()
@@ -761,9 +773,9 @@ Object Relational update data
         # check update correct
         row = session.query(TestTable).filter(
               TestTable.key == 'Hello').first()
-        print 'update:', row.key, row.val
+        print('update:', row.key, row.val)
     except SQLAlchemyError as e:
-        print e
+        print(e)
     finally:
         session.close()
 
@@ -818,11 +830,11 @@ Object Relational delete row
     session.add(row)
     query = session.query(TestTable).filter(
             TestTable.key=='hello')
-    print query.first()
+    print(query.first())
     query.delete()
     query = session.query(TestTable).filter(
             TestTable.key=='hello')
-    print query.all()
+    print(query.all())
 
 output:
 
@@ -857,12 +869,12 @@ Object Relational relationship
 
     u1 = User()
     a1 = Address()
-    print u1.addresses
-    print a1.user
+    print(u1.addresses)
+    print(a1.user)
 
     u1.addresses.append(a1)
-    print u1.addresses
-    print a1.user
+    print(u1.addresses)
+    print(a1.user)
 
 output:
 
@@ -1020,67 +1032,67 @@ Object Relational basic query
     session.add_all(users)
     session.commit()
 
-    print "----> order_by(id):"
+    print("----> order_by(id):")
     query = session.query(User).order_by(User.id)
     for _row in query.all():
-        print _row.name, _row.fullname, _row.birth
+        print(_row.name, _row.fullname, _row.birth)
 
-    print "\n----> order_by(desc(id)):"
+    print("\n----> order_by(desc(id)):")
     query = session.query(User).order_by(desc(User.id))
     for _row in query.all():
-        print _row.name, _row.fullname, _row.birth
+        print(_row.name, _row.fullname, _row.birth)
 
-    print "\n----> order_by(date):"
+    print("\n----> order_by(date):")
     query = session.query(User).order_by(User.birth)
     for _row in query.all():
-        print _row.name, _row.fullname, _row.birth
+        print(_row.name, _row.fullname, _row.birth)
 
-    print "\n----> EQUAL:"
+    print("\n----> EQUAL:")
     query = session.query(User).filter(User.id == 2)
     _row = query.first()
-    print _row.name, _row.fullname, _row.birth
+    print(_row.name, _row.fullname, _row.birth)
 
-    print "\n----> NOT EQUAL:"
+    print("\n----> NOT EQUAL:")
     query = session.query(User).filter(User.id != 2)
     for _row in query.all():
-        print _row.name, _row.fullname, _row.birth
+        print(_row.name, _row.fullname, _row.birth)
 
-    print "\n----> IN:"
+    print("\n----> IN:")
     query = session.query(User).filter(User.name.in_(['ed', 'wendy']))
     for _row in query.all():
-        print _row.name, _row.fullname, _row.birth
+        print(_row.name, _row.fullname, _row.birth)
 
-    print "\n----> NOT IN:"
+    print("\n----> NOT IN:")
     query = session.query(User).filter(~User.name.in_(['ed', 'wendy']))
     for _row in query.all():
-        print _row.name, _row.fullname, _row.birth
+        print(_row.name, _row.fullname, _row.birth)
 
-    print "\n----> AND:"
+    print("\n----> AND:")
     query = session.query(User).filter(
             User.name=='ed', User.fullname=='Ed Jones')
     _row = query.first()
-    print _row.name, _row.fullname, _row.birth
+    print(_row.name, _row.fullname, _row.birth)
 
-    print "\n----> OR:"
+    print("\n----> OR:")
     query = session.query(User).filter(
             or_(User.name=='ed', User.name=='wendy'))
     for _row in query.all():
-        print _row.name, _row.fullname, _row.birth
+        print(_row.name, _row.fullname, _row.birth)
 
-    print "\n----> NULL:"
+    print("\n----> NULL:")
     query = session.query(User).filter(User.birth == None)
     for _row in query.all():
-        print _row.name, _row.fullname
+        print(_row.name, _row.fullname)
 
-    print "\n----> NOT NULL:"
+    print("\n----> NOT NULL:")
     query = session.query(User).filter(User.birth != None)
     for _row in query.all():
         print _row.name, _row.fullname
 
-    print "\n----> LIKE"
+    print("\n----> LIKE")
     query = session.query(User).filter(User.name.like('%ed%'))
     for _row in query.all():
-        print _row.name, _row.fullname
+        print(_row.name, _row.fullname)
 
 output:
 
@@ -1213,7 +1225,7 @@ mapper: Map ``Table`` to ``class``
 
         # query result
         u = session.query(User).filter(User.name == 'Hello').first()
-        print u.name, u.fullname, u.password
+        print(u.name, u.fullname, u.password)
 
     finally:
         session.close()
@@ -1276,7 +1288,8 @@ Get table dynamically
     try:
         Session.add(t(name='foo'))
         Session.add(t(name='bar'))
-        for _ in Session.query(t).all(): print _.name
+        for _ in Session.query(t).all():
+            print(_.name)
     except Exception as e:
         Session.rollback()
     finally:
@@ -1344,7 +1357,8 @@ Object Relational join two tables
     session.commit()
 
     query = session.query(Address, User).join(User)
-    for _a, _u in query.all(): print _u.name, _a.email
+    for _a, _u in query.all():
+        print(_u.name, _a.email)
 
 output:
 
@@ -1419,7 +1433,7 @@ join on relationship and group_by count
 
         # print result
         for _p, _c in q.all():
-            print 'parent: {}, num_child: {}'.format(_p.name, _c)
+            print('parent: {}, num_child: {}'.format(_p.name, _c))
     finally:
         Session.remove()
 
@@ -1471,7 +1485,8 @@ Create tables with dynamic columns (ORM)
                  'val': Column(String)})
 
     inspector = inspect(engine)
-    for _t in inspector.get_table_names(): print _t
+    for _t in inspector.get_table_names():
+        print(_t)
 
 output:
 
