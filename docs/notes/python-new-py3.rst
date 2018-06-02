@@ -321,6 +321,8 @@ Function annotations
 **New in Python 3.0**
 
 - PEP 3107_ - Function Annotations
+- PEP 484_ - Type Hints
+- PEP 483_ - The Theory of Type Hints
 
 .. code-block:: python
 
@@ -796,6 +798,8 @@ Built-in ``breakpoint()``
 .. _3132: https://www.python.org/dev/peps/pep-3132/
 .. _448: https://www.python.org/dev/peps/pep-0448/
 .. _3107: https://www.python.org/dev/peps/pep-3107/
+.. _484: https://www.python.org/dev/peps/pep-0484/
+.. _483: https://www.python.org/dev/peps/pep-0483/
 .. _526: https://www.python.org/dev/peps/pep-0526/
 .. _461: https://www.python.org/dev/peps/pep-0461/
 .. _498: https://www.python.org/dev/peps/pep-0498/
