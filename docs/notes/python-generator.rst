@@ -596,10 +596,10 @@ What ``@contextmanager`` actually doing?
             l = [1, 2, 3, 4, 5]
             yield l
         finally:
-            print "exit scope"
+            print("exit scope")
 
     with mylist() as l:
-        print l
+        print(l)
 
 output:
 
@@ -933,7 +933,7 @@ simple round-robin with blocking and non-blocking
                 elif why == 'send':
                     w_send[what] = task
                 elif why == 'continue':
-                    print what
+                    print(what)
                     tasks.append(task)
                 else:
                     raise RuntimeError

@@ -36,7 +36,7 @@ Create a thread via "threading"
     ...     super(Worker, self).__init__()
     ...     self._id = id
     ...   def run(self):
-    ...     print "I am worker %d" % self._id
+    ...     print("I am worker %d" % self._id)
     ...
     >>> t1 = Worker(1)
     >>> t2 = Worker(2)
@@ -46,7 +46,7 @@ Create a thread via "threading"
 
     # using function could be more flexible
     >>> def Worker(worker_id):
-    ...   print "I am worker %d" % worker_id
+    ...   print("I am worker %d" % worker_id)
     ...
     >>> from threading import Thread
     >>> t1 = Thread(target=Worker, args=(1,))
@@ -69,7 +69,7 @@ Performance Problem - GIL
     ...     start = time.time()
     ...     func(*args, **kwargs)
     ...     end   = time.time()
-    ...     print end - start
+    ...     print(end - start)
     ...   return wrapper
     ...
     >>> @profile
@@ -116,7 +116,7 @@ Consumer and Producer
     >>> def consumer():
     ...   while True:
     ...     task,arg = q.get()
-    ...     print task(arg)
+    ...     print(task(arg))
     ...     q.task_done()
     ...
     >>> t1 = Thread(target=producer)
@@ -142,9 +142,9 @@ Thread Pool Template
           while True:
              f,args,kwargs = self._q.get()
              try:
-                print f(*args, **kwargs)
+                print(f(*args, **kwargs))
              except Exception as e:
-                print e
+                print(e)
              self._q.task_done()
 
     class ThreadPool(object):
@@ -193,11 +193,11 @@ Compare with "map" performance
     pool = ThreadPool(10)
     def profile(func):
         def wrapper(*args, **kwargs):
-           print func.__name__
+           print(func.__name__)
            s = time.time()
            func(*args, **kwargs)
            e = time.time()
-           print "cost: {0}".format(e-s)
+           print("cost: {0}".format(e-s))
         return wrapper
 
     @profile
@@ -235,7 +235,7 @@ Simplest synchronization primitive lock
     >>> lock = Lock()
     >>> def getlock(id):
     ...   lock.acquire()
-    ...   print "task{0} get".format(id)
+    ...   print("task{0} get".format(id))
     ...   lock.release()
     ...
     >>> t1=Thread(target=getlock,args=(1,))
@@ -247,7 +247,7 @@ Simplest synchronization primitive lock
     # using lock manager
     >>> def getlock(id):
     ...   with lock:
-    ...     print "task%d get" % id
+    ...     print("task%d get" % id)
     ...
     >>> t1=Thread(target=getlock,args=(1,))
     >>> t2=Thread(target=getlock,args=(2,))
@@ -269,16 +269,16 @@ Happen when more than one mutex lock.
     >>> lock2 = threading.Lock()
     >>> def task1():
     ...   with lock1:
-    ...     print "get lock1"
+    ...     print("get lock1")
     ...     time.sleep(3)
     ...     with lock2:
-    ...       print "No deadlock"
+    ...       print("No deadlock")
     ...
     >>> def task2():
     ...   with lock2:
-    ...     print "get lock2"
+    ...     print("get lock2")
     ...     with lock1:
-    ...       print "No deadlock"
+    ...       print("No deadlock")
     ...
     >>> t1=threading.Thread(target=task1)
     >>> t2=threading.Thread(target=task2)
@@ -308,13 +308,13 @@ Using RLock
        lock = RLock()
        def foo(self,tid):
           with monitor.lock:
-             print "%d in foo" % tid
+             print("%d in foo" % tid)
              time.sleep(5)
              self.ker(tid)
 
        def ker(self,tid):
           with monitor.lock:
-             print "%d in ker" % tid
+             print("%d in ker" % tid)
     m = monitor()
     def task1(id):
        m.foo(id)
@@ -354,10 +354,10 @@ Using Semaphore
     sema = Semaphore(3)
     def foo(tid):
         with sema:
-            print "%d acquire sema" % tid
+            print("%d acquire sema" % tid)
             wt = random()*5
             time.sleep(wt)
-        print "%d release sema" % tid
+        print("%d release sema" % tid)
 
     threads = []
     for _t in range(5):
@@ -398,9 +398,9 @@ Using 'event'
     e = Event()
 
     def worker(id):
-       print "%d wait event" % id
+       print("%d wait event" % id)
        e.wait()
-       print "%d get event set" % id
+       print("%d get event set" % id)
 
     t1=Thread(target=worker,args=(1,))
     t2=Thread(target=worker,args=(2,))
@@ -516,7 +516,7 @@ Solving GIL problem via processes
     ...         start = time.time()
     ...         func(*args, **kwargs)
     ...         end   = time.time()
-    ...         print end - start
+    ...         print(end - start)
     ...     return wrapper
     ...
     >>> @profile
@@ -556,7 +556,7 @@ Custom multiprocessing map
         [p.join() for p in proc]
         return [p.recv() for (p,c) in pipe]
 
-    print parmap(lambda x:x**x,range(1,5))
+    print(parmap(lambda x:x**x,range(1,5)))
 
 
 Graceful way to kill all child processes
@@ -614,10 +614,10 @@ Simple round-robin scheduler
     ...   while tasks:
     ...     try:
     ...       task = tasks.popleft()
-    ...       print task.next()
+    ...       print(task.next())
     ...       tasks.append(task)
     ...     except StopIteration:
-    ...       print "done"
+    ...       print("done")
     ...
     >>> run(tasks)
     1

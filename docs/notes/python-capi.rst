@@ -293,7 +293,7 @@ Doing Zero-copy via sendfile
         with open(dst, 'w') as f2:
             src_fd = c_int(f1.fileno())
             dst_fd = c_int(f2.fileno())
-            ret = sendfile(dst_fd, src_fd, byref(offset), src_size) 
+            ret = sendfile(dst_fd, src_fd, byref(offset), src_size)
             if ret < 0:
                 errno_ = get_errno()
                 errmsg = "sendfile failed. {}".format(os.strerror(errno_))
@@ -371,7 +371,7 @@ C API source
     #define PyMODINIT_FUNC void
     #endif
 
-    PyMODINIT_FUNC 
+    PyMODINIT_FUNC
     initspam(void)
     {
         PyObject *m;
@@ -454,10 +454,10 @@ C API source
         self = (spamObj *)
                type->tp_alloc(type, 0);
         if (self == NULL) {
-            goto END; 
-        } 
+            goto END;
+        }
         /* alloc str to hello */
-        self->hello = 
+        self->hello =
             PyString_FromString("");
         if (self->hello == NULL)
         {
@@ -466,7 +466,7 @@ C API source
             goto END;
         }
         /* alloc str to world */
-        self->world = 
+        self->world =
             PyString_FromString("");
         if (self->world == NULL)
         {
@@ -480,25 +480,25 @@ C API source
     }
 
     /* __init__ */
-    static int 
+    static int
     spamInit(spamObj *self, PyObject *args, PyObject *kwds)
     {
         int ret = -1;
-        PyObject *hello=NULL, 
-                 *world=NULL, 
+        PyObject *hello=NULL,
+                 *world=NULL,
                  *tmp=NULL;
 
         static char *kwlist[] = {
-            "hello", 
-            "world", 
+            "hello",
+            "world",
             "spam_id", NULL};
 
         /* parse input arguments */
         if (! PyArg_ParseTupleAndKeywords(
-              args, kwds, 
-              "|OOi", 
-              kwlist, 
-              &hello, &world, 
+              args, kwds,
+              "|OOi",
+              kwlist,
+              &hello, &world,
               &self->spam_id)) {
             goto END;
         }
@@ -521,7 +521,7 @@ C API source
         return ret;
     }
 
-    static long 
+    static long
     fib(long n) {
         if (n<=2) {
             return 1;
@@ -538,7 +538,7 @@ C API source
         if (!PyArg_ParseTuple(args, "i", &arg)) {
             goto END;
         }
-        ret = PyInt_FromLong(fib(arg)); 
+        ret = PyInt_FromLong(fib(arg));
     END:
         return ret;
     }
@@ -548,19 +548,19 @@ C API source
         /* spameObj.hello*/
         {"hello",                   //name
          T_OBJECT_EX,               //type
-         offsetof(spamObj, hello),  //offset 
+         offsetof(spamObj, hello),  //offset
          0,                         //flags
          "spam hello"},             //doc
         /* spamObj.world*/
-        {"world", 
+        {"world",
          T_OBJECT_EX,
-         offsetof(spamObj, world), 
+         offsetof(spamObj, world),
          0,
          "spam world"},
         /* spamObj.spam_id*/
-        {"spam_id", 
-         T_INT, 
-         offsetof(spamObj, spam_id), 
+        {"spam_id",
+         T_INT,
+         offsetof(spamObj, spam_id),
          0,
          "spam id"},
         /* Sentiel */
@@ -569,8 +569,8 @@ C API source
 
     static PyMethodDef spam_methods[] = {
         /* fib */
-        {"spam_fib", 
-         (PyCFunction)spamFib, 
+        {"spam_fib",
+         (PyCFunction)spamFib,
          METH_VARARGS,
          "Calculate fib number"},
         /* Sentiel */
@@ -596,15 +596,15 @@ C API source
         0,                               //tp_as_number
         0,                               //tp_as_sequence
         0,                               //tp_as_mapping
-        0,                               //tp_hash 
+        0,                               //tp_hash
         0,                               //tp_call
         0,                               //tp_str
         0,                               //tp_getattro
         0,                               //tp_setattro
         0,                               //tp_as_buffer
-        Py_TPFLAGS_DEFAULT | 
+        Py_TPFLAGS_DEFAULT |
         Py_TPFLAGS_BASETYPE,             //tp_flags
-        "spamKlass objects",             //tp_doc 
+        "spamKlass objects",             //tp_doc
         0,                               //tp_traverse
         0,                               //tp_clear
         0,                               //tp_richcompare
@@ -625,7 +625,7 @@ C API source
     };
 
     /* declarations for DLL import */
-    #ifndef PyMODINIT_FUNC 
+    #ifndef PyMODINIT_FUNC
     #define PyMODINIT_FUNC void
     #endif
 
@@ -639,16 +639,16 @@ C API source
         }
 
         m = Py_InitModule3(
-          "spam",         // Mod name 
+          "spam",         // Mod name
           module_methods, // Mod methods
-          "Spam Module"); // Mod doc  
+          "Spam Module"); // Mod doc
 
         if (m == NULL) {
             goto END;
         }
         Py_INCREF(&spamKlass);
         PyModule_AddObject(
-          m,                           // Module    
+          m,                           // Module
           "SpamKlass",                 // Class Name
           (PyObject *) &spamKlass);    // Class
     END:
@@ -667,14 +667,14 @@ Compare performance with pure Python
     ...         s = time.time()
     ...         ret = func(*args, **kwargs)
     ...         e = time.time()
-    ...         print e-s
+    ...         print(e-s)
     ...     return wrapper
     ...
     >>> def fib(n):
     ...     if n <= 2:
     ...         return n
     ...     return fib(n-1)+fib(n-2)
-    ... 
+    ...
     >>> @profile
     ... def cfib(n):
     ...     o.spam_fib(n)

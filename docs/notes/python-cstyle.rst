@@ -22,12 +22,12 @@ Python
     >>> @decorator
     ... def hello(str):
     ...     print("Hello {0}".format(str))
-    ... 
+    ...
     >>> @decorator
     ... def add(a,b):
     ...     print("add %d+%d=%d" % (a,b,a+b))
     ...     return a+b
-    ... 
+    ...
     >>> hello("KerKer")
     I am decorator
     Hello KerKer
@@ -67,7 +67,7 @@ C
     #undef INPUT
 
     #define DECLAR    int a, int b
-    #define INPUT     a,b 
+    #define INPUT     a,b
     DECORATOR(int, add, DECLAR, INPUT)
     #undef DECLAR
     #undef INPUT
@@ -98,17 +98,17 @@ Python
 .. code-block:: python
 
     >>> def func_1():
-    ...     print "Hello"
-    ... 
+    ...     print("Hello")
+    ...
     >>> def func_2():
-    ...     print "World"
-    ... 
+    ...     print("World")
+    ...
     >>> def func_3():
-    ...     print "!!!"
-    ... 
+    ...     print("!!!")
+    ...
     >>> s = [func_1,func_2,func_3]
     >>> for _ in s: _()
-    ... 
+    ...
     Hello
     World
     !!!
@@ -160,20 +160,20 @@ Python
     ...         self.val = 5566
     ...     def __call__(self,var):
     ...         self.val += var
-    ... 
+    ...
     >>> c = closure()
     >>> c(9527)
-    >>> print c.val
+    >>> print(c.val)
     15093
-    # using "global" keyword 
+    # using "global" keyword
     >>> x = 0
     >>> def closure(val):
     ...     def wrapper():
-    ...         global x 
+    ...         global x
     ...         x += val
-    ...         print x
+    ...         print(x)
     ...     wrapper()
-    ... 
+    ...
     >>> closure(5566)
     5566
     >>> closure(9527)
@@ -186,7 +186,7 @@ Python
     ...         x += val
     ...         print(x)
     ...     wrapper()
-    ... 
+    ...
     >>> closure(5566)
     5566
     >>> closure(9527)
@@ -235,9 +235,9 @@ Python
     ...
     >>> g = gen()
     >>> for _ in range(3):
-    ...     print next(g),
-    ... 
-    1 2 3
+    ...     print(next(g), end=' ')
+    ...
+    1 2 3 >>>
 
 C
 
@@ -259,7 +259,7 @@ C
 
     struct gen * new_gen() {
        struct gen *g = NULL;
-       g = (struct gen*) 
+       g = (struct gen*)
              malloc(sizeof(struct gen));
        g->var = 0;
        g->next = next_func;
@@ -288,10 +288,10 @@ Python
     ...         return self._attr
     ...     def __exit__(self,*e_info):
     ...         del self._attr
-    ... 
+    ...
     >>> with CtxManager() as c:
-    ...     print c
-    ... 
+    ...     print(c)
+    ...
     KerKer
 
 C
@@ -326,7 +326,7 @@ C
     int main(int argc, char *argv[]) {
        char *ptr;
        CONTEXT_MANAGER(char, ptr, 128,
-          sprintf(ptr, "Hello World");  
+          sprintf(ptr, "Hello World");
           printf("%s\n",ptr);
        );
        printf("ptr = %s\n",ptr);
@@ -340,10 +340,11 @@ Python
 
 .. code-block:: python
 
-    >>> a = ("Hello","World",123)
-    >>> for _ in a: print _,
-    ... 
-    Hello World 123
+    >>> a = ("Hello", "World", 123)
+    >>> for x in a:
+    ...     print(x, end=' ')
+    ...
+    Hello World 123 >>>
 
 C
 
@@ -371,14 +372,14 @@ Python
     ...     try:
     ...         os.listdir('.')
     ...     except OSError:
-    ...         print "listdir get error"
+    ...         print("listdir get error")
     ...         return
     ...     try:
     ...         a/b
     ...     except ZeroDivisionError:
-    ...         print "zero division"
+    ...         print("zero division")
     ...         return
-    ... 
+    ...
     >>> spam(1,0)
     zero division
     # single exit -> using decorator
@@ -388,7 +389,7 @@ Python
     ...         s = time.time()
     ...         ret = func(*args, **kwargs)
     ...         e = time.time()
-    ...         print e - s
+    ...         print(e - s)
     ...         return ret
     ...     return wrapper
     ...
@@ -402,7 +403,7 @@ Python
     ...         a/b
     ...     except ZeroDivisionError:
     ...         return
-    ... 
+    ...
     >>> spam(1,0)
     0.000284910202026
 
@@ -429,7 +430,7 @@ C
        if (ptr) {
           free(ptr);
           ptr = NULL;
-       } 
+       }
        return ret;
     }
 
@@ -646,9 +647,9 @@ Python
 
 .. code-block:: python
 
-    >>> def f(str_, float_,int_=0):
+    >>> def f(str_, float_, int_=0):
     ...     print(str_, float_, int_)
-    ... 
+    ...
     >>> f("KerKer",2.0,2)
     KerKer 2.0 2
     >>> f("HaHa",3.)
@@ -670,7 +671,7 @@ C
     };
 
     void base_func(struct input in){
-       printf("str = %s, var = %d" 
+       printf("str = %s, var = %d"
           ", dvar = %lf\n",
           in.str, in.var,in.dvar);
     }
@@ -689,14 +690,14 @@ Python
 
 .. code-block:: python
 
-    >>> x = [1,2,3,4,5]
-    >>> y = map(lambda x:2*x, x)
-    >>> print y
+    >>> x = [1, 2, 3, 4, 5]
+    >>> y = map(lambda x: 2 * x, x)
+    >>> print(y)
     [2, 4, 6, 8, 10]
     #or
-    >>> x = [1,2,3,4,5]
-    >>> y = [2*_ for _ in x]
-    >>> print y
+    >>> x = [1, 2, 3, 4, 5]
+    >>> y = [2 * i for i in x]
+    >>> print(y)
     [2, 4, 6, 8, 10]
 
 C
@@ -736,10 +737,11 @@ Python
 
 .. code-block:: python
 
-    >>> x = ["Hello","World","!!!"]
-    >>> for _ in x:print _,
-    ... 
-    Hello World !!!
+    >>> x = ["Hello", "World", "!!!"]
+    >>> for i in x:
+    ...     print(i, end=' ')
+    ...
+    Hello World !!! >>>
 
 C
 
@@ -754,7 +756,7 @@ C
        char *x[] = {"Hello","World",
                     "!!!",NULL};
        foreach(it,x,
-          printf("%s ",*it);  
+          printf("%s ",*it);
        )
        printf("\n");
        return 0;
@@ -776,7 +778,7 @@ Python
     ...         return self.a + self.b
     ...     def sub(self):
     ...         return self.a - self.b
-    ...     
+    ...
     >>> o = obj()
     >>> o.a = 9527
     >>> o.b = 5566
@@ -789,13 +791,13 @@ Python
     ...     def __init__(self):
     ...         self.a = 0
     ...         self.b = 0
-    ... 
+    ...
     >>> def add(self):
     ...     return self.a+self.b
-    ... 
+    ...
     >>> def sub(self):
     ...     return self.a - self.b
-    ... 
+    ...
     >>> obj.add = add
     >>> obj.sub = sub
     >>> o = obj()

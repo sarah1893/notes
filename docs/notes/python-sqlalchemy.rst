@@ -536,7 +536,7 @@ Delete Rows from Table
     sel_st = user_t.select()
     res = conn.execute(sel_st)
     for _row in res:
-        (print _row)
+        print(_row)
 
 Check Table Existing
 ----------------------
@@ -1087,7 +1087,7 @@ Object Relational basic query
     print("\n----> NOT NULL:")
     query = session.query(User).filter(User.birth != None)
     for _row in query.all():
-        print _row.name, _row.fullname
+        print(_row.name, _row.fullname)
 
     print("\n----> LIKE")
     query = session.query(User).filter(User.name.like('%ed%'))
