@@ -36,6 +36,7 @@ class PysheeetTest(LiveServerTestCase):
         os.environ['FLASK_ENV'] = 'development'
         os.environ['FLASK_DEBUG'] = "1"
         app.config['TESTING'] = True
+        app.config['LIVESERVER_PORT'] = 0
         return app
 
     def test_index_redirection_req(self):
