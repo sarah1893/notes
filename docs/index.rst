@@ -6,6 +6,13 @@
 Welcome to Python cheatsheet!
 =============================================
 
+Welcome to pysheeet. This project aims at collecting useful python snippets
+in order to enhance pythoneers' coding expreiences. Any snippets are welcome.
+If there is any question or suggestion, please create an issue on `GitHub Issues`_.
+
+.. _GitHub Issues: https://github.com/crazyguitar/pysheeet/issues
+
+
 .. toctree::
    :maxdepth: 2
 
