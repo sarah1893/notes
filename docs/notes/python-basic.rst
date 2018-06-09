@@ -1052,7 +1052,7 @@ Property - Managed attributes
     ...         return self._val
     ...     @val.setter
     ...     def val(self, value):
-    ...         if not isintance(value, int):
+    ...         if not isinstance(value, int):
     ...             raise TypeError("Expected int")
     ...         self._val = value
     ...     @val.deleter
@@ -1076,7 +1076,7 @@ Property - Managed attributes
     ...         return self._val
     ...
     ...     def _val_setter(self, value):
-    ...         if not isintance(value, int):
+    ...         if not isinstance(value, int):
     ...             raise TypeError("Expected int")
     ...         self._val = value
     ...
