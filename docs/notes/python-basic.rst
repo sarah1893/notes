@@ -439,6 +439,21 @@ Get dictionary item **SMART**
     >>> a
     {'1': 1, '3': 3, '2': 2, '4': 4}
 
+    # merge two dictionaries (python 3.4 or lower)
+    >>> a = {"x": 55, "y": 66}
+    >>> b = {"a": "foo", "b": "bar"}
+    >>> c = a.copy()
+    >>> c.update(b)
+    >>> c
+    {'y': 66, 'x': 55, 'b': 'bar', 'a': 'foo'}
+
+    # merge two dictionaries (python 3.5 or above)
+    >>> a = {"x": 55, "y": 66}
+    >>> b = {"a": "foo", "b": "bar"}
+    >>> c = {**a, **b}
+    >>> c
+    {'x': 55, 'y': 66, 'a': 'foo', 'b': 'bar'}
+
 Set a list/dict **SMART**
 --------------------------
 
