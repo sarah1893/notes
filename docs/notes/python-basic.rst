@@ -104,6 +104,21 @@ Using ``__future__`` backport features
 .. _future: https://docs.python.org/2/reference/simple_stmts.html#future
 __ future_
 
+Check python version
+--------------------
+
+.. code-block:: python
+
+    >>> import sys
+    >>> print(sys.version)
+    3.6.5 (default, Apr 24 2018, 10:37:34)
+    [GCC 4.2.1 Compatible Apple LLVM 7.3.0 (clang-703.0.31)]
+    >>> py36 = sys.version_info >= (3, 6)
+    >>> py36
+    True
+    >>> py37 = sys.version_info >= (3, 7)
+    >>> py37
+    False
 
 Check object attributes
 -----------------------
