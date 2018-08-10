@@ -164,3 +164,51 @@ output:
 
     # mypy will not detect type errors
     $ mypy --strict foo.py
+
+User-defined generic types
+--------------------------
+
+Like c++ ``<template typename T>``
+
+.. code-block:: cpp
+
+    #include <iostream>
+
+    template <typename T>
+    T add(T x, T y) {
+        return x + y;
+    }
+
+    int main(int argc, char *argv[])
+    {
+        std::cout << add(1, 2) << std::endl;
+        std::cout << add(1., 2.) << std::endl;
+        return 0;
+    }
+
+
+Python using ``Generic``
+
+.. code-block:: python
+
+    from typing import Generic, TypeVar
+
+    # restrict T = int or T = float
+    T = TypeVar("T", int, float)
+
+    def add(x: T, y: T) -> T:
+        return x + y
+
+    add(1, 2)
+    add(1., 2.)
+    add("1", 2)
+    add("hello", "world")
+
+output:
+
+.. code-block:: bash
+
+    # mypy can detect wrong type
+    $ mypy --strict foo.py
+    foo.py:10: error: Value of type variable "T" of "add" cannot be "object"
+    foo.py:11: error: Value of type variable "T" of "add" cannot be "str"
