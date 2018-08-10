@@ -20,6 +20,7 @@ or suggestion, please create an issue on `GitHub Issues`_.
 
    notes/python-basic
    notes/python-new-py3
+   notes/python-typing
    notes/python-unicode
    notes/python-generator
    notes/python-rexp
