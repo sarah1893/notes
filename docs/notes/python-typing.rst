@@ -90,6 +90,26 @@ output:
     $ mypy --strict foo.py
     foo.py:15: error: Item "None" of "Optional[Pattern[Any]]" has no attribute "match"
 
+Union[Any, None] == Optional[Any]
+----------------------------------
+
+.. code-block:: python
+
+    from typing import List, Union
+
+    def first(l: List[Union[int, None]]) -> Union[int, None]:
+        return None if len(l) == 0 else l[0]
+
+    first([None])
+
+    # equal to
+
+    from typing import List, Optional
+
+    def first(l: List[Optional[int]]) -> Optional[int]:
+        return None if len(l) == 0 else l[0]
+
+    first([None])
 
 Becareful ``Optional``
 -----------------------
@@ -302,6 +322,108 @@ output:
     $ mypy --strict foo.py
     foo.py:13: error: Incompatible types in assignment (expression has type "str", variable has type "int")
 
+Scoping rules for ``TypeVar``
+------------------------------
+
+- ``TypeVar`` used in different generic function will be inferred to be different types.
+
+.. code-block:: python
+
+    from typing import TypeVar
+
+    T = TypeVar("T")
+
+    def foo(x: T) -> T:
+        return x
+
+    def bar(y: T) -> T:
+        return y
+
+    a: int = foo(1)    # ok: T is inferred to be int
+    b: int = bar("2")  # error: T is inferred to be str
+
+output:
+
+.. code-block:: bash
+
+    $ mypy --strict foo.py
+    foo.py:12: error: Incompatible types in assignment (expression has type "str", variable has type "int")
+
+- ``TypeVar`` used in a generic class will be inferred to be same types.
+
+.. code-block:: python
+
+    from typing import TypeVar, Generic
+
+    T = TypeVar("T")
+
+    class Foo(Generic[T]):
+
+        def foo(self, x: T) -> T:
+            return x
+
+        def bar(self, y: T) -> T:
+            return y
+
+    f: Foo[int] = Foo()
+    a: int = f.foo(1)    # ok: T is inferred to be int
+    b: str = f.bar("2")  # error: T is expected to be int
+
+output:
+
+.. code-block:: bash
+
+    $ mypy --strict foo.py
+    foo.py:15: error: Incompatible types in assignment (expression has type "int", variable has type "str")
+    foo.py:15: error: Argument 1 to "bar" of "Foo" has incompatible type "str"; expected "int"
+
+- ``TypeVar`` used in a method but not match any parameters which declare in ``Generic`` can be inferred to be different types.
+
+.. code-block:: python
+
+    from typing import TypeVar, Generic
+
+    T = TypeVar("T")
+    S = TypeVar("S")
+
+    class Foo(Generic[T]):    # S does not match params
+
+        def foo(self, x: T, y: S) -> S:
+            return y
+
+        def bar(self, z: S) -> S:
+            return z
+
+    f: Foo[int] = Foo()
+    a: str = f.foo(1, "foo")  # S is inferred to be str
+    b: int = f.bar(12345678)  # S is inferred to be int
+
+output:
+
+.. code-block:: bash
+
+    $  mypy --strict foo.py
+
+- ``TypeVar`` should not appear in body of method/function if it is unbound type.
+
+.. code-block:: python
+
+    from typing import TypeVar, Generic
+
+    T = TypeVar("T")
+    S = TypeVar("S")
+
+    def foo(x: T) -> None:
+        a: T = x    # ok
+        b: S = 123  # error: invalid type
+
+output:
+
+.. code-block:: bash
+
+    $ mypy --strict foo.py
+    foo.py:8: error: Invalid type "foo.S"
+
 Constraining to a fixed set of possible types
 ----------------------------------------------
 
@@ -328,24 +450,3 @@ output:
     $ mypy --strict foo.py
     foo.py:10: error: Value of type variable "T" of "add" cannot be "object"
     foo.py:11: error: Value of type variable "T" of "add" cannot be "str"
-
-Union[Any, None] == Optional[Any]
-----------------------------------
-
-.. code-block:: python
-
-    from typing import List, Union
-
-    def first(l: List[Union[int, None]]) -> Union[int, None]:
-        return None if len(l) == 0 else l[0]
-
-    first([None])
-
-    # equal to
-
-    from typing import List, Optional
-
-    def first(l: List[Optional[int]]) -> Optional[int]:
-        return None if len(l) == 0 else l[0]
-
-    first([None])
