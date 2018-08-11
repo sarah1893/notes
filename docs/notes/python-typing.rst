@@ -165,8 +165,8 @@ output:
     # mypy will not detect type errors
     $ mypy --strict foo.py
 
-User-defined generic types
---------------------------
+Using ``TypeVar`` as template
+------------------------------
 
 Like c++ ``<template typename T>``
 
@@ -186,12 +186,26 @@ Like c++ ``<template typename T>``
         return 0;
     }
 
-
 Python using ``Generic``
 
 .. code-block:: python
 
-    from typing import Generic, TypeVar
+    from typing import TypeVar
+
+    T = TypeVar("T")
+
+    def add(x: T, y: T) -> T:
+        return x + y
+
+    add(1, 2)
+    add(1., 2.)
+
+Constraining to a fixed set of possible types
+----------------------------------------------
+
+.. code-block:: python
+
+    from typing import TypeVar
 
     # restrict T = int or T = float
     T = TypeVar("T", int, float)
@@ -212,3 +226,24 @@ output:
     $ mypy --strict foo.py
     foo.py:10: error: Value of type variable "T" of "add" cannot be "object"
     foo.py:11: error: Value of type variable "T" of "add" cannot be "str"
+
+Union[Any, None] == Optional[Any]
+----------------------------------
+
+.. code-block:: python
+
+    from typing import List, Union
+
+    def first(l: List[Union[int, None]]) -> Union[int, None]:
+        return None if len(l) == 0 else l[0]
+
+    first([None])
+
+    # equal to
+
+    from typing import List, Optional
+
+    def first(l: List[Optional[int]]) -> Optional[int]:
+        return None if len(l) == 0 else l[0]
+
+    first([None])
