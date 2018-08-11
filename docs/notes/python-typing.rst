@@ -111,6 +111,47 @@ Multiple return values
     a, b = foo(1, 2)      # ok
     c, d = bar(3, "bar")  # ok
 
+Generator function
+-------------------
+
+.. code-block:: python
+
+    from typing import Generator
+
+    # Generator[YieldType, SendType, ReturnType]
+    def fib(n: int) -> Generator[int, None, None]:
+        a: int = 0
+        b: int = 1
+        while n > 0:
+            yield a
+            b, a = a + b, b
+            n -= 1
+
+    # or
+
+    from typing import Iterable
+
+    def fib(n: int) -> Iterable[int]:
+        a: int = 0
+        b: int = 1
+        while n > 0:
+            yield a
+            b, a = a + b, b
+            n -= 1
+
+    # or
+
+    from typing import Iterator
+
+    def fib(n: int) -> Iterator[int]:
+        a: int = 0
+        b: int = 1
+        while n > 0:
+            yield a
+            b, a = a + b, b
+            n -= 1
+
+
 Union[Any, None] == Optional[Any]
 ----------------------------------
 
