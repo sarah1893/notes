@@ -26,11 +26,11 @@ output:
 
     $ python fib.py
     Traceback (most recent call last):
-      File "ty.py", line 8, in <module>
+      File "fib.py", line 8, in <module>
         print([n for n in fib(3.5)])
-      File "ty.py", line 8, in <listcomp>
+      File "fib.py", line 8, in <listcomp>
         print([n for n in fib(3.5)])
-      File "ty.py", line 3, in fib
+      File "fib.py", line 3, in fib
         for _ in range(n):
     TypeError: 'float' object cannot be interpreted as an integer
 
