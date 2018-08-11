@@ -216,7 +216,7 @@ Type aliases are defined by simple variable assignments
 Using ``TypeVar`` as template
 ------------------------------
 
-Like c++ ``<template typename T>``
+Like c++ ``template <typename T>``
 
 .. code-block:: cpp
 
@@ -247,6 +247,60 @@ Python using ``Generic``
 
     add(1, 2)
     add(1., 2.)
+
+Using ``TypeVar`` and ``Generic`` as class template
+----------------------------------------------------
+
+Like c++ ``template <typename T> class``
+
+.. code-block:: cpp
+
+    #include <iostream>
+
+    template<typename T>
+    class Foo {
+    public:
+        Foo(T foo) {
+            foo_ = foo;
+        }
+        T Get() {
+            return foo_;
+        }
+    private:
+        T foo_;
+    };
+
+    int main(int argc, char *argv[])
+    {
+        Foo<int> f(123);
+        std::cout << f.Get() << std::endl;
+        return 0;
+    }
+
+Define a generic class in Python
+
+.. code-block:: python
+
+    from typing import Generic, TypeVar
+
+    T = TypeVar("T")
+
+    class Foo(Generic[T]):
+        def __init__(self, foo: T) -> None:
+            self.foo = foo
+
+        def get(self) -> T:
+            return self.foo
+
+    f: Foo[str] = Foo("Foo")
+    v: int = f.get()
+
+output:
+
+.. code-block:: bash
+
+    $ mypy --strict foo.py
+    foo.py:13: error: Incompatible types in assignment (expression has type "str", variable has type "int")
 
 Constraining to a fixed set of possible types
 ----------------------------------------------
