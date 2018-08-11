@@ -165,6 +165,54 @@ output:
     # mypy will not detect type errors
     $ mypy --strict foo.py
 
+Type alias
+----------
+
+Like ``typedef`` or ``using`` in c/c++
+
+.. code-block:: cpp
+
+    #include <iostream>
+    #include <string>
+    #include <regex>
+    #include <vector>
+
+    typedef std::string Url;
+    template<typename T> using Vector = std::vector<T>;
+
+    int main(int argc, char *argv[])
+    {
+        Url url = "https://python.org";
+        std::regex p("(https?)://([^/\r\n]+)(/[^\r\n]*)?");
+        bool m = std::regex_match(url, p);
+        Vector<int> v = {1, 2};
+
+        std::cout << m << std::endl;
+        for (auto it : v) std::cout << it << std::endl;
+        return 0;
+    }
+
+Type aliases are defined by simple variable assignments
+
+.. code-block:: python
+
+    import re
+
+    from typing import Pattern, List
+
+    # Like typedef, using in c/c++
+
+    # PEP 484 recommend capitalizing alias names
+    Url = str
+
+    url: Url = "https://www.python.org/"
+
+    p: Pattern = re.compile("(https?)://([^/\r\n]+)(/[^\r\n]*)?")
+    m = p.match(url)
+
+    Vector = List[int]
+    v: Vector = [1., 2.]
+
 Using ``TypeVar`` as template
 ------------------------------
 
