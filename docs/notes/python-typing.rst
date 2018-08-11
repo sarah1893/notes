@@ -90,6 +90,27 @@ output:
     $ mypy --strict foo.py
     foo.py:15: error: Item "None" of "Optional[Pattern[Any]]" has no attribute "match"
 
+Multiple return values
+-----------------------
+
+.. code-block:: python
+
+    from typing import Tuple, Iterable, Union
+
+    def foo(x: int, y: int) -> Tuple[int, int]:
+        return x, y
+
+    # or
+
+    def bar(x: int, y: str) -> Iterable[Union[int, str]]:
+        # XXX: not recommend declaring in this way
+        return x, y
+
+    a: int
+    b: int
+    a, b = foo(1, 2)      # ok
+    c, d = bar(3, "bar")  # ok
+
 Union[Any, None] == Optional[Any]
 ----------------------------------
 
