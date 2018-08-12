@@ -316,7 +316,7 @@ Like c++ ``template <typename T>``
         return 0;
     }
 
-Python using ``Generic``
+Python using ``TypeVar``
 
 .. code-block:: python
 
