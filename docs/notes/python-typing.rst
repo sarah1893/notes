@@ -426,7 +426,7 @@ output:
     foo.py:15: error: Incompatible types in assignment (expression has type "int", variable has type "str")
     foo.py:15: error: Argument 1 to "bar" of "Foo" has incompatible type "str"; expected "int"
 
-- ``TypeVar`` used in a method but not match any parameters which declare in ``Generic`` can be inferred to be different types.
+- ``TypeVar`` used in a method but did not match any parameters which declare in ``Generic`` can be inferred to be different types.
 
 .. code-block:: python
 
