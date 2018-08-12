@@ -139,19 +139,6 @@ Generator function
             b, a = a + b, b
             n -= 1
 
-    # or
-
-    from typing import Iterator
-
-    def fib(n: int) -> Iterator[int]:
-        a: int = 0
-        b: int = 1
-        while n > 0:
-            yield a
-            b, a = a + b, b
-            n -= 1
-
-
 Union[Any, None] == Optional[Any]
 ----------------------------------
 
@@ -204,7 +191,7 @@ Explicitly declare
 
     from typing import Optional
 
-    def fib(n: int) -> int:
+    def fib(n: int) -> int:  # declare n to be int
         a, b = 0, 1
         for _ in range(n):
             b, a = a + b, b
