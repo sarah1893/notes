@@ -90,6 +90,38 @@ output:
     $ mypy --strict foo.py
     foo.py:15: error: Item "None" of "Optional[Pattern[Any]]" has no attribute "match"
 
+Positional-only arguments
+--------------------------
+
+.. code-block:: python
+
+    # define arguments with names beginning with __
+
+    def fib(__n: int) -> int:  # positional only arg
+        a, b = 0, 1
+        for _ in range(__n):
+            b, a = a + b, b
+        return a
+
+
+    def gcd(*, a: int, b: int) -> int:  # keyword only arg
+        while b:
+            a, b = b, a % b
+        return a
+
+
+    print(fib(__n=10))  # error
+    print(gcd(10, 5))   # error
+
+output:
+
+.. code-block:: bash
+
+    mypy --strict foo.py
+    foo.py:1: note: "fib" defined here
+    foo.py:14: error: Unexpected keyword argument "__n" for "fib"
+    foo.py:15: error: Too many positional arguments for "gcd"
+
 Multiple return values
 -----------------------
 
