@@ -486,8 +486,10 @@ output:
     $ mypy --strict foo.py
     foo.py:8: error: Invalid type "foo.S"
 
-Constraining to a fixed set of possible types
+Restricting to a fixed set of possible types
 ----------------------------------------------
+
+``T = TypeVar('T', ClassA, ...)`` means we create a **type variable with a value restriction**.
 
 .. code-block:: python
 
@@ -512,3 +514,114 @@ output:
     $ mypy --strict foo.py
     foo.py:10: error: Value of type variable "T" of "add" cannot be "object"
     foo.py:11: error: Value of type variable "T" of "add" cannot be "str"
+
+``TypeVar`` with an upper bound
+--------------------------------
+
+``T = TypeVar('T', bound=BaseClass)`` means we create a **type variable with an upper bound**.
+The concept is similar to **polymorphism** in c++.
+
+.. code-block:: cpp
+
+    #include <iostream>
+
+    class Shape {
+    public:
+        Shape(double width, double height) {
+            width_ = width;
+            height_ = height;
+        };
+        virtual double Area() = 0;
+    protected:
+        double width_;
+        double height_;
+    };
+
+    class Rectangle: public Shape {
+    public:
+        Rectangle(double width, double height)
+        :Shape(width, height)
+        {};
+
+        double Area() {
+            return width_ * height_;
+        };
+    };
+
+    class Triangle: public Shape {
+    public:
+        Triangle(double width, double height)
+        :Shape(width, height)
+        {};
+
+        double Area() {
+            return width_ * height_ / 2;
+        };
+    };
+
+    double Area(Shape &s) {
+        return s.Area();
+    }
+
+    int main(int argc, char *argv[])
+    {
+        Rectangle r(1., 2.);
+        Triangle t(3., 4.);
+
+        std::cout << Area(r) << std::endl;
+        std::cout << Area(t) << std::endl;
+        return 0;
+    }
+
+Like c++, create a base class and ``TypeVar`` which bounds to the base class.
+Then, static type checker will take every subclass as type of base class.
+
+.. code-block:: python
+
+    from typing import TypeVar
+
+
+    class Shape:
+        def __init__(self, width: float, height: float) -> None:
+            self.width = width
+            self.height = height
+
+        def area(self) -> float:
+            return 0
+
+
+    class Rectangle(Shape):
+        def area(self) -> float:
+            width: float = self.width
+            height: float = self.height
+            return width * height
+
+
+    class Triangle(Shape):
+        def area(self) -> float:
+            width: float = self.width
+            height: float = self.height
+            return width * height / 2
+
+
+    S = TypeVar("S", bound=Shape)
+
+
+    def area(s: S) -> float:
+        return s.area()
+
+
+    r: Rectangle = Rectangle(1, 2)
+    t: Triangle = Triangle(3, 4)
+    i: int = 5566
+
+    print(area(r))
+    print(area(t))
+    print(area(i))
+
+output:
+
+.. code-block:: bash
+
+    $ mypy --strict foo.py
+    foo.py:40: error: Value of type variable "S" of "area" cannot be "int"
