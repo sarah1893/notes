@@ -173,8 +173,8 @@ Union[Any, None] == Optional[Any]
 
     first([None])
 
-Becareful ``Optional``
------------------------
+Be careful of ``Optional``
+---------------------------
 
 .. code-block:: python
 
@@ -221,8 +221,8 @@ output:
     $ mypy --strict foo.py
     foo.py:11: error: Argument 1 to "fib" has incompatible type "Optional[int]"; expected "int"
 
-Becareful cast
----------------
+Be careful of casting
+----------------------
 
 .. code-block:: python
 
