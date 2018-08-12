@@ -752,3 +752,54 @@ output:
 
     $ python foo.py
     NotImplementedError
+
+Stub Files
+----------
+
+Stub files just like header files which we usually use to define our interfaces in c/c++.
+In python, we can define our interfaces in the same module directory or ``export MYPYPATH=${stubs}``
+
+First, we need to create a stub file (interface file) for module.
+
+.. code-block:: bash
+
+    $ mkdir fib
+    $ touch fib/__init__.py fib/__init__.pyi
+
+Then, define the interface of the function in ``__init__.pyi`` and implement the module.
+
+.. code-block:: python
+
+    # fib/__init__.pyi
+    def fib(n: int) -> int: ...
+
+    # fib/__init__.py
+
+    def fib(n):
+        a, b = 0, 1
+        for _ in range(n):
+            b, a = a + b, b
+        return a
+
+Then, write a test.py for testing ``fib`` module.
+
+.. code-block:: python
+
+    # touch test.py
+    import sys
+
+    from pathlib import Path
+
+    p = Path(__file__).parent / "fib"
+    sys.path.append(str(p))
+
+    from fib import fib
+
+    print(fib(10.0))
+
+output:
+
+.. code-block:: bash
+
+    $ mypy --strict test.py
+    test.py:10: error: Argument 1 to "fib" has incompatible type "float"; expected "int"
