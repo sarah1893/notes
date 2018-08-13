@@ -132,6 +132,45 @@ Basic types
     var_map_dict: Mapping[str, str] = {"foo": "Foo"}
     var_mutable_dict: MutableMapping[str, str] = {"bar": "Bar"}
 
+Functions
+----------
+
+.. code-block:: python
+
+    from typing import Generator, Callable
+
+    # function
+    def gcd(a: int, b: int) -> int:
+        while b:
+            a, b = b, a % b
+        return a
+
+    # callback
+    def fun(cb: Callable[[int, int], int]) -> int:
+        return cb(55, 66)
+
+    # lambda
+    f: Callable[[int], int] = lambda x: x * 2
+
+Generator
+----------
+
+.. code-block:: python
+
+    from typing import Generator
+
+    # Generator[YieldType, SendType, ReturnType]
+    def fib(n: int) -> Generator[int, None, None]:
+        a: int = 0
+        b: int = 1
+        while n > 0:
+            yield a
+            b, a = a + b, b
+            n -= 1
+
+    g: Generator = fib(10)
+    i: Iterator[int] = (x for x in range(3))
+
 Avoid ``None`` access
 ----------------------
 
@@ -212,34 +251,6 @@ Multiple return values
     b: int
     a, b = foo(1, 2)      # ok
     c, d = bar(3, "bar")  # ok
-
-Generator function
--------------------
-
-.. code-block:: python
-
-    from typing import Generator
-
-    # Generator[YieldType, SendType, ReturnType]
-    def fib(n: int) -> Generator[int, None, None]:
-        a: int = 0
-        b: int = 1
-        while n > 0:
-            yield a
-            b, a = a + b, b
-            n -= 1
-
-    # or
-
-    from typing import Iterable
-
-    def fib(n: int) -> Iterable[int]:
-        a: int = 0
-        b: int = 1
-        while n > 0:
-            yield a
-            b, a = a + b, b
-            n -= 1
 
 Union[Any, None] == Optional[Any]
 ----------------------------------
