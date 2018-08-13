@@ -92,6 +92,11 @@ Basic types
     # without initializing
     x: int
 
+    # any type
+    y: Any
+    y = 1
+    y = "1"
+
     # built-in
     var_int: int = 1
     var_str: str = "Hello Typing"
@@ -151,6 +156,32 @@ Functions
 
     # lambda
     f: Callable[[int], int] = lambda x: x * 2
+
+Classes
+--------
+
+.. code-block:: python
+
+    from typing import ClassVar, Dict, List
+
+    class Foo:
+
+        x: int = 1  # instance variable. default = 1
+        y: ClassVar[str] = "class var"  # class variable
+
+        def __init__(self) -> None:
+            self.i: List[int] = [0]
+
+        def foo(self, a: int, b: str) -> Dict[int, str]:
+            return {a: b}
+
+    foo = Foo()
+    foo.x = 123
+
+    print(foo.x)
+    print(foo.i)
+    print(Foo.y)
+    print(foo.foo(1, "abc"))
 
 Generator
 ----------
