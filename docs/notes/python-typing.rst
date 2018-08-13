@@ -420,6 +420,50 @@ output:
     # mypy will not detect type errors
     $ mypy --strict foo.py
 
+
+Forward references
+-------------------
+
+Based on PEP 484, if we want to reference a type before it has been declared, we
+have to use **string literal** to imply that there is a type of that name later on
+in the file.
+
+.. code-block:: python
+
+    from typing import Optional
+
+
+    class Tree:
+        def __init__(
+            self, data: int,
+            left: Optional["Tree"],  # Forward references.
+            right: Optional["Tree"]
+        ) -> None:
+            self.data = data
+            self.left = left
+            self.right = right
+
+.. note::
+
+    There are some issues that mypy does not complain about Forward References.
+    Get further information from `Issue#948`_.
+
+.. _Issue\#948: https://github.com/python/mypy/issues/948
+
+.. code-block:: python
+
+    class A:
+        def __init__(self, a: A) -> None:  # should fail
+            self.a = a
+
+output:
+
+.. code-block:: bash
+
+    $ mypy --strict type.py
+    $ echo $?
+    0
+
 Type alias
 ----------
 
