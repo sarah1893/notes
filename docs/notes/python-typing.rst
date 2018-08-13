@@ -171,6 +171,34 @@ Generator
     g: Generator = fib(10)
     i: Iterator[int] = (x for x in range(3))
 
+Asynchronous Generator
+-----------------------
+
+.. code-block:: python
+
+    import asyncio
+
+    from typing import AsyncGenerator, AsyncIterator
+
+    async def fib(n: int) -> AsyncGenerator:
+        a: int = 0
+        b: int = 1
+        while n > 0:
+            await asyncio.sleep(0.1)
+            yield a
+
+            b, a = a + b, b
+            n -= 1
+
+    async def main() -> None:
+        async for f in fib(10):
+            print(f)
+
+        ag: AsyncIterator = (f async for f in fib(10))
+
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main())
+
 Avoid ``None`` access
 ----------------------
 
