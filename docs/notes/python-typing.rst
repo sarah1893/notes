@@ -199,6 +199,51 @@ Asynchronous Generator
     loop = asyncio.get_event_loop()
     loop.run_until_complete(main())
 
+Context Manager
+---------------
+
+.. code-block:: python
+
+    from typing import ContextManager, Generator, IO
+    from contextlib import contextmanager
+
+    @contextmanager
+    def open_file(name: str) -> Generator:
+        f = open(name)
+        yield f
+        f.close()
+
+    cm: ContextManager[IO] = open_file(__file__)
+    with cm as f:
+        print(f.read())
+
+Asynchronous Contents Manager
+-----------------------------
+
+.. code-block:: python
+
+    import asyncio
+
+    from typing import AsyncContextManager, AsyncGenerator, IO
+    from contextlib import asynccontextmanager
+
+    # need python 3.7 or above
+    @asynccontextmanager
+    async def open_file(name: str) -> AsyncGenerator:
+        await asyncio.sleep(0.1)
+        f = open(name)
+        yield f
+        await asyncio.sleep(0.1)
+        f.close()
+
+    async def main() -> None:
+        acm: AsyncContextManager[IO] = open_file(__file__)
+        async with acm as f:
+            print(f.read())
+
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main())
+
 Avoid ``None`` access
 ----------------------
 
