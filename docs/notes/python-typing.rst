@@ -543,6 +543,53 @@ Type aliases are defined by simple variable assignments
     Vector = List[int]
     v: Vector = [1., 2.]
 
+Define a ``NewType``
+---------------------
+
+Unlike alias, ``NewType`` returns a separate type but is identical to the original type at runtime.
+
+.. code-block:: python
+
+    from sqlalchemy import Column, String, Integer
+    from sqlalchemy.ext.declarative import declarative_base
+    from typing import NewType, Any
+
+    # check mypy #2477
+    Base: Any = declarative_base()
+
+    # create a new type
+    Id = NewType('Id', int) # not equal alias, it's a 'new type'
+
+    class User(Base):
+        __tablename__ = 'User'
+        id = Column(Integer, primary_key=True)
+        age = Column(Integer, nullable=False)
+        name = Column(String, nullable=False)
+
+        def __init__(self, id: Id, age: int, name: str) -> None:
+            self.id = id
+            self.age = age
+            self.name = name
+
+    # create users
+    user1 = User(Id(1), 62, "Guido van Rossum") # ok
+    user2 = User(2, 48, "David M. Beazley")     # error
+
+output:
+
+.. code-block:: bash
+
+    $ python foo.py
+    $ mypy --ignore-missing-imports foo.py
+    foo.py:24: error: Argument 1 to "User" has incompatible type "int"; expected "Id"
+
+Further reading:
+
+- `Issue\#1284`_
+
+.. _`Issue\#1284`: https://github.com/python/mypy/issues/1284
+
+
 Using ``TypeVar`` as template
 ------------------------------
 
