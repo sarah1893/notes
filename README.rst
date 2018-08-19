@@ -49,7 +49,7 @@ Cheat Sheets
 - `generator`_
 - `regular expression`_
 - `socket`_
-- `crypto`_
+- `security`_
 - `concurrency`_
 - `sqlalchemy`_
 - `asyncio`_
@@ -65,7 +65,7 @@ Cheat Sheets
 .. _generator: docs/notes/python-generator.rst
 .. _regular expression: docs/notes/python-rexp.rst
 .. _socket: docs/notes/python-socket.rst
-.. _crypto: docs/notes/python-crypto.rst
+.. _security: docs/notes/python-security.rst
 .. _concurrency: docs/notes/python-concurrency.rst
 .. _sqlalchemy: docs/notes/python-sqlalchemy.rst
 .. _asyncio: docs/notes/python-asyncio.rst

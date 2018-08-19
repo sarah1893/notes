@@ -1,6 +1,6 @@
-==============================
-Python cryptography cheatsheet
-==============================
+==========================
+Python security cheatsheet
+==========================
 
 .. contents:: Table of Contents
     :backlinks: none
@@ -38,8 +38,8 @@ Simple https server
     ...
     >>> httpd.serve_forever()
 
-ssh-keygen
------------
+Generate a SSH key pair
+------------------------
 
 .. code-block:: python
 

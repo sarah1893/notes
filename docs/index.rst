@@ -25,7 +25,7 @@ or suggestion, please create an issue on `GitHub Issues`_.
    notes/python-generator
    notes/python-rexp
    notes/python-socket
-   notes/python-crypto
+   notes/python-security
    notes/python-concurrency
    notes/python-sqlalchemy
    notes/python-asyncio
