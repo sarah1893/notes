@@ -38,9 +38,36 @@ Simple https server
     ...
     >>> httpd.serve_forever()
 
+ssh-keygen
+-----------
 
-Check certificate information
--------------------------------
+.. code-block:: python
+
+    from cryptography.hazmat.primitives import serialization
+    from cryptography.hazmat.primitives.asymmetric import rsa
+    from cryptography.hazmat.backends import default_backend
+
+    key = rsa.generate_private_key(
+        backend=default_backend(),
+        public_exponent=65537,
+        key_size=2048
+    )
+    private_key = key.private_bytes(
+        serialization.Encoding.PEM,
+        serialization.PrivateFormat.PKCS8,
+        serialization.NoEncryption(),
+    )
+    public_key = key.public_key().public_bytes(
+        serialization.Encoding.OpenSSH,
+        serialization.PublicFormat.OpenSSH
+    )
+
+    with open('id_rsa', 'wb') as f, open('id_rsa.pub', 'wb') as g:
+        f.write(private_key)
+        g.write(public_key)
+
+Get certificate information
+----------------------------
 
 .. code-block:: python
 
