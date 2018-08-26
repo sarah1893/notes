@@ -20,6 +20,7 @@ ifeq ($(PY36), 1)
 endif
 
 deps:
+	pip install -r requirements.txt
 ifeq ($(PY36), 1)
-	pip -q install black==18.6b4
+	pip install black==18.6b4
 endif
