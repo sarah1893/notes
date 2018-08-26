@@ -494,6 +494,13 @@ output:
     $ mypy --strict type.py
     $ echo $?
     0
+    $ python type.py   # get runtime fail
+    Traceback (most recent call last):
+      File "type.py", line 1, in <module>
+        class A:
+      File "type.py", line 2, in A
+        def __init__(self, a: A) -> None:  # should fail
+    NameError: name 'A' is not defined
 
 Type alias
 ----------
