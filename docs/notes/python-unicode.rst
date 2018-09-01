@@ -31,14 +31,14 @@ Get unicode code point
 
     >>> s = u'Café'
     >>> for _c in s: print('U+%04x' % ord(_c))
-    ... 
+    ...
     U+0043
     U+0061
     U+0066
     U+00e9
     >>> u = '中文'
     >>> for _c in u: print('U+%04x' % ord(_c))
-    ... 
+    ...
     U+4e2d
     U+6587
 
@@ -59,7 +59,7 @@ python2 ``str`` is equivalent to byte string
     <type 'unicode'>
 
 
-python3 ``str`` is equivalent to unicode string 
+python3 ``str`` is equivalent to unicode string
 -------------------------------------------------
 
 .. code-block:: python
@@ -105,7 +105,7 @@ python3 take ``str`` char as unicode character
     >>> print(bs)
     b'Caf\xc3\xa9'
     >>> len(bs)
-   5 
+   5
 
 
 unicode normalization
@@ -127,7 +127,7 @@ unicode normalization
     >>> u2.encode('utf-8') # get u2 byte string
     b'Cafe\xcc\x81'
     >>> from unicodedata import normalize
-    >>> s1 = normalize('NFC', u1)  # get u1 NFC format 
+    >>> s1 = normalize('NFC', u1)  # get u1 NFC format
     >>> s2 = normalize('NFC', u2)  # get u2 NFC format
     >>> s1 == s2
     True
@@ -140,7 +140,40 @@ unicode normalization
     >>> s1 == s2
     True
     >>> s1.encode('utf-8'), s2.encode('utf-8')
-    (b'Cafe\xcc\x81', b'Cafe\xcc\x81') 
+    (b'Cafe\xcc\x81', b'Cafe\xcc\x81')
 
-    
 
+Avoid UnicodeDecodeError
+-------------------------
+
+.. code-block:: python
+
+    # raise a UnicodeDecodeError
+
+    >>> u = b"0xff"
+    >>> u.decode('utf-8')
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    UnicodeDecodeError: 'utf-8' codec can't decode byte 0xff in position 0: invalid start byte
+
+    # raise a UnicodeDecodeError
+
+    >>> u.decode('utf-8', "strict")
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    UnicodeDecodeError: 'utf-8' codec can't decode byte 0xff in position 0: invalid start byte
+
+    # use U+FFFD, REPLACEMENT CHARACTER
+
+    >>> u.decode('utf-8', "replace")
+    '\ufffd'
+
+    # inserts a \xNN escape sequence
+
+    >>> u.decode('utf-8', "backslashreplace")
+    '\\xff'
+
+    # leave the character out of the Unicode result
+
+    >>> u.decode('utf-8', "ignore")
+    ''
