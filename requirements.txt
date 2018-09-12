@@ -6,6 +6,8 @@ docutils==0.14
 Flask==1.0.2
 Flask-SSLify==0.1.5
 Flask-Testing==0.7.1
+Flask-SeaSurf==0.2.2
+flask-talisman==0.5.1
 gunicorn==19.9.0
 pycodestyle==2.4.0
 pydocstyle==2.1.1

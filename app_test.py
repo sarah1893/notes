@@ -34,10 +34,20 @@ class PysheeetTest(LiveServerTestCase):
         app.config["LIVESERVER_PORT"] = 0
         return app
 
+    def check_security_headers(self, resp):
+        """Check security headers."""
+        headers = resp.headers
+        self.assertTrue("X-Content-Security-Policy" in headers)
+        self.assertTrue("X-XSS-Protection" in headers)
+        self.assertTrue("X-Content-Type-Options" in headers)
+        self.assertTrue("Content-Security-Policy" in headers)
+        self.assertEqual(headers["X-Frame-Options"], "SAMEORIGIN")
+
     def test_index_redirection_req(self):
         """Test that send a request for the index page."""
         url = self.get_server_url()
         resp = requests.get(url)
+        self.check_security_headers(resp)
         self.assertEqual(resp.status_code, 200)
 
     def test_static_proxy_req(self):
@@ -47,6 +57,7 @@ class PysheeetTest(LiveServerTestCase):
         for h in htmls:
             u = url + "/notes/" + h
             resp = requests.get(u)
+            self.check_security_headers(resp)
             self.assertEqual(resp.status_code, 200)
 
     def test_acme_req(self):
@@ -54,10 +65,12 @@ class PysheeetTest(LiveServerTestCase):
         url = self.get_server_url()
         u = url + "/.well-known/acme-challenge/token"
         resp = requests.get(u)
+        self.check_security_headers(resp)
         self.assertEqual(resp.status_code, 200)
 
         u = url + "/.well-known/acme-challenge/foo"
         resp = requests.get(u)
+        self.check_security_headers(resp)
         self.assertEqual(resp.status_code, 404)
 
     def test_find_key(self):

@@ -4,6 +4,8 @@ import os
 
 from flask import Flask, abort, send_from_directory
 from flask_sslify import SSLify
+from flask_seasurf import SeaSurf
+from flask_talisman import Talisman
 
 DIR = os.path.dirname(os.path.realpath(__file__))
 ROOT = os.path.join(DIR, "docs", "_build", "html")
@@ -19,7 +21,11 @@ def find_key(token):
             return os.environ.get("ACME_KEY_{}".format(n))
 
 
+csp = {"default-src": ["*", "'unsafe-inline'", "'unsafe-eval'"]}
 app = Flask(__name__)
+app.config["SECRET_KEY"] = os.urandom(16)
+csrf = SeaSurf(app)
+talisman = Talisman(app, force_https=False, content_security_policy=csp)
 
 if "DYNO" in os.environ:
     sslify = SSLify(app, skips=[".well-known"])
