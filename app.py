@@ -21,7 +21,18 @@ def find_key(token):
             return os.environ.get("ACME_KEY_{}".format(n))
 
 
-csp = {"default-src": ["*", "'unsafe-inline'", "'unsafe-eval'"]}
+csp = {
+    "default-src": ["'self'", "github.com", "*.readthedocs.org"],
+    "style-src": ["'self'", "unsafe-inline", "'unsafe-inline'"],
+    "script-src": [
+        "'self'",
+        "*.cloudflare.com",
+        "'unsafe-inline'",
+        "'unsafe-eval'",
+    ],
+    "img-src": "*",
+    "frame-src": "ghbtns.com",
+}
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.urandom(16)
 csrf = SeaSurf(app)
