@@ -39,6 +39,11 @@ csp = {
 }
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.urandom(16)
+app.config["SESSION_COOKIE_NAME"] = "__Secure-session"
+app.config["SESSION_COOKIE_SAMESITE"] = "Strict"
+app.config["CSRF_COOKIE_NAME"] = "__Secure-csrf-token"
+app.config["CSRF_COOKIE_HTTPONLY"] = True
+app.config["CSRF_COOKIE_SECURE"] = True
 csrf = SeaSurf(app)
 talisman = Talisman(app, force_https=False, content_security_policy=csp)
 
@@ -65,6 +70,7 @@ def index_redirection():
     return send_from_directory(ROOT, "index.html")
 
 
+@csrf.exempt
 @app.route("/.well-known/acme-challenge/<token>")
 def acme(token):
     """Find the acme-key from environment variable."""
