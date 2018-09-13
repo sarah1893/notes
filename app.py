@@ -23,7 +23,7 @@ def find_key(token):
 
 csp = {
     "default-src": "'none'",
-    "style-src": ["'self'", "unsafe-inline", "'unsafe-inline'"],
+    "style-src": ["'self'", "'unsafe-inline'"],
     "script-src": [
         "'self'",
         "*.cloudflare.com",
