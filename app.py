@@ -31,6 +31,13 @@ if "DYNO" in os.environ:
     sslify = SSLify(app, skips=[".well-known"])
 
 
+@app.after_request
+def add_feature_policy(response):
+    """Add feature policy."""
+    response.headers["Feature-Policy"] = "geolocation 'none'"
+    return response
+
+
 @app.route("/<path:path>")
 def static_proxy(path):
     """Find static files."""
