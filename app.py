@@ -22,7 +22,7 @@ def find_key(token):
 
 
 csp = {
-    "default-src": ["'self'", "github.com", "*.readthedocs.org"],
+    "default-src": "'none'",
     "style-src": ["'self'", "unsafe-inline", "'unsafe-inline'"],
     "script-src": [
         "'self'",
@@ -30,8 +30,12 @@ csp = {
         "'unsafe-inline'",
         "'unsafe-eval'",
     ],
+    "form-action": "'self'",
+    "base-uri": "'self'",
     "img-src": "*",
     "frame-src": "ghbtns.com",
+    "frame-ancestors": "'none'",
+    "object-src": "'none'",
 }
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.urandom(16)
