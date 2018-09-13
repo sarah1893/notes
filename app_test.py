@@ -50,11 +50,18 @@ class PysheeetTest(LiveServerTestCase):
         self.assertTrue("Feature-Policy" in headers)
         self.assertEqual(headers["X-Frame-Options"], "SAMEORIGIN")
 
+    def check_csrf_cookies(self, resp):
+        """Check cookies for csrf."""
+        cookies = resp.cookies
+        self.assertTrue(cookies.get("__Secure-session"))
+        self.assertTrue(cookies.get("__Secure-csrf-token"))
+
     def test_index_redirection_req(self):
         """Test that send a request for the index page."""
         url = self.get_server_url()
         resp = requests.get(url)
         self.check_security_headers(resp)
+        self.check_csrf_cookies(resp)
         self.assertEqual(resp.status_code, 200)
 
     def test_static_proxy_req(self):
@@ -65,6 +72,7 @@ class PysheeetTest(LiveServerTestCase):
             u = url + "/notes/" + h
             resp = requests.get(u)
             self.check_security_headers(resp)
+            self.check_csrf_cookies(resp)
             self.assertEqual(resp.status_code, 200)
 
     def test_acme_req(self):
