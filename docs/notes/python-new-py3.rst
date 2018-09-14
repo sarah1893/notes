@@ -118,6 +118,48 @@ Python3
     >>> 1 // 2
     0
 
+New dict implementation
+------------------------
+
+**New in Python 3.6**
+
+-  bpo 27350_ - More compact dictionaries with faster iteration
+
+Before Python 3.5
+
+.. code-block:: python
+
+    >>> import resource
+    >>> import functools
+    >>> def profile_mem(func):
+    ...     @functools.wraps(func)
+    ...     def wrapper(*a, **k):
+    ...         s = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+    ...         ret = func(*a, **k)
+    ...         e = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+    ...         print("mem usage: {} kByte".format(e-s))  # linux
+    ...         return ret
+    ...     return wrapper
+    ...
+    >>> @profile_mem
+    ... def foo():
+    ...     d = {x: x for x in range(10000000)}
+    ...
+    >>> foo()
+    mem usage: 767312 kByte
+
+Python 3.6
+
+.. code-block:: python
+
+    # memory usage is smaller than python 3.5
+    >>> @profile_mem
+    ... def foo():
+    ...     d = {x: x for x in range(10000000)}
+    ...
+    >>> foo()
+    mem usage: 668968 kByte
+
 Keyword-Only Arguments
 -----------------------
 
@@ -812,3 +854,4 @@ Built-in ``breakpoint()``
 .. _557: https://www.python.org/dev/peps/pep-0557/
 .. _553: https://www.python.org/dev/peps/pep-0553/
 .. _560: https://www.python.org/dev/peps/pep-0560/
+.. _27350: https://bugs.python.org/issue27350
