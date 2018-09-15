@@ -123,7 +123,9 @@ New dict implementation
 
 **New in Python 3.6**
 
--  bpo 27350_ - More compact dictionaries with faster iteration
+- PEP 468_ - Preserving the order of \*\*kwargs in a function
+- PEP 520_ - Preserving Class Attribute Definition Order
+- bpo 27350_ - More compact dictionaries with faster iteration
 
 Before Python 3.5
 
@@ -148,17 +150,25 @@ Before Python 3.5
     >>> foo()
     mem usage: 767312 kByte
 
+    >>> d = {'timmy': 'red', 'barry': 'green', 'guido': 'blue'}
+    >>> d   # without order-preserving
+    {'barry': 'green', 'timmy': 'red', 'guido': 'blue'}
+
 Python 3.6
 
 .. code-block:: python
 
-    # memory usage is smaller than python 3.5
     >>> @profile_mem
     ... def foo():
+    ...     # memory usage is smaller than python 3.5
     ...     d = {x: x for x in range(10000000)}
     ...
     >>> foo()
     mem usage: 668968 kByte
+
+    >>> d = {'timmy': 'red', 'barry': 'green', 'guido': 'blue'}
+    >>> d   # preserve insertion ordered
+    {'timmy': 'red', 'barry': 'green', 'guido': 'blue'}
 
 Keyword-Only Arguments
 -----------------------
@@ -840,8 +850,10 @@ Built-in ``breakpoint()``
 .. _3132: https://www.python.org/dev/peps/pep-3132/
 .. _448: https://www.python.org/dev/peps/pep-0448/
 .. _3107: https://www.python.org/dev/peps/pep-3107/
+.. _468: https://www.python.org/dev/peps/pep-0468/
 .. _484: https://www.python.org/dev/peps/pep-0484/
 .. _483: https://www.python.org/dev/peps/pep-0483/
+.. _520: https://www.python.org/dev/peps/pep-0520/
 .. _526: https://www.python.org/dev/peps/pep-0526/
 .. _461: https://www.python.org/dev/peps/pep-0461/
 .. _498: https://www.python.org/dev/peps/pep-0498/
