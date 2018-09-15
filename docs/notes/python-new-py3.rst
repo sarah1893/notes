@@ -131,24 +131,9 @@ Before Python 3.5
 
 .. code-block:: python
 
-    >>> import resource
-    >>> import functools
-    >>> def profile_mem(func):
-    ...     @functools.wraps(func)
-    ...     def wrapper(*a, **k):
-    ...         s = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
-    ...         ret = func(*a, **k)
-    ...         e = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
-    ...         print("mem usage: {} kByte".format(e-s))  # linux
-    ...         return ret
-    ...     return wrapper
-    ...
-    >>> @profile_mem
-    ... def foo():
-    ...     d = {x: x for x in range(10000000)}
-    ...
-    >>> foo()
-    mem usage: 767312 kByte
+    >>> import sys
+    >>> sys.getsizeof({str(i):i for i in range(1000)})
+    49248
 
     >>> d = {'timmy': 'red', 'barry': 'green', 'guido': 'blue'}
     >>> d   # without order-preserving
@@ -156,15 +141,14 @@ Before Python 3.5
 
 Python 3.6
 
+- Memory usage is smaller than Python 3.5
+- Preserve insertion ordered
+
 .. code-block:: python
 
-    >>> @profile_mem
-    ... def foo():
-    ...     # memory usage is smaller than python 3.5
-    ...     d = {x: x for x in range(10000000)}
-    ...
-    >>> foo()
-    mem usage: 668968 kByte
+    >>> import sys
+    >>> sys.getsizeof({str(i):i for i in range(1000)})
+    36968
 
     >>> d = {'timmy': 'red', 'barry': 'green', 'guido': 'blue'}
     >>> d   # preserve insertion ordered
