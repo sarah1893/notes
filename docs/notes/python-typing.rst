@@ -502,6 +502,45 @@ output:
         def __init__(self, a: A) -> None:  # should fail
     NameError: name 'A' is not defined
 
+Postponed Evaluation of Annotations
+-----------------------------------
+
+**New in Python 3.7**
+
+- PEP 563_ - Postponed Evaluation of Annotations
+
+.. _563: https://www.python.org/dev/peps/pep-0563/
+
+Before Python 3.7
+
+.. code-block:: python
+
+    >>> class A:
+    ...     def __init__(self, a: A) -> None:
+    ...         self._a = a
+    ...
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+      File "<stdin>", line 2, in A
+    NameError: name 'A' is not defined
+
+After Python 3.7 (include 3.7)
+
+.. code-block:: python
+
+    >>> from __future__ import annotations
+    >>> class A:
+    ...     def __init__(self, a: A) -> None:
+    ...         self._a = a
+    ...
+
+.. note::
+
+    Annotation can only be used within the scope which names have already
+    existed. Therefore, **forward reference** does not support the case which
+    names are not available in the current scope. **Postponed evaluation
+    of annotations** will become the default behavior in Python 4.0.
+
 Type alias
 ----------
 
