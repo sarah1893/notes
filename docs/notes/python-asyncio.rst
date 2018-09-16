@@ -376,10 +376,26 @@ Put blocking task into Executor
     ...     with open(file_) as f:
     ...         data = await loop.run_in_executor(e, f.read)
     ...         return data
-
+    ...
     >>> task = loop.create_task(read_file('/etc/passwd'))
     >>> ret = loop.run_until_complete(task)
 
+asyncio.run
+------------
+
+**New in Python 3.7**
+
+.. code-block:: python
+
+    >>> import asyncio
+    >>> from concurrent.futures import ThreadPoolExecutor
+    >>> e = ThreadPoolExecutor()
+    >>> async def read_file(file_):
+    ...     loop = asyncio.get_event_loop()
+    ...     with open(file_) as f:
+    ...         return (await loop.run_in_executor(e, f.read))
+    ...
+    >>> ret = asyncio.run(read_file('/etc/passwd'))
 
 Socket with asyncio
 -------------------
