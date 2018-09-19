@@ -1447,6 +1447,66 @@ output:
     >      --cacert ~/test/root-ca.crt
 
 
+TLS Upgrade
+------------
+
+**New in Python 3.7**
+
+.. code-block:: python
+
+    import asyncio
+    import ssl
+
+
+    class HttpClient(asyncio.Protocol):
+        def __init__(self, on_con_lost):
+            self.on_con_lost = on_con_lost
+            self.resp = b""
+
+        def data_received(self, data):
+            self.resp += data
+
+        def connection_lost(self, exc):
+            resp = self.resp.decode()
+            print(resp.split("\r\n")[0])
+            self.on_con_lost.set_result(True)
+
+
+    async def main():
+        paths = ssl.get_default_verify_paths()
+        sslctx = ssl.SSLContext()
+        sslctx.verify_mode = ssl.CERT_REQUIRED
+        sslctx.check_hostname = True
+        sslctx.load_verify_locations(paths.cafile)
+
+        loop = asyncio.get_running_loop()
+        on_con_lost = loop.create_future()
+
+        tr, proto = await loop.create_connection(
+            lambda: HttpClient(on_con_lost), "github.com", 443
+        )
+        new_tr = await loop.start_tls(tr, proto, sslctx)
+        req = f"GET / HTTP/1.1\r\n"
+        req += "Host: github.com\r\n"
+        req += "Connection: close\r\n"
+        req += "\r\n"
+        new_tr.write(req.encode())
+
+        await on_con_lost
+        new_tr.close()
+
+
+    asyncio.run(main())
+
+output:
+
+.. code-block:: bash
+
+    $ python3 --version
+    Python 3.7.0
+    $ python3 https.py
+    HTTP/1.1 200 OK
+
 Simple asyncio WSGI web server
 ------------------------------
 
