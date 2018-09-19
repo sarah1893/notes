@@ -397,6 +397,24 @@ asyncio.run
     ...
     >>> ret = asyncio.run(read_file('/etc/passwd'))
 
+Simple asyncio.run
+-------------------
+
+.. code-block:: python
+
+    >>> import asyncio
+    >>> async def getaddrinfo(host, port):
+    ...     loop = asyncio.get_event_loop()
+    ...     return (await loop.getaddrinfo(host, port))
+    ...
+    >>> def run(main):
+    ...     loop = asyncio.new_event_loop()
+    ...     asyncio.set_event_loop(loop)
+    ...     return loop.run_until_complete(main)
+    ...
+    >>> ret = run(getaddrinfo('google.com', 443))
+    >>> ret = asyncio.run(getaddrinfo('google.com', 443))
+
 Socket with asyncio
 -------------------
 
