@@ -1161,6 +1161,25 @@ output:
     echo: b'coro_3'
     echo: b'coro_4'
 
+Get domain name
+----------------
+
+.. code-block:: python
+
+    >>> import asyncio
+    >>> async def getaddrinfo(host, port):
+    ...     loop = asyncio.get_event_loop()
+    ...     return (await loop.getaddrinfo(host, port))
+    ...
+    >>> addrs = asyncio.run(getaddrinfo('github.com', 443))
+    >>> for a in addrs:
+    ...     family, typ, proto, name, sockaddr = a
+    ...     print(sockaddr)
+    ...
+    ('192.30.253.113', 443)
+    ('192.30.253.113', 443)
+    ('192.30.253.112', 443)
+    ('192.30.253.112', 443)
 
 Simple asyncio UDP echo server
 --------------------------------
