@@ -1273,7 +1273,7 @@ output:
     Hello UDP
 
 
-Simple asyncio web server
+Simple asyncio Web server
 -------------------------
 
 .. code-block:: python
@@ -1326,8 +1326,42 @@ Simple asyncio web server
     # Then open browser with url: localhost:9527
 
 
-Simple HTTPS asyncio web server
---------------------------------
+Simple HTTPS Web Server
+------------------------
+
+.. code-block:: python
+
+    import asyncio
+    import ssl
+
+    ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    ctx.load_cert_chain('crt.pem', 'key.pem')
+
+    async def conn(reader, writer):
+        _ = await reader.read(1024)
+        head = b"HTTP/1.1 200 OK\r\n"
+        head += b"Content-Type: text/html\r\n"
+        head += b"\r\n"
+
+        body = b"<!doctype html>"
+        body += b"<html>"
+        body += b"<body><h1>Awesome Python</h1></body>"
+        body += b"</html>"
+
+        writer.write(head + body)
+        writer.close()
+
+
+    async def main(host, port):
+        srv = await asyncio.start_server(conn, host, port, ssl=ctx)
+        async with srv:
+            await srv.serve_forever()
+
+    asyncio.run(main('0.0.0.0', 8000))
+
+
+Simple HTTPS Web server (low-level api)
+----------------------------------------
 
 .. code-block:: python
 
