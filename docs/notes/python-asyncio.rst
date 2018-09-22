@@ -1544,6 +1544,51 @@ output:
     $ python3 https.py
     HTTP/1.1 200 OK
 
+Using sendfile
+---------------
+
+**New in Python 3.7**
+
+.. code-block:: python
+
+    import asyncio
+
+    path = "index.html"
+
+    async def conn(reader, writer):
+
+        loop = asyncio.get_event_loop()
+        _ = await reader.read(1024)
+
+        with open(path, "rb") as f:
+            tr = writer.transport
+            head = b"HTTP/1.1 200 OK\r\n"
+            head += b"Content-Type: text/html\r\n"
+            head += b"\r\n"
+
+            tr.write(head)
+            await loop.sendfile(tr, f)
+            writer.close()
+
+    async def main(host, port):
+        # run a simplle http server
+        srv = await asyncio.start_server(conn, host, port)
+        async with srv:
+            await srv.serve_forever()
+
+    asyncio.run(main("0.0.0.0", 8000))
+
+output:
+
+.. code-block:: bash
+
+    $ echo '<!doctype html><h1>Awesome Python</h1>' > index.html
+    $ python http.py &
+    [2] 60506
+    $ curl http://localhost:8000
+    <!doctype html><h1>Awesome Python</h1>
+
+
 Simple asyncio WSGI web server
 ------------------------------
 
