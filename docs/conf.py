@@ -50,7 +50,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'python-cheatsheet'
-copyright = u'2016, crazyguitar'
+copyright = u'2016-2018, crazyguitar'
 author = u'crazyguitar'
 
 # The version info for the project you're documenting, acts as replacement for
