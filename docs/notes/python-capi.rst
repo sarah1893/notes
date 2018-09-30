@@ -307,21 +307,61 @@ output:
     nameserver	192.168.1.1
 
 
-PyObject header
----------------
+Simple C Extension
+-------------------
+
+foo.c
 
 .. code-block:: c
 
-    // ref: python source code
-    // Python/Include/object.c
-    #define _PyObject_HEAD_EXTRA \
-        struct _object *_ob_next;\
-        struct _object *_ob_prev;
+    #include <stdio.h>
+    #include <Python.h>
 
-    #define PyObject_HEAD    \
-        _PyObject_HEAD_EXTRA \
-        Py_ssize_t ob_refcnt;\
-        struct _typeobject *ob_type;
+    static PyObject* foo(PyObject* self, PyObject* args) {
+        printf("foo\n");
+        return Py_None;
+    };
+
+    static PyMethodDef methods[] = {
+        {"foo", foo, METH_NOARGS, "Foo"}
+    };
+
+    static struct PyModuleDef module = {
+        PyModuleDef_HEAD_INIT,  /* m_base    */
+        "Foo",                  /* m_name    */
+        "Foo doc",              /* m_doc     */
+        -1,                     /* m_size    */
+        methods                 /* m_methods */
+    };
+
+    PyMODINIT_FUNC PyInit_foo(void)
+    {
+        return PyModule_Create(&module);
+    }
+
+setup.py
+
+.. code-block:: python
+
+    from distutils.core import setup, Extension
+
+    ext = Extension('foo', sources=['foo.c'])
+
+    setup(
+        name="Foo",
+        version="2018.09.30",
+        description="foo",
+        ext_modules=[ext],
+    )
+
+output:
+
+.. code-block:: bash
+
+    $ python setup.py -q build
+    $ python setup.py -q install
+    $ python -c "import foo; foo.foo()"
+    foo
 
 Python C API Template
 ---------------------
