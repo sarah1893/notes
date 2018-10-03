@@ -375,7 +375,7 @@ foo.c
 
     static PyObject* foo(PyObject* self) {
         printf("foo\n");
-        return Py_None;
+        Py_RETURN_NONE;
     };
 
     static PyMethodDef methods[] = {
