@@ -1,4 +1,4 @@
-alabaster==0.7.11
+alabaster==0.7.12
 bandit==1.5.1
 coverage==4.5.1
 coveralls==1.5.1
