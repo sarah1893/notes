@@ -338,6 +338,27 @@ Customize CFLAGS
 
     setup(name="foo", version="1.0", ext_modules=[ext])
 
+Doc string
+----------
+
+.. code-block:: c
+
+    PyDoc_STRVAR(doc_mod, "Module document\n");
+    PyDoc_STRVAR(doc_foo, "foo() -> None\n\nFoo doc");
+
+    static PyMethodDef methods[] = {
+        {"foo", (PyCFunction)foo, METH_NOARGS, doc_foo},
+        {NULL, NULL, 0, NULL}
+    };
+
+    static struct PyModuleDef module = {
+        PyModuleDef_HEAD_INIT,  /* m_base    */
+        "Foo",                  /* m_name    */
+        doc_mod,                /* m_doc     */
+        -1,                     /* m_size    */
+        methods                 /* m_methods */
+    };
+
 
 Simple C Extension
 -------------------
@@ -349,22 +370,21 @@ foo.c
     #include <stdio.h>
     #include <Python.h>
 
-    static PyObject* foo(PyObject* self, PyObject* args) {
+    PyDoc_STRVAR(doc_mod, "Module document\n");
+    PyDoc_STRVAR(doc_foo, "foo() -> None\n\nFoo doc");
+
+    static PyObject* foo(PyObject* self) {
         printf("foo\n");
         return Py_None;
     };
 
     static PyMethodDef methods[] = {
-        {"foo", foo, METH_NOARGS, "Foo"},
+        {"foo", (PyCFunction)foo, METH_NOARGS, doc_foo},
         {NULL, NULL, 0, NULL}
     };
 
     static struct PyModuleDef module = {
-        PyModuleDef_HEAD_INIT,  /* m_base    */
-        "Foo",                  /* m_name    */
-        "Foo doc",              /* m_doc     */
-        -1,                     /* m_size    */
-        methods                 /* m_methods */
+        PyModuleDef_HEAD_INIT, "Foo", doc_mod, -1, methods
     };
 
     PyMODINIT_FUNC PyInit_foo(void)
