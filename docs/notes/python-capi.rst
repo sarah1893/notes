@@ -307,6 +307,38 @@ output:
     nameserver	192.168.1.1
 
 
+Simple setup.py for c extension
+----------------------------------
+
+.. code-block:: python
+
+    from distutils.core import setup, Extension
+
+    ext = Extension('foo', sources=['foo.c'])
+    setup(name="Foo", version="1.0", ext_modules=[ext])
+
+
+Customize CFLAGS
+-----------------
+
+.. code-block:: python
+
+    import sysconfig
+    from distutils.core import setup, Extension
+
+    cflags = sysconfig.get_config_var("CFLAGS")
+
+    extra_compile_args = cflags.split()
+    extra_compile_args += ["-Wextra"]
+
+    ext = Extension(
+        "foo", ["foo.c"],
+        extra_compile_args=extra_compile_args
+    )
+
+    setup(name="foo", version="1.0", ext_modules=[ext])
+
+
 Simple C Extension
 -------------------
 
@@ -323,7 +355,8 @@ foo.c
     };
 
     static PyMethodDef methods[] = {
-        {"foo", foo, METH_NOARGS, "Foo"}
+        {"foo", foo, METH_NOARGS, "Foo"},
+        {NULL, NULL, 0, NULL}
     };
 
     static struct PyModuleDef module = {
@@ -339,21 +372,6 @@ foo.c
         return PyModule_Create(&module);
     }
 
-setup.py
-
-.. code-block:: python
-
-    from distutils.core import setup, Extension
-
-    ext = Extension('foo', sources=['foo.c'])
-
-    setup(
-        name="Foo",
-        version="2018.09.30",
-        description="foo",
-        ext_modules=[ext],
-    )
-
 output:
 
 .. code-block:: bash
@@ -362,6 +380,78 @@ output:
     $ python setup.py -q install
     $ python -c "import foo; foo.foo()"
     foo
+
+Simple Exception
+-----------------
+
+foo.c
+
+.. code-block:: c
+
+    #include <stdio.h>
+    #include <Python.h>
+
+    static PyObject *FooError;
+
+    PyDoc_STRVAR(pydoc_foo, "foo() -> void\n"
+        "\n"
+        "Equal to the following example:\n"
+        "\n"
+        "def foo(*a, **kw):\n"
+        "    raise FooError(\"Raise exception in C\")"
+    );
+
+    static PyObject *
+    foo(
+        PyObject *self    __attribute__((unused)),
+        PyObject *args    __attribute__((unused)),
+        PyObject *kwargs  __attribute__((unused))
+    ) {
+        PyErr_SetString(FooError, "Raise exception in C");
+        return NULL;
+    }
+
+    static PyMethodDef methods[] = {
+        {
+            "foo",
+            (PyCFunction)foo,
+            METH_VARARGS | METH_KEYWORDS,
+            pydoc_foo
+        },
+        {NULL, NULL, 0, NULL}
+    };
+
+    static struct PyModuleDef module = {
+        PyModuleDef_HEAD_INIT,
+        "foo",
+        "document",
+        -1,
+        methods,
+        NULL, NULL, NULL, NULL
+    };
+
+    PyMODINIT_FUNC PyInit_foo(void)
+    {
+        PyObject *m = NULL;
+        m = PyModule_Create(&module);
+        if (!m) return NULL;
+
+        FooError = PyErr_NewException("foo.FooError", NULL, NULL);
+        Py_INCREF(FooError);
+        PyModule_AddObject(m, "FooError", FooError);
+        return m;
+    }
+
+output:
+
+.. code-block:: bash
+
+    $ python setup.py -q build
+    $ python setup.py -q install
+    $ python -c "import foo; foo.foo()"
+    Traceback (most recent call last):
+      File "<string>", line 1, in <module>
+    foo.FooError: Raise exception in C
 
 Python C API Template
 ---------------------
