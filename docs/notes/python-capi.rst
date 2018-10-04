@@ -403,8 +403,22 @@ output:
     $ python -c "import foo; foo.foo()"
     'foo'
 
-Simple Exception
------------------
+Raise Exception
+----------------
+
+.. code-block:: c
+
+    static PyObject* foo(PyObject* self)
+    {
+        // equal to raise NotImplementedError
+        PyErr_SetString(
+            PyExc_NotImplementedError, "Not implemented"
+        );
+        return NULL;
+    }
+
+Customize Exception
+--------------------
 
 foo.c
 
@@ -474,6 +488,12 @@ output:
     Traceback (most recent call last):
       File "<string>", line 1, in <module>
     foo.FooError: Raise exception in C
+
+Reference:
+
+- `Standard Exceptions`_
+
+.. _Standard Exceptions: https://docs.python.org/3/c-api/exceptions.html
 
 Python C API Template
 ---------------------
