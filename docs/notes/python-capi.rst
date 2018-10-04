@@ -373,10 +373,12 @@ foo.c
     PyDoc_STRVAR(doc_mod, "Module document\n");
     PyDoc_STRVAR(doc_foo, "foo() -> None\n\nFoo doc");
 
-    static PyObject* foo(PyObject* self) {
-        printf("foo\n");
+    static PyObject* foo(PyObject* self)
+    {
+        PyObject* s = PyUnicode_FromString("foo");
+        PyObject_Print(s, stdout, 0);
         Py_RETURN_NONE;
-    };
+    }
 
     static PyMethodDef methods[] = {
         {"foo", (PyCFunction)foo, METH_NOARGS, doc_foo},
@@ -399,7 +401,7 @@ output:
     $ python setup.py -q build
     $ python setup.py -q install
     $ python -c "import foo; foo.foo()"
-    foo
+    'foo'
 
 Simple Exception
 -----------------
