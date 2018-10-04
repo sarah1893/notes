@@ -403,6 +403,57 @@ output:
     $ python -c "import foo; foo.foo()"
     'foo'
 
+Parse Arguments
+----------------
+
+.. code-block:: c
+
+    #include <Python.h>
+
+    static PyObject *
+    foo(PyObject *self)
+    {
+        return PyUnicode_FromString("no args");
+    }
+
+    static PyObject *
+    bar(PyObject *self, PyObject *args)
+    {
+        int i = -1;
+        const char *s = NULL;
+        PyObject *u = NULL;
+        if (!PyArg_ParseTuple(args, "is", &i, &s)) return NULL;
+
+        u = PyUnicode_FromFormat("args(%d, %s)", i, s);
+        return u;
+    }
+
+    static PyMethodDef methods[] = {
+        {"foo", (PyCFunction)foo, METH_NOARGS, NULL},
+        {"bar", (PyCFunction)bar, METH_VARARGS, NULL},
+        {NULL, NULL, 0, NULL}
+    };
+
+    static struct PyModuleDef module = {
+        PyModuleDef_HEAD_INIT, "foo", NULL, -1, methods
+    };
+
+    PyMODINIT_FUNC PyInit_foo(void)
+    {
+        return PyModule_Create(&module);
+    }
+
+output:
+
+.. code-block:: bash
+
+    $ python setup.py -q build
+    $ python setup.py -q install
+    $ python -c 'import foo; print(foo.foo())'
+    no args
+    $ python -c 'import foo; print(foo.bar(1, "s"))'
+    args(1, s)
+
 Raise Exception
 ----------------
 
