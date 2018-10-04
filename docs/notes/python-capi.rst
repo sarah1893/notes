@@ -314,10 +314,14 @@ Raise Exception
         return NULL;
     }
 
+Reference:
+
+- `Standard Exceptions`_
+
+.. _Standard Exceptions: https://docs.python.org/3/c-api/exceptions.html
+
 Customize Exception
 --------------------
-
-foo.c
 
 .. code-block:: c
 
@@ -373,12 +377,6 @@ output:
     Traceback (most recent call last):
       File "<string>", line 1, in <module>
     foo.FooError: Raise exception in C
-
-Reference:
-
-- `Standard Exceptions`_
-
-.. _Standard Exceptions: https://docs.python.org/3/c-api/exceptions.html
 
 PyObject with Member and Methods
 --------------------------------
