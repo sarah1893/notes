@@ -429,41 +429,28 @@ foo.c
 
     static PyObject *FooError;
 
-    PyDoc_STRVAR(pydoc_foo, "foo() -> void\n"
+    PyDoc_STRVAR(doc_foo, "foo() -> void\n"
         "\n"
         "Equal to the following example:\n"
         "\n"
-        "def foo(*a, **kw):\n"
+        "def foo():\n"
         "    raise FooError(\"Raise exception in C\")"
     );
 
     static PyObject *
-    foo(
-        PyObject *self    __attribute__((unused)),
-        PyObject *args    __attribute__((unused)),
-        PyObject *kwargs  __attribute__((unused))
-    ) {
+    foo(PyObject *self __attribute__((unused)))
+    {
         PyErr_SetString(FooError, "Raise exception in C");
         return NULL;
     }
 
     static PyMethodDef methods[] = {
-        {
-            "foo",
-            (PyCFunction)foo,
-            METH_VARARGS | METH_KEYWORDS,
-            pydoc_foo
-        },
+        {"foo", (PyCFunction)foo, METH_NOARGS, doc_foo},
         {NULL, NULL, 0, NULL}
     };
 
     static struct PyModuleDef module = {
-        PyModuleDef_HEAD_INIT,
-        "foo",
-        "document",
-        -1,
-        methods,
-        NULL, NULL, NULL, NULL
+        PyModuleDef_HEAD_INIT, "foo", "doc", -1, methods
     };
 
     PyMODINIT_FUNC PyInit_foo(void)
@@ -477,6 +464,7 @@ foo.c
         PyModule_AddObject(m, "FooError", FooError);
         return m;
     }
+
 
 output:
 
