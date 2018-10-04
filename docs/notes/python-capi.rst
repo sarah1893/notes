@@ -11,7 +11,11 @@ Performance of ctypes
 
 .. code-block:: c
 
-    // fib.c
+    // Compile (Mac)
+    // -------------
+    //
+    //   $ clang -Wall -Werror -shared -fPIC -o libfib.dylib fib.c
+    //
     unsigned int fib(unsigned int n)
     {
         if ( n < 2) {
@@ -20,14 +24,7 @@ Performance of ctypes
         return fib(n-1) + fib(n-2);
     }
 
-
-Building a libfib.dylib (Mac OSX)
-
-.. code-block:: bash
-
-    clang -Wall -Werror -shared -fPIC -o libfib.dylib fib.c
-
-Comparing the performance
+Compare the performance
 
 .. code-block:: python
 
@@ -48,23 +45,21 @@ Comparing the performance
     >>> print("cost time: {} sec".format(e - s))
     cost time: 0.0819959640503 sec
 
-
-Error handling when use ctypes
--------------------------------
+Error handling when using ctypes
+---------------------------------
 
 .. code-block:: python
 
     from __future__ import print_function
 
-    import errno
     import os
 
     from ctypes import *
     from sys import platform, maxsize
 
-    is_64bits = maxsize > 2**32
+    is_64bits = maxsize > 2 ** 32
 
-    if is_64bits and platform == 'darwin':
+    if is_64bits and platform == "darwin":
         libc = CDLL("libc.dylib", use_errno=True)
     else:
         raise RuntimeError("Not support platform: {}".format(platform))
@@ -72,58 +67,60 @@ Error handling when use ctypes
     stat = libc.stat
 
     class Stat(Structure):
-        '''
+        """
         From /usr/include/sys/stat.h
 
         struct stat {
-            dev_t	  st_dev;
-            ino_t	  st_ino;
-            mode_t	  st_mode;
-            nlink_t	  st_nlink;
-            uid_t	  st_uid;
-            gid_t	  st_gid;
-            dev_t	  st_rdev;
+            dev_t         st_dev;
+            ino_t         st_ino;
+            mode_t        st_mode;
+            nlink_t       st_nlink;
+            uid_t         st_uid;
+            gid_t         st_gid;
+            dev_t         st_rdev;
         #ifndef _POSIX_SOURCE
-            struct	timespec st_atimespec;
-            struct	timespec st_mtimespec;
-            struct	timespec st_ctimespec;
+            struct      timespec st_atimespec;
+            struct      timespec st_mtimespec;
+            struct      timespec st_ctimespec;
         #else
-            time_t	  st_atime;
-            long	  st_atimensec;
-            time_t	  st_mtime;
-            long	  st_mtimensec;
-            time_t	  st_ctime;
-            long	  st_ctimensec;
+            time_t        st_atime;
+            long          st_atimensec;
+            time_t        st_mtime;
+            long          st_mtimensec;
+            time_t        st_ctime;
+            long          st_ctimensec;
         #endif
-            off_t	  st_size;
-            int64_t	  st_blocks;
+            off_t         st_size;
+            int64_t       st_blocks;
             u_int32_t     st_blksize;
             u_int32_t     st_flags;
             u_int32_t     st_gen;
-            int32_t	  st_lspare;
-            int64_t	  st_qspare[2];
+            int32_t       st_lspare;
+            int64_t       st_qspare[2];
         };
-        '''
-        _fields_ = [('st_dev',        c_ulong),
-                    ('st_ino',        c_ulong),
-                    ('st_mode',       c_ushort),
-                    ('st_nlink',      c_uint),
-                    ('st_uid',        c_uint),
-                    ('st_gid',        c_uint),
-                    ('st_rdev',       c_ulong),
-                    ('st_atime',      c_longlong),
-                    ('st_atimendesc', c_long),
-                    ('st_mtime',      c_longlong),
-                    ('st_mtimendesc', c_long),
-                    ('st_ctime',      c_longlong),
-                    ('st_ctimendesc', c_long),
-                    ('st_size',       c_ulonglong),
-                    ('st_blocks',     c_int64),
-                    ('st_blksize',    c_uint32),
-                    ('st_flags',      c_uint32),
-                    ('st_gen',        c_uint32),
-                    ('st_lspare',     c_int32),
-                    ('st_qspare',     POINTER(c_int64) * 2)]
+        """
+        _fields_ = [
+            ("st_dev", c_ulong),
+            ("st_ino", c_ulong),
+            ("st_mode", c_ushort),
+            ("st_nlink", c_uint),
+            ("st_uid", c_uint),
+            ("st_gid", c_uint),
+            ("st_rdev", c_ulong),
+            ("st_atime", c_longlong),
+            ("st_atimendesc", c_long),
+            ("st_mtime", c_longlong),
+            ("st_mtimendesc", c_long),
+            ("st_ctime", c_longlong),
+            ("st_ctimendesc", c_long),
+            ("st_size", c_ulonglong),
+            ("st_blocks", c_int64),
+            ("st_blksize", c_uint32),
+            ("st_flags", c_uint32),
+            ("st_gen", c_uint32),
+            ("st_lspare", c_int32),
+            ("st_qspare", POINTER(c_int64) * 2),
+        ]
 
     # stat success
     path = create_string_buffer(b"/etc/passwd")
@@ -136,9 +133,9 @@ Error handling when use ctypes
     st = Stat()
     ret = stat(path, byref(st))
     if ret != 0:
-        errno_ = get_errno() # get errno
-        errmsg = "stat({}) failed. {}".format(path.raw, os.strerror(errno_))
-        raise OSError(errno_, errmsg)
+        errno = get_errno()  # get errno
+        errmsg = "stat({}) failed. {}".format(path.raw, os.strerror(errno))
+        raise OSError(errno, errmsg)
 
 output:
 
