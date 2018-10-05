@@ -303,9 +303,7 @@ Raise Exception
     static PyObject* foo(PyObject* self)
     {
         // equal to raise NotImplementedError
-        PyErr_SetString(
-            PyExc_NotImplementedError, "Not implemented"
-        );
+        PyErr_SetString(PyExc_NotImplementedError, "Not implemented");
         return NULL;
     }
 
