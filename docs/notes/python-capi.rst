@@ -366,6 +366,85 @@ output:
       File "<string>", line 1, in <module>
     foo.FooError: Raise exception in C
 
+List Operations
+---------------
+
+.. code-block:: c
+
+    #include <Python.h>
+
+    #define PY_PRINTF(o) \
+        PyObject_Print(o, stdout, 0); printf("\n");
+
+    static PyObject *
+    foo(PyObject *self, PyObject *args)
+    {
+        PyObject *item = NULL;
+        PyObject *list = NULL;
+        PyObject *slice = NULL;
+
+        if (!PyArg_ParseTuple(args, "O", &list))
+            return NULL;
+        PY_PRINTF(list)
+
+        // Get item
+        item = PyList_GetItem(list, 0);
+        if (!item)
+            return NULL;
+        PY_PRINTF(item);
+
+        // Set item
+        if (PyList_SetItem(list, 0, PyLong_FromLong(5566L)) < 0)
+            return NULL;
+        PY_PRINTF(list);
+
+        // Get slice, equal to list[low:high]
+        slice = PyList_GetSlice(list, 1, PyList_Size(list) - 1);
+        if (!slice)
+            return NULL;
+        PY_PRINTF(slice)
+
+        // Sort, equal to list.sort
+        if (PyList_Sort(list) < 0)
+            return NULL;
+        PY_PRINTF(list);
+
+        // Reverse, equal to list.reverse
+        if (PyList_Reverse(list) < 0)
+            return NULL;
+        PY_PRINTF(list);
+
+        Py_RETURN_NONE;
+    }
+
+    static PyMethodDef methods[] = {
+        {"foo", (PyCFunction)foo, METH_VARARGS, NULL},
+        {NULL, NULL, 0, NULL}
+    };
+
+    static struct PyModuleDef module = {
+        PyModuleDef_HEAD_INIT, "foo", NULL, -1, methods
+    };
+
+    PyMODINIT_FUNC PyInit_foo(void)
+    {
+        return PyModule_Create(&module);
+    }
+
+output:
+
+.. code-block:: bash
+
+    $ python setup.py -q build
+    $ python setup.py -q install
+    $ python -c "import foo; foo.foo([1,2,3,4,5])"
+    [1, 2, 3, 4, 5]
+    1
+    [5566, 2, 3, 4, 5]
+    [2, 3, 4]
+    [2, 3, 4, 5, 5566]
+    [5566, 5, 4, 3, 2]
+
 Performance of c api
 ---------------------
 
