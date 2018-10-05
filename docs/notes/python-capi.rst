@@ -371,8 +371,8 @@ output:
       File "<string>", line 1, in <module>
     foo.FooError: Raise exception in C
 
-Performance
-------------
+Performance of c api
+---------------------
 
 .. code-block:: c
 
