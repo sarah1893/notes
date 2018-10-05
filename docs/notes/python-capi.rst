@@ -24,26 +24,21 @@ Performance of ctypes
         return fib(n-1) + fib(n-2);
     }
 
-Compare the performance
+Compare the performance with pure Python
 
 .. code-block:: python
 
-    >>> import time
-    >>> from ctypes import *
+    >>> from time import time
+    >>> from ctypes import CDLL
     >>> def fib(n):
-    ...     if n < 2:
-    ...         return n
-    ...     return fib(n-1) + fib(n-2)
+    ...     if n < 2: return n
+    ...     return fib(n - 1) + fib(n - 2)
     ...
-    >>> s = time.time(); fib(35); e = time.time()
-    9227465
-    >>> print("cost time: {} sec".format(e - s))
-    cost time: 4.09563493729 sec
-    >>> libfib = CDLL("./libfib.dylib")
-    >>> s = time.time(); libfib.fib(35); e = time.time()
-    9227465
-    >>> print("cost time: {} sec".format(e - s))
-    cost time: 0.0819959640503 sec
+    >>> cfib = CDLL("./libfib.dylib").fib
+    >>> s = time(); _ = fib(35); e = time(); e - s
+    4.918856859207153
+    >>> s = time(); _ = cfib(35); e = time(); e - s
+    0.07283687591552734
 
 Error handling when using ctypes
 ---------------------------------
