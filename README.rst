@@ -55,7 +55,6 @@ Cheat Sheets
 - `asyncio`_
 - `tests`_
 - `c api`_
-- `c style`_
 
 
 .. _basic: docs/notes/python-basic.rst
@@ -71,4 +70,3 @@ Cheat Sheets
 .. _asyncio: docs/notes/python-asyncio.rst
 .. _tests: docs/notes/python-tests.rst
 .. _c api: docs/notes/python-capi.rst
-.. _c style: docs/notes/python-cstyle.rst

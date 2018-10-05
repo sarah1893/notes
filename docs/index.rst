@@ -31,4 +31,3 @@ or suggestion, please create an issue on `GitHub Issues`_.
    notes/python-asyncio
    notes/python-tests
    notes/python-capi
-   notes/python-cstyle
