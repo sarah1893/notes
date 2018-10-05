@@ -366,8 +366,8 @@ output:
       File "<string>", line 1, in <module>
     foo.FooError: Raise exception in C
 
-List Operations
----------------
+Iterate List
+------------
 
 .. code-block:: c
 
@@ -377,48 +377,42 @@ List Operations
         PyObject_Print(o, stdout, 0); printf("\n");
 
     static PyObject *
-    foo(PyObject *self, PyObject *args)
+    iter_list(PyObject *self, PyObject *args)
     {
-        PyObject *item = NULL;
-        PyObject *list = NULL;
-        PyObject *slice = NULL;
+        PyObject *list = NULL, *item = NULL, *iter = NULL;
+        PyObject *result = NULL;
 
         if (!PyArg_ParseTuple(args, "O", &list))
-            return NULL;
-        PY_PRINTF(list)
+            goto error;
 
-        // Get item
-        item = PyList_GetItem(list, 0);
-        if (!item)
-            return NULL;
-        PY_PRINTF(item);
+        if (!PyList_Check(list))
+            goto error;
 
-        // Set item
-        if (PyList_SetItem(list, 0, PyLong_FromLong(5566L)) < 0)
-            return NULL;
-        PY_PRINTF(list);
+        // Get iterator
+        iter = PyObject_GetIter(list);
+        if (!iter)
+            goto error;
 
-        // Get slice, equal to list[low:high]
-        slice = PyList_GetSlice(list, 1, PyList_Size(list) - 1);
-        if (!slice)
-            return NULL;
-        PY_PRINTF(slice)
+        // Display items (using PyIter_Next)
+        //
+        // Similar to
+        //
+        // for i in arr: print(i)
+        //
+        while ((item = PyIter_Next(iter)) != NULL) {
+            PY_PRINTF(item);
+            Py_XDECREF(item);
+        }
 
-        // Sort, equal to list.sort
-        if (PyList_Sort(list) < 0)
-            return NULL;
-        PY_PRINTF(list);
-
-        // Reverse, equal to list.reverse
-        if (PyList_Reverse(list) < 0)
-            return NULL;
-        PY_PRINTF(list);
-
-        Py_RETURN_NONE;
+        Py_XINCREF(Py_None);
+        result = Py_None;
+    error:
+        Py_XDECREF(iter);
+        return result;
     }
 
     static PyMethodDef methods[] = {
-        {"foo", (PyCFunction)foo, METH_VARARGS, NULL},
+        {"iter_list", (PyCFunction)iter_list, METH_VARARGS, NULL},
         {NULL, NULL, 0, NULL}
     };
 
@@ -437,13 +431,10 @@ output:
 
     $ python setup.py -q build
     $ python setup.py -q install
-    $ python -c "import foo; foo.foo([1,2,3,4,5])"
-    [1, 2, 3, 4, 5]
+    $ python -c "import foo; foo.iter_list([1,2,3])"
     1
-    [5566, 2, 3, 4, 5]
-    [2, 3, 4]
-    [2, 3, 4, 5, 5566]
-    [5566, 5, 4, 3, 2]
+    2
+    3
 
 Iterate Dictionary
 -------------------
