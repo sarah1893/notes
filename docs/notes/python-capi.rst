@@ -445,6 +445,70 @@ output:
     [2, 3, 4, 5, 5566]
     [5566, 5, 4, 3, 2]
 
+Iterate Dictionary
+-------------------
+
+.. code-block:: c
+
+    #include <Python.h>
+
+    #define PY_PRINTF(o) \
+        PyObject_Print(o, stdout, 0); printf("\n");
+
+    static PyObject *
+    iter_dict(PyObject *self, PyObject *args)
+    {
+        PyObject *dict = NULL;
+        PyObject *key = NULL, *val = NULL;
+        PyObject *o = NULL, *result = NULL;
+        Py_ssize_t pos = 0;
+
+        if (!PyArg_ParseTuple(args, "O", &dict))
+            goto error;
+
+        // Display keys and values (using PyDict_Next)
+        //
+        // Similar to
+        //
+        // for k, v in d.items():
+        //     print(f"({k}, {v})")
+        //
+        while (PyDict_Next(dict, &pos, &key, &val)) {
+            o = PyUnicode_FromFormat("(%S, %S)", key, val);
+            if (!o) continue;
+            PY_PRINTF(o);
+            Py_XDECREF(o);
+        }
+
+        Py_INCREF(Py_None);
+        result = Py_None;
+    error:
+        return result;
+    }
+
+    static PyMethodDef methods[] = {
+        {"iter_dict", (PyCFunction)iter_dict, METH_VARARGS, NULL},
+        {NULL, NULL, 0, NULL}
+    };
+
+    static struct PyModuleDef module = {
+        PyModuleDef_HEAD_INIT, "foo", NULL, -1, methods
+    };
+
+    PyMODINIT_FUNC PyInit_foo(void)
+    {
+        return PyModule_Create(&module);
+    }
+
+output:
+
+.. code-block:: bash
+
+    $ python setup.py -q build
+    $ python setup.py -q install
+    $ python -c "import foo; foo.iter_dict({'k': 'v'})"
+    '(k, v)'
+
 Performance of c api
 ---------------------
 
