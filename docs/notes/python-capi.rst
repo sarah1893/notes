@@ -6,148 +6,6 @@ Python C API cheatsheet
     :backlinks: none
 
 
-Performance of ctypes
-----------------------
-
-.. code-block:: c
-
-    // Compile (Mac)
-    // -------------
-    //
-    //   $ clang -Wall -Werror -shared -fPIC -o libfib.dylib fib.c
-    //
-    unsigned int fib(unsigned int n)
-    {
-        if ( n < 2) {
-            return n;
-        }
-        return fib(n-1) + fib(n-2);
-    }
-
-Compare the performance with pure Python
-
-.. code-block:: python
-
-    >>> from time import time
-    >>> from ctypes import CDLL
-    >>> def fib(n):
-    ...     if n < 2: return n
-    ...     return fib(n - 1) + fib(n - 2)
-    ...
-    >>> cfib = CDLL("./libfib.dylib").fib
-    >>> s = time(); _ = fib(35); e = time(); e - s
-    4.918856859207153
-    >>> s = time(); _ = cfib(35); e = time(); e - s
-    0.07283687591552734
-
-Error handling when using ctypes
----------------------------------
-
-.. code-block:: python
-
-    from __future__ import print_function
-
-    import os
-
-    from ctypes import *
-    from sys import platform, maxsize
-
-    is_64bits = maxsize > 2 ** 32
-
-    if is_64bits and platform == "darwin":
-        libc = CDLL("libc.dylib", use_errno=True)
-    else:
-        raise RuntimeError("Not support platform: {}".format(platform))
-
-    stat = libc.stat
-
-    class Stat(Structure):
-        """
-        From /usr/include/sys/stat.h
-
-        struct stat {
-            dev_t         st_dev;
-            ino_t         st_ino;
-            mode_t        st_mode;
-            nlink_t       st_nlink;
-            uid_t         st_uid;
-            gid_t         st_gid;
-            dev_t         st_rdev;
-        #ifndef _POSIX_SOURCE
-            struct      timespec st_atimespec;
-            struct      timespec st_mtimespec;
-            struct      timespec st_ctimespec;
-        #else
-            time_t        st_atime;
-            long          st_atimensec;
-            time_t        st_mtime;
-            long          st_mtimensec;
-            time_t        st_ctime;
-            long          st_ctimensec;
-        #endif
-            off_t         st_size;
-            int64_t       st_blocks;
-            u_int32_t     st_blksize;
-            u_int32_t     st_flags;
-            u_int32_t     st_gen;
-            int32_t       st_lspare;
-            int64_t       st_qspare[2];
-        };
-        """
-        _fields_ = [
-            ("st_dev", c_ulong),
-            ("st_ino", c_ulong),
-            ("st_mode", c_ushort),
-            ("st_nlink", c_uint),
-            ("st_uid", c_uint),
-            ("st_gid", c_uint),
-            ("st_rdev", c_ulong),
-            ("st_atime", c_longlong),
-            ("st_atimendesc", c_long),
-            ("st_mtime", c_longlong),
-            ("st_mtimendesc", c_long),
-            ("st_ctime", c_longlong),
-            ("st_ctimendesc", c_long),
-            ("st_size", c_ulonglong),
-            ("st_blocks", c_int64),
-            ("st_blksize", c_uint32),
-            ("st_flags", c_uint32),
-            ("st_gen", c_uint32),
-            ("st_lspare", c_int32),
-            ("st_qspare", POINTER(c_int64) * 2),
-        ]
-
-    # stat success
-    path = create_string_buffer(b"/etc/passwd")
-    st = Stat()
-    ret = stat(path, byref(st))
-    assert ret == 0
-
-    # if stat fail, check errno
-    path = create_string_buffer(b"&%$#@!")
-    st = Stat()
-    ret = stat(path, byref(st))
-    if ret != 0:
-        errno = get_errno()  # get errno
-        errmsg = "stat({}) failed. {}".format(path.raw, os.strerror(errno))
-        raise OSError(errno, errmsg)
-
-output:
-
-.. code-block:: console
-
-    $ python err_handling.py   # python2
-    Traceback (most recent call last):
-      File "err_handling.py", line 85, in <module>
-        raise OSError(errno_, errmsg)
-    OSError: [Errno 2] stat(&%$#@!) failed. No such file or directory
-
-    $ python3 err_handling.py  # python3
-    Traceback (most recent call last):
-      File "err_handling.py", line 85, in <module>
-        raise OSError(errno_, errmsg)
-    FileNotFoundError: [Errno 2] stat(b'&%$#@!\x00') failed. No such file or directory
-
 Simple setup.py for c extension
 ----------------------------------
 
@@ -551,3 +409,145 @@ Compare the performance with pure Python
     4.953313112258911
     >>> s = time(); _ = foo.fib(35); e = time(); e - s
     0.04628586769104004
+
+Performance of ctypes
+----------------------
+
+.. code-block:: c
+
+    // Compile (Mac)
+    // -------------
+    //
+    //   $ clang -Wall -Werror -shared -fPIC -o libfib.dylib fib.c
+    //
+    unsigned int fib(unsigned int n)
+    {
+        if ( n < 2) {
+            return n;
+        }
+        return fib(n-1) + fib(n-2);
+    }
+
+Compare the performance with pure Python
+
+.. code-block:: python
+
+    >>> from time import time
+    >>> from ctypes import CDLL
+    >>> def fib(n):
+    ...     if n < 2: return n
+    ...     return fib(n - 1) + fib(n - 2)
+    ...
+    >>> cfib = CDLL("./libfib.dylib").fib
+    >>> s = time(); _ = fib(35); e = time(); e - s
+    4.918856859207153
+    >>> s = time(); _ = cfib(35); e = time(); e - s
+    0.07283687591552734
+
+Error handling when using ctypes
+---------------------------------
+
+.. code-block:: python
+
+    from __future__ import print_function
+
+    import os
+
+    from ctypes import *
+    from sys import platform, maxsize
+
+    is_64bits = maxsize > 2 ** 32
+
+    if is_64bits and platform == "darwin":
+        libc = CDLL("libc.dylib", use_errno=True)
+    else:
+        raise RuntimeError("Not support platform: {}".format(platform))
+
+    stat = libc.stat
+
+    class Stat(Structure):
+        """
+        From /usr/include/sys/stat.h
+
+        struct stat {
+            dev_t         st_dev;
+            ino_t         st_ino;
+            mode_t        st_mode;
+            nlink_t       st_nlink;
+            uid_t         st_uid;
+            gid_t         st_gid;
+            dev_t         st_rdev;
+        #ifndef _POSIX_SOURCE
+            struct      timespec st_atimespec;
+            struct      timespec st_mtimespec;
+            struct      timespec st_ctimespec;
+        #else
+            time_t        st_atime;
+            long          st_atimensec;
+            time_t        st_mtime;
+            long          st_mtimensec;
+            time_t        st_ctime;
+            long          st_ctimensec;
+        #endif
+            off_t         st_size;
+            int64_t       st_blocks;
+            u_int32_t     st_blksize;
+            u_int32_t     st_flags;
+            u_int32_t     st_gen;
+            int32_t       st_lspare;
+            int64_t       st_qspare[2];
+        };
+        """
+        _fields_ = [
+            ("st_dev", c_ulong),
+            ("st_ino", c_ulong),
+            ("st_mode", c_ushort),
+            ("st_nlink", c_uint),
+            ("st_uid", c_uint),
+            ("st_gid", c_uint),
+            ("st_rdev", c_ulong),
+            ("st_atime", c_longlong),
+            ("st_atimendesc", c_long),
+            ("st_mtime", c_longlong),
+            ("st_mtimendesc", c_long),
+            ("st_ctime", c_longlong),
+            ("st_ctimendesc", c_long),
+            ("st_size", c_ulonglong),
+            ("st_blocks", c_int64),
+            ("st_blksize", c_uint32),
+            ("st_flags", c_uint32),
+            ("st_gen", c_uint32),
+            ("st_lspare", c_int32),
+            ("st_qspare", POINTER(c_int64) * 2),
+        ]
+
+    # stat success
+    path = create_string_buffer(b"/etc/passwd")
+    st = Stat()
+    ret = stat(path, byref(st))
+    assert ret == 0
+
+    # if stat fail, check errno
+    path = create_string_buffer(b"&%$#@!")
+    st = Stat()
+    ret = stat(path, byref(st))
+    if ret != 0:
+        errno = get_errno()  # get errno
+        errmsg = "stat({}) failed. {}".format(path.raw, os.strerror(errno))
+        raise OSError(errno, errmsg)
+
+output:
+
+.. code-block:: console
+
+    $ python err_handling.py   # python2
+    Traceback (most recent call last):
+      File "err_handling.py", line 85, in <module>
+        raise OSError(errno_, errmsg)
+    OSError: [Errno 2] stat(&%$#@!) failed. No such file or directory
+
+    $ python3 err_handling.py  # python3
+    Traceback (most recent call last):
+      File "err_handling.py", line 85, in <module>
+        raise OSError(errno_, errmsg)
+    FileNotFoundError: [Errno 2] stat(b'&%$#@!\x00') failed. No such file or directory
