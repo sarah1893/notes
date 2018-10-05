@@ -224,8 +224,8 @@ output:
       File "<string>", line 1, in <module>
     foo.FooError: Raise exception in C
 
-Iterate List
-------------
+Iterate a List
+---------------
 
 .. code-block:: c
 
@@ -294,8 +294,8 @@ output:
     2
     3
 
-Iterate Dictionary
--------------------
+Iterate a Dictionary
+---------------------
 
 .. code-block:: c
 
