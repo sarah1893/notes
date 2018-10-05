@@ -262,11 +262,8 @@ Parse Arguments
     {
         int i = -1;
         const char *s = NULL;
-        PyObject *u = NULL;
         if (!PyArg_ParseTuple(args, "is", &i, &s)) return NULL;
-
-        u = PyUnicode_FromFormat("args(%d, %s)", i, s);
-        return u;
+        return PyUnicode_FromFormat("args(%d, %s)", i, s);
     }
 
     static PyMethodDef methods[] = {
