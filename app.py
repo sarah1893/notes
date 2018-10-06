@@ -27,6 +27,8 @@ csp = {
     "script-src": [
         "'self'",
         "*.cloudflare.com",
+        "*.googletagmanager.com",
+        "*.google-analytics.com",
         "'unsafe-inline'",
         "'unsafe-eval'",
     ],
