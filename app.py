@@ -24,18 +24,11 @@ def find_key(token):
 csp = {
     "default-src": "'none'",
     "style-src": ["'self'", "'unsafe-inline'"],
-    "script-src": [
-        "'self'",
-        "*.cloudflare.com",
-        "*.googletagmanager.com",
-        "*.google-analytics.com",
-        "'unsafe-inline'",
-        "'unsafe-eval'",
-    ],
+    "script-src": ["'self'", "*", "'unsafe-inline'", "'unsafe-eval'"],
     "form-action": "'self'",
     "base-uri": "'self'",
     "img-src": "*",
-    "frame-src": "ghbtns.com",
+    "frame-src": ["ghbtns.com", "googleads.g.doubleclick.net"],
     "frame-ancestors": "'none'",
     "object-src": "'none'",
 }
