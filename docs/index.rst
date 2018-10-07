@@ -3,6 +3,11 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+.. meta::
+    :description lang=en-US: Collect useful python snippets for pythoneers or non-pythoneers.
+    :keywords: Python, Python Cheat Sheet
+
+
 Welcome to Python cheatsheet!
 =============================================
 
