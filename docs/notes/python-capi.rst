@@ -102,6 +102,53 @@ output:
     $ python -c "import foo; foo.foo()"
     'foo'
 
+Get Reference Count
+--------------------
+
+.. code-block:: c
+
+    #include <Python.h>
+
+    static PyObject *
+    getrefcount(PyObject *self, PyObject *a)
+    {
+        return PyLong_FromSsize_t(Py_REFCNT(a));
+    }
+
+    static PyMethodDef methods[] = {
+        {"getrefcount", (PyCFunction)getrefcount, METH_O, NULL},
+        {NULL, NULL, 0, NULL}
+    };
+
+    static struct PyModuleDef module = {
+        PyModuleDef_HEAD_INIT, "foo", NULL, -1, methods
+    };
+
+    PyMODINIT_FUNC PyInit_foo(void)
+    {
+        return PyModule_Create(&module);
+    }
+
+output:
+
+.. code-block:: bash
+
+    $ python setup.py -q build
+    $ python setup.py -q install
+    $ python -q
+    >>> import sys
+    >>> import foo
+    >>> l = [1, 2, 3]
+    >>> sys.getrefcount(l[0])
+    104
+    >>> foo.getrefcount(l[0])
+    104
+    >>> i = l[0]
+    >>> sys.getrefcount(l[0])
+    105
+    >>> foo.getrefcount(l[0])
+    105
+
 Parse Arguments
 ----------------
 
