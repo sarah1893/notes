@@ -454,6 +454,33 @@ output:
     $ python -c "import foo; foo.iter_dict({'k': 'v'})"
     '(k, v)'
 
+Run a Python command from C
+----------------------------
+
+.. code-block:: c
+
+    #include <stdio.h>
+    #include <Python.h>
+
+    int
+    main(int argc, char *argv[])
+    {
+        int rc = -1;
+        Py_Initialize();
+        rc = PyRun_SimpleString(argv[1]);
+        Py_Finalize();
+        return rc;
+    }
+
+output:
+
+.. code-block:: bash
+
+    $ clang `python3-config --cflags` -c foo.c -o foo.o
+    $ clang `python3-config --ldflags` foo.o -o foo
+    $ ./foo "print('Hello Python')"
+    Hello Python
+
 Performance of c api
 ---------------------
 
