@@ -197,6 +197,55 @@ output:
     $ python -c 'import foo; print(foo.bar(1, "s"))'
     args(1, s)
 
+Calling Python Functions from C
+--------------------------------
+
+.. code-block:: c
+
+    #include <Python.h>
+
+    static PyObject *
+    foo(PyObject *self, PyObject *args)
+    {
+        PyObject *py_callback = NULL;
+        PyObject *rv = NULL;
+
+        if (!PyArg_ParseTuple(args, "O:callback", &py_callback))
+            return NULL;
+
+        if (!PyCallable_Check(py_callback)) {
+            PyErr_SetString(PyExc_TypeError, "should be callable");
+            return NULL;
+        }
+
+        // similar to py_callback("Awesome Python!")
+        rv = PyObject_CallFunction(py_callback, "s", "Awesome Python!");
+        return rv;
+    }
+
+    static PyMethodDef methods[] = {
+        {"foo", (PyCFunction)foo, METH_VARARGS, NULL},
+        {NULL, NULL, 0, NULL}
+    };
+
+    static struct PyModuleDef module = {
+        PyModuleDef_HEAD_INIT, "foo", NULL, -1, methods
+    };
+
+    PyMODINIT_FUNC PyInit_foo(void)
+    {
+        return PyModule_Create(&module);
+    }
+
+output:
+
+.. code-block:: bash
+
+    $ python setup.py -q build
+    $ python setup.py -q install
+    $ python -c "import foo; foo.foo(print)"
+    Awesome Python!
+
 Raise Exception
 ----------------
 
