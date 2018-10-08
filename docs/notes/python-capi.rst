@@ -609,6 +609,8 @@ Import a Python Module from C
         PYOBJECT_CHECK(result, error);
         PyObject_Print(result, stdout, 0);
         printf("\n");
+        rc = 0;
+
     error:
         Py_XDECREF(result);
         Py_XDECREF(dict);
@@ -680,6 +682,7 @@ Access Attributes
         PYOBJECT_CHECK(result, error);
         PyObject_Print(result, stdout, 0);
         printf("\n");
+        rc = 0;
     error:
         Py_XDECREF(result);
         Py_XDECREF(dict);
