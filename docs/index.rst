@@ -35,4 +35,4 @@ or suggestion, please create an issue on `GitHub Issues`_.
    notes/python-sqlalchemy
    notes/python-asyncio
    notes/python-tests
-   notes/python-capi
+   notes/python-c-extensions

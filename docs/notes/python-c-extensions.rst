@@ -1,6 +1,6 @@
-=======================
-Python C API cheatsheet
-=======================
+==============================
+Python C Extensions cheatsheet
+==============================
 
 .. contents:: Table of Contents
     :backlinks: none

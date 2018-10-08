@@ -54,7 +54,7 @@ Cheat Sheets
 - `sqlalchemy`_
 - `asyncio`_
 - `tests`_
-- `c api`_
+- `c extensions`_
 
 
 .. _basic: docs/notes/python-basic.rst
@@ -69,4 +69,4 @@ Cheat Sheets
 .. _sqlalchemy: docs/notes/python-sqlalchemy.rst
 .. _asyncio: docs/notes/python-asyncio.rst
 .. _tests: docs/notes/python-tests.rst
-.. _c api: docs/notes/python-capi.rst
+.. _c extensions: docs/notes/python-c-extensions.rst
