@@ -481,6 +481,66 @@ output:
     $ ./foo "print('Hello Python')"
     Hello Python
 
+Run a Python file from C
+-------------------------
+
+.. code-block:: c
+
+    #include <stdio.h>
+    #include <Python.h>
+
+    int
+    main(int argc, char *argv[])
+    {
+        int rc = -1, i = 0;
+        wchar_t **argv_copy = NULL;
+        const char *filename = NULL;
+        FILE *fp = NULL;
+        PyCompilerFlags cf = {.cf_flags = 0};
+
+        filename = argv[1];
+        fp = fopen(filename, "r");
+        if (!fp)
+            goto error;
+
+        // copy argv
+        argv_copy = PyMem_RawMalloc(sizeof(wchar_t*) * argc);
+        if (!argv_copy)
+            goto error;
+
+        for (i = 0; i < argc; i++) {
+            argv_copy[i] = Py_DecodeLocale(argv[i], NULL);
+            if (argv_copy[i]) continue;
+            fprintf(stderr, "Unable to decode the argument");
+            goto error;
+        }
+
+        Py_Initialize();
+        Py_SetProgramName(argv_copy[0]);
+        PySys_SetArgv(argc, argv_copy);
+        rc = PyRun_AnyFileExFlags(fp, filename, 0, &cf);
+        Py_Finalize();
+
+    error:
+        if (argv_copy) {
+            for (i = 0; i < argc; i++)
+                PyMem_RawFree(argv_copy[i]);
+            PyMem_RawFree(argv_copy);
+        }
+        if (fp) fclose(fp);
+        return rc;
+    }
+
+output:
+
+.. code-block:: bash
+
+    $ clang `python3-config --cflags` -c foo.c -o foo.o
+    $ clang `python3-config --ldflags` foo.o -o foo
+    $ echo "import sys; print(sys.argv)" > foo.py
+    $ ./foo foo.py arg1 arg2 arg3
+    ['./foo', 'foo.py', 'arg1', 'arg2', 'arg3']
+
 Performance of c api
 ---------------------
 
