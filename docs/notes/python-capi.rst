@@ -372,12 +372,7 @@ Iterate a List
         if (!iter)
             goto error;
 
-        // Display items (using PyIter_Next)
-        //
-        // Similar to
-        //
         // for i in arr: print(i)
-        //
         while ((item = PyIter_Next(iter)) != NULL) {
             PY_PRINTF(item);
             Py_XDECREF(item);
@@ -436,13 +431,7 @@ Iterate a Dictionary
         if (!PyArg_ParseTuple(args, "O", &dict))
             goto error;
 
-        // Display keys and values (using PyDict_Next)
-        //
-        // Similar to
-        //
-        // for k, v in d.items():
-        //     print(f"({k}, {v})")
-        //
+        // for k, v in d.items(): print(f"({k}, {v})")
         while (PyDict_Next(dict, &pos, &key, &val)) {
             o = PyUnicode_FromFormat("(%S, %S)", key, val);
             if (!o) continue;
