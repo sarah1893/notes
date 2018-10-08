@@ -519,7 +519,6 @@ Run a Python file from C
         Py_SetProgramName(argv_copy[0]);
         PySys_SetArgv(argc, argv_copy);
         rc = PyRun_AnyFileExFlags(fp, filename, 0, &cf);
-        Py_Finalize();
 
     error:
         if (argv_copy) {
@@ -528,6 +527,7 @@ Run a Python file from C
             PyMem_RawFree(argv_copy);
         }
         if (fp) fclose(fp);
+        Py_Finalize();
         return rc;
     }
 
@@ -540,6 +540,81 @@ output:
     $ echo "import sys; print(sys.argv)" > foo.py
     $ ./foo foo.py arg1 arg2 arg3
     ['./foo', 'foo.py', 'arg1', 'arg2', 'arg3']
+
+Import Python Module in C
+--------------------------
+
+.. code-block:: c
+
+    #include <stdio.h>
+    #include <Python.h>
+
+    #define PYOBJECT_CHECK(obj, label) \
+        if (!obj) { \
+            PyErr_Print(); \
+            goto label; \
+        }
+
+    int
+    main(int argc, char *argv[])
+    {
+        int rc = -1;
+        wchar_t *program = NULL;
+        PyObject *json_module = NULL, *json_dict = NULL;
+        PyObject *json_dumps = NULL;
+        PyObject *dict = NULL;
+        PyObject *result = NULL;
+
+        program = Py_DecodeLocale(argv[0], NULL);
+        if (!program) {
+            fprintf(stderr, "unable to decode the program name");
+            goto error;
+        }
+
+        Py_SetProgramName(program);
+        Py_Initialize();
+
+        // import json
+        json_module = PyImport_ImportModule("json");
+        PYOBJECT_CHECK(json_module, error);
+
+        // get json.__dict__
+        json_dict = PyModule_GetDict(json_module);
+        PYOBJECT_CHECK(json_dict, error);
+
+        // get json.__dict__['dumps']
+        json_dumps = PyDict_GetItemString(json_dict, "dumps");
+        PYOBJECT_CHECK(json_dumps, error);
+
+        // dict = {'foo': 'Foo', 'bar': 123}
+        dict = Py_BuildValue("({sssi})", "foo", "Foo", "bar", 123);
+        PYOBJECT_CHECK(dict, error);
+
+        // json.dumps(dict)
+        result = PyObject_CallObject(json_dumps, dict);
+        PYOBJECT_CHECK(result, error);
+        PyObject_Print(result, stdout, 0);
+        printf("\n");
+    error:
+        Py_XDECREF(result);
+        Py_XDECREF(dict);
+        Py_XDECREF(json_dumps);
+        Py_XDECREF(json_dict);
+        Py_XDECREF(json_module);
+
+        PyMem_RawFree(program);
+        Py_Finalize();
+        return rc;
+    }
+
+output:
+
+.. code-block:: bash
+
+    $ clang `python3-config --cflags` -c foo.c -o foo.o
+    $ clang `python3-config --ldflags` foo.o -o foo
+    $ ./foo
+    '{"foo": "Foo", "bar": 123}'
 
 Performance of c api
 ---------------------
