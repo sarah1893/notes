@@ -51,11 +51,11 @@ Doc string
     };
 
     static struct PyModuleDef module = {
-        PyModuleDef_HEAD_INIT,  /* m_base    */
-        "Foo",                  /* m_name    */
-        doc_mod,                /* m_doc     */
-        -1,                     /* m_size    */
-        methods                 /* m_methods */
+        .m_base    = PyModuleDef_HEAD_INIT,
+        .m_name    = "Foo",
+        .m_doc     = doc_mod,
+        .m_size    = -1,
+        .m_methods = methods
     };
 
 
@@ -66,7 +66,6 @@ foo.c
 
 .. code-block:: c
 
-    #include <stdio.h>
     #include <Python.h>
 
     PyDoc_STRVAR(doc_mod, "Module document\n");
@@ -251,18 +250,44 @@ Raise Exception
 
 .. code-block:: c
 
-    static PyObject* foo(PyObject* self)
+    #include <Python.h>
+
+    PyDoc_STRVAR(doc_mod, "Module document\n");
+    PyDoc_STRVAR(doc_foo, "foo() -> None\n\nFoo doc");
+
+    static PyObject*
+    foo(PyObject* self)
     {
-        // equal to raise NotImplementedError
+        // raise NotImplementedError
         PyErr_SetString(PyExc_NotImplementedError, "Not implemented");
         return NULL;
     }
 
-Reference:
+    static PyMethodDef methods[] = {
+        {"foo", (PyCFunction)foo, METH_NOARGS, doc_foo},
+        {NULL, NULL, 0, NULL}
+    };
 
-- `Standard Exceptions`_
+    static struct PyModuleDef module = {
+        PyModuleDef_HEAD_INIT, "Foo", doc_mod, -1, methods
+    };
 
-.. _Standard Exceptions: https://docs.python.org/3/c-api/exceptions.html
+    PyMODINIT_FUNC PyInit_foo(void)
+    {
+        return PyModule_Create(&module);
+    }
+
+output:
+
+.. code-block::
+
+    $ python setup.py -q build
+    $ python setup.py -q install
+    $ python -c "import foo; foo.foo(print)"
+    $ python -c "import foo; foo.foo()"
+    Traceback (most recent call last):
+      File "<string>", line 1, in <module>
+    NotImplementedError: Not implemented
 
 Customize Exception
 --------------------
