@@ -566,8 +566,8 @@ output:
     $ ./foo foo.py arg1 arg2 arg3
     ['./foo', 'foo.py', 'arg1', 'arg2', 'arg3']
 
-Import Python Module in C
---------------------------
+Import a Python Module from C
+------------------------------
 
 .. code-block:: c
 
