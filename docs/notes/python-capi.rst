@@ -592,11 +592,11 @@ Import a Python Module from C
         json_module = PyImport_ImportModule("json");
         PYOBJECT_CHECK(json_module, error);
 
-        // get json.__dict__
+        // json_dict = json.__dict__
         json_dict = PyModule_GetDict(json_module);
         PYOBJECT_CHECK(json_dict, error);
 
-        // get json.__dict__['dumps']
+        // json_dumps = json.__dict__['dumps']
         json_dumps = PyDict_GetItemString(json_dict, "dumps");
         PYOBJECT_CHECK(json_dumps, error);
 
@@ -604,7 +604,7 @@ Import a Python Module from C
         dict = Py_BuildValue("({sssi})", "foo", "Foo", "bar", 123);
         PYOBJECT_CHECK(dict, error);
 
-        // json.dumps(dict)
+        // result = json.dumps(dict)
         result = PyObject_CallObject(json_dumps, dict);
         PYOBJECT_CHECK(result, error);
         PyObject_Print(result, stdout, 0);
@@ -675,7 +675,7 @@ Access Attributes
         dict = Py_BuildValue("({sssi})", "foo", "Foo", "bar", 123);
         PYOBJECT_CHECK(dict, error);
 
-        // json.dumps(dict)
+        // result = json.dumps(dict)
         result = PyObject_CallObject(json_dumps, dict);
         PYOBJECT_CHECK(result, error);
         PyObject_Print(result, stdout, 0);
