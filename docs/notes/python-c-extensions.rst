@@ -792,8 +792,8 @@ output:
     $ ./foo
     '{"foo": "Foo", "bar": 123}'
 
-Performance of c api
----------------------
+Performance of C Extension
+---------------------------
 
 .. code-block:: c
 
