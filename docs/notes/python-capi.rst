@@ -279,7 +279,7 @@ Raise Exception
 
 output:
 
-.. code-block::
+.. code-block:: bash
 
     $ python setup.py -q build
     $ python setup.py -q install
@@ -631,6 +631,95 @@ output:
     $ clang `python3-config --ldflags` foo.o -o foo
     $ ./foo
     '{"foo": "Foo", "bar": 123}'
+
+Import All Attributes of a Module
+----------------------------------
+
+.. code-block:: c
+
+    #include <stdio.h>
+    #include <Python.h>
+
+    #define PYOBJECT_CHECK(obj, label) \
+        if (!obj) { \
+            PyErr_Print(); \
+            goto label; \
+        }
+
+
+    int
+    main(int argc, char *argv[])
+    {
+        int rc = -1;
+        wchar_t *program = NULL;
+        PyObject *main_module = NULL, *main_dict = NULL;
+        PyObject *uname = NULL;
+        PyObject *sysname = NULL;
+        PyObject *result = NULL;
+
+        program = Py_DecodeLocale(argv[0], NULL);
+        if (!program) {
+            fprintf(stderr, "unable to decode the program name");
+            goto error;
+        }
+
+        Py_SetProgramName(program);
+        Py_Initialize();
+
+        // import __main__
+        main_module = PyImport_ImportModule("__main__");
+        PYOBJECT_CHECK(main_module, error);
+
+        // main_dict = __main__.__dict__
+        main_dict = PyModule_GetDict(main_module);
+        PYOBJECT_CHECK(main_dict, error);
+
+        // from os import *
+        result = PyRun_String("from os import *",
+                              Py_file_input,
+                              main_dict,
+                              main_dict);
+        PYOBJECT_CHECK(result, error);
+        Py_XDECREF(result);
+        Py_XDECREF(main_dict);
+
+        // uname = __main__.__dict__['uname']
+        main_dict = PyModule_GetDict(main_module);
+        PYOBJECT_CHECK(main_dict, error);
+
+        // result = uname()
+        uname = PyDict_GetItemString(main_dict, "uname");
+        PYOBJECT_CHECK(uname, error);
+        result = PyObject_CallObject(uname, NULL);
+        PYOBJECT_CHECK(result, error);
+
+        // sysname = result.sysname
+        sysname = PyObject_GetAttrString(result, "sysname");
+        PYOBJECT_CHECK(sysname, error);
+        PyObject_Print(sysname, stdout, 0);
+        printf("\n");
+
+        rc = 0;
+    error:
+        Py_XDECREF(sysname);
+        Py_XDECREF(result);
+        Py_XDECREF(uname);
+        Py_XDECREF(main_dict);
+        Py_XDECREF(main_module);
+
+        PyMem_RawFree(program);
+        Py_Finalize();
+        return rc;
+    }
+
+output:
+
+.. code-block:: bash
+
+    $ clang `python3-config --cflags` -c foo.c -o foo.o
+    $ clang `python3-config --ldflags` foo.o -o foo
+    $ ./foo
+    'Darwin'
 
 Access Attributes
 ------------------
