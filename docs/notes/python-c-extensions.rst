@@ -1,3 +1,7 @@
+.. meta::
+    :description lang=en: Collect useful snippets of c extensions
+    :keywords: Python, C Extensions
+
 ==============================
 Python C Extensions cheatsheet
 ==============================

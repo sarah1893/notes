@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 .. meta::
-    :description lang=en-US: Collect useful python snippets for pythoneers or non-pythoneers.
+    :description lang=en: Collect useful python snippets for pythoneers or non-pythoneers.
     :keywords: Python, Python Cheat Sheet
 
 
