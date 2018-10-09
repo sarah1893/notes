@@ -536,6 +536,176 @@ output:
     >>> print(type(o))
     <class '__main__.Foo'>
 
+Simple Class with Members and Methods
+--------------------------------------
+
+.. code-block:: c
+
+    #include <Python.h>
+    #include <structmember.h>
+
+    /*
+     * class Foo:
+     *     def __new__(cls, *a, **kw):
+     *         foo_obj = object.__new__(cls)
+     *         foo_obj.foo = ""
+     *         foo_obj.bar = ""
+     *         return foo_obj
+     *
+     *     def __init__(self, foo, bar):
+     *         self.foo = foo
+     *         self.bar = bar
+     *
+     *     def fib(self, n):
+     *         if n < 2:
+     *             return n
+     *         return self.fib(n - 1) + self.fib(n - 2)
+     */
+
+    typedef struct {
+        PyObject_HEAD
+        PyObject *foo;
+        PyObject *bar;
+    } FooObject;
+
+    static void
+    Foo_dealloc(FooObject *self)
+    {
+        Py_XDECREF(self->foo);
+        Py_XDECREF(self->bar);
+        Py_TYPE(self)->tp_free((PyObject *) self);
+    }
+
+    static PyObject *
+    Foo_new(PyTypeObject *type, PyObject *args, PyObject *kw)
+    {
+        int rc = -1;
+        FooObject *self = NULL;
+        self = (FooObject *) type->tp_alloc(type, 0);
+
+        if (!self) goto error;
+
+        /* allocate attributes */
+        self->foo = PyUnicode_FromString("");
+        if (self->foo == NULL) goto error;
+
+        self->bar = PyUnicode_FromString("");
+        if (self->bar == NULL) goto error;
+
+        rc = 0;
+    error:
+        if (rc < 0) {
+            Py_XDECREF(self->foo);
+            Py_XINCREF(self->bar);
+            Py_XDECREF(self);
+        }
+        return (PyObject *) self;
+    }
+
+    static int
+    Foo_init(FooObject *self, PyObject *args, PyObject *kw)
+    {
+        int rc = -1;
+        static char *keywords[] = {"foo", "bar", NULL};
+        PyObject *foo = NULL, *bar = NULL, *ptr = NULL;
+
+        if (!PyArg_ParseTupleAndKeywords(args, kw,
+                         "|OO", keywords,
+                         &foo, &bar))
+        {
+            goto error;
+        }
+
+        if (foo) {
+            ptr = self->foo;
+            Py_INCREF(foo);
+            self->foo = foo;
+            Py_XDECREF(ptr);
+        }
+
+        if (bar) {
+            ptr = self->bar;
+            Py_INCREF(bar);
+            self->bar = bar;
+            Py_XDECREF(ptr);
+        }
+        rc = 0;
+    error:
+        return rc;
+    }
+
+    static unsigned long
+    fib(unsigned long n)
+    {
+        if (n < 2) return n;
+        return fib(n - 1) + fib(n - 2);
+    }
+
+    static PyObject *
+    Foo_fib(FooObject *self, PyObject *args)
+    {
+        unsigned long n = 0;
+        if (!PyArg_ParseTuple(args, "k", &n)) return NULL;
+        return PyLong_FromUnsignedLong(fib(n));
+    }
+
+    static PyMemberDef Foo_members[] = {
+        {"foo", T_OBJECT_EX, offsetof(FooObject, foo), 0, NULL},
+        {"bar", T_OBJECT_EX, offsetof(FooObject, bar), 0, NULL}
+    };
+
+    static PyMethodDef Foo_methods[] = {
+        {"fib", (PyCFunction)Foo_fib, METH_VARARGS, NULL},
+        {NULL, NULL, 0, NULL}
+    };
+
+    static PyTypeObject FooType = {
+        PyVarObject_HEAD_INIT(NULL, 0)
+        .tp_name = "foo.Foo",
+        .tp_doc = "Foo objects",
+        .tp_basicsize = sizeof(FooObject),
+        .tp_itemsize = 0,
+        .tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+        .tp_new = Foo_new,
+        .tp_init = (initproc) Foo_init,
+        .tp_dealloc = (destructor) Foo_dealloc,
+        .tp_members = Foo_members,
+        .tp_methods = Foo_methods
+    };
+
+    static PyModuleDef module = {
+        PyModuleDef_HEAD_INIT, "foo", NULL, -1, NULL
+    };
+
+    PyMODINIT_FUNC
+    PyInit_foo(void)
+    {
+        PyObject *m = NULL;
+        if (PyType_Ready(&FooType) < 0)
+            return NULL;
+        if ((m = PyModule_Create(&module)) == NULL)
+            return NULL;
+        Py_XINCREF(&FooType);
+        PyModule_AddObject(m, "Foo", (PyObject *) &FooType);
+        return m;
+    }
+
+output:
+
+.. code-block:: bash
+
+    $ python setup.py -q build
+    $ python setup.py -q install
+    $ python -q
+    >>> import foo
+    >>> o = foo.Foo('foo', 'bar')
+    >>> o.foo
+    'foo'
+    >>> o.bar
+    'bar'
+    >>> o.fib(10)
+    55
+
 Run a Python command from C
 ----------------------------
 
