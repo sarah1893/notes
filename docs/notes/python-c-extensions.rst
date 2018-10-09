@@ -706,6 +706,226 @@ output:
     >>> o.fib(10)
     55
 
+Inherit from Other Class
+-------------------------
+
+.. code-block:: c
+
+    #include <Python.h>
+    #include <structmember.h>
+
+    /*
+     * class Foo:
+     *     def __new__(cls, *a, **kw):
+     *         foo_obj = object.__new__(cls)
+     *         foo_obj.foo = ""
+     *         return foo_obj
+     *
+     *     def __init__(self, foo):
+     *         self.foo = foo
+     *
+     *     def fib(self, n):
+     *         if n < 2:
+     *             return n
+     *         return self.fib(n - 1) + self.fib(n - 2)
+     */
+
+    /* FooObject */
+
+    typedef struct {
+        PyObject_HEAD
+        PyObject *foo;
+    } FooObject;
+
+    static void
+    Foo_dealloc(FooObject *self)
+    {
+        Py_XDECREF(self->foo);
+        Py_TYPE(self)->tp_free((PyObject *) self);
+    }
+
+    static PyObject *
+    Foo_new(PyTypeObject *type, PyObject *args, PyObject *kw)
+    {
+        int rc = -1;
+        FooObject *self = NULL;
+        self = (FooObject *) type->tp_alloc(type, 0);
+
+        if (!self) goto error;
+
+        /* allocate attributes */
+        self->foo = PyUnicode_FromString("");
+        if (self->foo == NULL) goto error;
+
+        rc = 0;
+    error:
+        if (rc < 0) {
+            Py_XDECREF(self->foo);
+            Py_XDECREF(self);
+        }
+        return (PyObject *) self;
+    }
+
+    static int
+    Foo_init(FooObject *self, PyObject *args, PyObject *kw)
+    {
+        int rc = -1;
+        static char *keywords[] = {"foo", NULL};
+        PyObject *foo = NULL, *ptr = NULL;
+
+        if (!PyArg_ParseTupleAndKeywords(args, kw, "|O", keywords, &foo)) {
+            goto error;
+        }
+
+        if (foo) {
+            ptr = self->foo;
+            Py_INCREF(foo);
+            self->foo = foo;
+            Py_XDECREF(ptr);
+        }
+        rc = 0;
+    error:
+        return rc;
+    }
+
+    static unsigned long
+    fib(unsigned long n)
+    {
+        if (n < 2) return n;
+        return fib(n - 1) + fib(n - 2);
+    }
+
+    static PyObject *
+    Foo_fib(FooObject *self, PyObject *args)
+    {
+        unsigned long n = 0;
+        if (!PyArg_ParseTuple(args, "k", &n)) return NULL;
+        return PyLong_FromUnsignedLong(fib(n));
+    }
+
+    static PyMemberDef Foo_members[] = {
+        {"foo", T_OBJECT_EX, offsetof(FooObject, foo), 0, NULL}
+    };
+
+    static PyMethodDef Foo_methods[] = {
+        {"fib", (PyCFunction)Foo_fib, METH_VARARGS, NULL},
+        {NULL, NULL, 0, NULL}
+    };
+
+    static PyTypeObject FooType = {
+        PyVarObject_HEAD_INIT(NULL, 0)
+        .tp_name = "foo.Foo",
+        .tp_doc = "Foo objects",
+        .tp_basicsize = sizeof(FooObject),
+        .tp_itemsize = 0,
+        .tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+        .tp_new = Foo_new,
+        .tp_init = (initproc) Foo_init,
+        .tp_dealloc = (destructor) Foo_dealloc,
+        .tp_members = Foo_members,
+        .tp_methods = Foo_methods
+    };
+
+    /*
+     * class Bar(Foo):
+     *     def __init__(self, bar):
+     *         super().__init__(bar)
+     *
+     *     def gcd(self, a, b):
+     *         while b:
+     *             a, b = b, a % b
+     *         return a
+     */
+
+    /* BarObject */
+
+    typedef struct {
+        FooObject super;
+    } BarObject;
+
+    static unsigned long
+    gcd(unsigned long a, unsigned long b)
+    {
+        unsigned long t = 0;
+        while (b) {
+            t = b;
+            b = a % b;
+            a = t;
+        }
+        return a;
+    }
+
+    static int
+    Bar_init(FooObject *self, PyObject *args, PyObject *kw)
+    {
+        return FooType.tp_init((PyObject *) self, args, kw);
+    }
+
+    static PyObject *
+    Bar_gcd(BarObject *self, PyObject *args)
+    {
+        unsigned long a = 0, b = 0;
+        if (!PyArg_ParseTuple(args, "kk", &a, &b)) return NULL;
+        return PyLong_FromUnsignedLong(gcd(a, b));
+    }
+
+    static PyMethodDef Bar_methods[] = {
+        {"gcd", (PyCFunction)Bar_gcd, METH_VARARGS, NULL},
+        {NULL, NULL, 0, NULL}
+    };
+
+    static PyTypeObject BarType = {
+        PyVarObject_HEAD_INIT(NULL, 0)
+        .tp_name = "foo.Bar",
+        .tp_doc = "Bar objects",
+        .tp_basicsize = sizeof(BarObject),
+        .tp_itemsize = 0,
+        .tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+        .tp_base = &FooType,
+        .tp_init = (initproc) Bar_init,
+        .tp_methods = Bar_methods
+    };
+
+    /* Module */
+
+    static PyModuleDef module = {
+        PyModuleDef_HEAD_INIT, "foo", NULL, -1, NULL
+    };
+
+    PyMODINIT_FUNC
+    PyInit_foo(void)
+    {
+        PyObject *m = NULL;
+        if (PyType_Ready(&FooType) < 0)
+            return NULL;
+        if (PyType_Ready(&BarType) < 0)
+            return NULL;
+        if ((m = PyModule_Create(&module)) == NULL)
+            return NULL;
+
+        Py_XINCREF(&FooType);
+        Py_XINCREF(&BarType);
+        PyModule_AddObject(m, "Foo", (PyObject *) &FooType);
+        PyModule_AddObject(m, "Bar", (PyObject *) &BarType);
+        return m;
+    }
+
+output:
+
+.. code-block:: bash
+
+    $ python setup.py -q build
+    $ python setup.py -q install
+    $ python -q
+    >>> import foo
+    >>> bar = foo.Bar('bar')
+    >>> bar.foo
+    'bar'
+    >>> bar.fib(10)
+    55
+    >>> bar.gcd(3, 7)
+    1
+
 Run a Python command from C
 ----------------------------
 
