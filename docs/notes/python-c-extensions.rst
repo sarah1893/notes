@@ -472,6 +472,70 @@ output:
     $ python -c "import foo; foo.iter_dict({'k': 'v'})"
     '(k, v)'
 
+Simple Class
+-------------
+
+.. code-block:: c
+
+    #include <Python.h>
+
+    typedef struct {
+        PyObject_HEAD
+    } FooObject;
+
+    /* calss Foo(object): pass */
+
+    static PyTypeObject FooType = {
+        PyVarObject_HEAD_INIT(NULL, 0)
+        .tp_name = "foo.Foo",
+        .tp_doc = "Foo objects",
+        .tp_basicsize = sizeof(FooObject),
+        .tp_itemsize = 0,
+        .tp_flags = Py_TPFLAGS_DEFAULT,
+        .tp_new = PyType_GenericNew
+    };
+
+    static PyModuleDef module = {
+        PyModuleDef_HEAD_INIT,
+        .m_name = "foo",
+        .m_doc = "module foo",
+        .m_size = -1
+    };
+
+    PyMODINIT_FUNC
+    PyInit_foo(void)
+    {
+        PyObject *m = NULL;
+        if (PyType_Ready(&FooType) < 0)
+            return NULL;
+        if ((m = PyModule_Create(&module)) == NULL)
+            return NULL;
+        Py_XINCREF(&FooType);
+        PyModule_AddObject(m, "Foo", (PyObject *) &FooType);
+        return m;
+    }
+
+output:
+
+.. code-block:: bash
+
+    $ python setup.py -q build
+    $ python setup.py -q install
+    $ python -q
+    >>> import foo
+    >>> print(type(foo.Foo))
+    <class 'type'>
+    >>> o = foo.Foo()
+    >>> print(type(o))
+    <class 'foo.Foo'>
+    >>> class Foo(object): ...
+    ...
+    >>> print(type(Foo))
+    <class 'type'>
+    >>> o = Foo()
+    >>> print(type(o))
+    <class '__main__.Foo'>
+
 Run a Python command from C
 ----------------------------
 
