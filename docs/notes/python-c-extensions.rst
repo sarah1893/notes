@@ -162,21 +162,47 @@ Parse Arguments
     static PyObject *
     foo(PyObject *self)
     {
-        return PyUnicode_FromString("no args");
+        Py_RETURN_NONE;
     }
 
     static PyObject *
-    bar(PyObject *self, PyObject *args)
+    bar(PyObject *self, PyObject *arg)
     {
-        int i = -1;
-        const char *s = NULL;
-        if (!PyArg_ParseTuple(args, "is", &i, &s)) return NULL;
-        return PyUnicode_FromFormat("args(%d, %s)", i, s);
+        return Py_BuildValue("O", arg);
+    }
+
+    static PyObject *
+    baz(PyObject *self, PyObject *args)
+    {
+        PyObject *x = NULL, *y = NULL;
+        if (!PyArg_ParseTuple(args, "OO", &x, &y)) {
+            return NULL;
+        }
+        return Py_BuildValue("OO", x, y);
+    }
+
+    static PyObject *
+    qux(PyObject *self, PyObject *args, PyObject *kwargs)
+    {
+        static char *keywords[] = {"x", "y", NULL};
+        PyObject *x = NULL, *y = NULL;
+        if (!PyArg_ParseTupleAndKeywords(args, kwargs,
+                                         "O|O", keywords,
+                                         &x, &y))
+        {
+            return NULL;
+        }
+        if (!y) {
+            y = Py_None;
+        }
+        return Py_BuildValue("OO", x, y);
     }
 
     static PyMethodDef methods[] = {
         {"foo", (PyCFunction)foo, METH_NOARGS, NULL},
-        {"bar", (PyCFunction)bar, METH_VARARGS, NULL},
+        {"bar", (PyCFunction)bar, METH_O, NULL},
+        {"baz", (PyCFunction)baz, METH_VARARGS, NULL},
+        {"qux", (PyCFunction)qux, METH_VARARGS | METH_KEYWORDS, NULL},
         {NULL, NULL, 0, NULL}
     };
 
@@ -195,10 +221,19 @@ output:
 
     $ python setup.py -q build
     $ python setup.py -q install
-    $ python -c 'import foo; print(foo.foo())'
-    no args
-    $ python -c 'import foo; print(foo.bar(1, "s"))'
-    args(1, s)
+    $ python -q
+    >>> import foo
+    >>> foo.foo()
+    >>> foo.bar(3.7)
+    3.7
+    >>> foo.baz(3, 7)
+    (3, 7)
+    >>> foo.qux(3, y=7)
+    (3, 7)
+    >>> foo.qux(x=3, y=7)
+    (3, 7)
+    >>> foo.qux(x=3)
+    (3, None)
 
 Calling Python Functions from C
 --------------------------------
@@ -610,8 +645,8 @@ Simple Class with Members and Methods
         PyObject *foo = NULL, *bar = NULL, *ptr = NULL;
 
         if (!PyArg_ParseTupleAndKeywords(args, kw,
-                         "|OO", keywords,
-                         &foo, &bar))
+                                        "|OO", keywords,
+                                        &foo, &bar))
         {
             goto error;
         }
@@ -655,7 +690,7 @@ Simple Class with Members and Methods
     };
 
     static PyMethodDef Foo_methods[] = {
-        {"fib", (PyCFunction)Foo_fib, METH_VARARGS, NULL},
+        {"fib", (PyCFunction)Foo_fib, METH_VARARGS | METH_KEYWORDS, NULL},
         {NULL, NULL, 0, NULL}
     };
 
@@ -808,7 +843,7 @@ Inherit from Other Class
     };
 
     static PyMethodDef Foo_methods[] = {
-        {"fib", (PyCFunction)Foo_fib, METH_VARARGS, NULL},
+        {"fib", (PyCFunction)Foo_fib, METH_VARARGS | METH_KEYWORDS, NULL},
         {NULL, NULL, 0, NULL}
     };
 
