@@ -12,6 +12,7 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
+from datetime import datetime
 import sys
 import os
 
@@ -49,8 +50,9 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
+year = datetime.now().year
 project = u'python-cheatsheet'
-copyright = u'2016-2018, crazyguitar'
+copyright = u'2016-{}, crazyguitar'.format(year)
 author = u'crazyguitar'
 
 # The version info for the project you're documenting, acts as replacement for
