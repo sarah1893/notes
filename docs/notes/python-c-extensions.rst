@@ -741,6 +741,173 @@ output:
     >>> o.fib(10)
     55
 
+
+Simplie Class with Getter and Setter
+-------------------------------------
+
+.. code-block:: c
+
+    #include <Python.h>
+
+    /*
+     * class Foo:
+     *     def __new__(cls, *a, **kw):
+     *         foo_obj = object.__new__(cls)
+     *         foo_obj._foo = ""
+     *         return foo_obj
+     *
+     *     def __init__(self, foo=None):
+     *         if foo and isinstance(foo, 'str'):
+     *             self._foo = foo
+     *
+     *     @property
+     *     def foo(self):
+     *         return self._foo
+     *
+     *     @foo.setter
+     *     def foo(self, value):
+     *         if not value or not isinstance(value, str):
+     *             raise TypeError("value should be unicode")
+     *         self._foo = value
+     */
+
+    typedef struct {
+        PyObject_HEAD
+        PyObject *foo;
+    } FooObject;
+
+    static void
+    Foo_dealloc(FooObject *self)
+    {
+        Py_XDECREF(self->foo);
+        Py_TYPE(self)->tp_free((PyObject *) self);
+    }
+
+    static PyObject *
+    Foo_new(PyTypeObject *type, PyObject *args, PyObject *kw)
+    {
+        int rc = -1;
+        FooObject *self = NULL;
+        self = (FooObject *) type->tp_alloc(type, 0);
+
+        if (!self) goto error;
+
+        /* allocate attributes */
+        self->foo = PyUnicode_FromString("");
+        if (self->foo == NULL) goto error;
+
+        rc = 0;
+    error:
+        if (rc < 0) {
+            Py_XDECREF(self->foo);
+            Py_XDECREF(self);
+        }
+        return (PyObject *) self;
+    }
+
+    static int
+    Foo_init(FooObject *self, PyObject *args, PyObject *kw)
+    {
+        int rc = -1;
+        static char *keywords[] = {"foo", NULL};
+        PyObject *foo = NULL, *ptr = NULL;
+
+        if (!PyArg_ParseTupleAndKeywords(args, kw,
+                                        "|O", keywords,
+                                        &foo))
+        {
+            goto error;
+        }
+
+        if (foo && PyUnicode_Check(foo)) {
+            ptr = self->foo;
+            Py_INCREF(foo);
+            self->foo = foo;
+            Py_XDECREF(ptr);
+        }
+
+        rc = 0;
+    error:
+        return rc;
+    }
+
+    static PyObject *
+    Foo_getfoo(FooObject *self, void *closure)
+    {
+        Py_INCREF(self->foo);
+        return self->foo;
+    }
+
+    static int
+    Foo_setfoo(FooObject *self, PyObject *value, void *closure)
+    {
+        int rc = -1;
+
+        if (!value || !PyUnicode_Check(value)) {
+            PyErr_SetString(PyExc_TypeError, "value should be unicode");
+            goto error;
+        }
+        Py_INCREF(value);
+        Py_XDECREF(self->foo);
+        self->foo = value;
+        rc = 0;
+    error:
+        return rc;
+    }
+
+    static PyGetSetDef Foo_getsetters[] = {
+        {"foo", (getter)Foo_getfoo, (setter)Foo_setfoo}
+    };
+
+    static PyTypeObject FooType = {
+        PyVarObject_HEAD_INIT(NULL, 0)
+        .tp_name = "foo.Foo",
+        .tp_doc = "Foo objects",
+        .tp_basicsize = sizeof(FooObject),
+        .tp_itemsize = 0,
+        .tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+        .tp_new = Foo_new,
+        .tp_init = (initproc) Foo_init,
+        .tp_dealloc = (destructor) Foo_dealloc,
+        .tp_getset = Foo_getsetters,
+    };
+
+    static PyModuleDef module = {
+        PyModuleDef_HEAD_INIT, "foo", NULL, -1, NULL
+    };
+
+    PyMODINIT_FUNC
+    PyInit_foo(void)
+    {
+        PyObject *m = NULL;
+        if (PyType_Ready(&FooType) < 0)
+            return NULL;
+        if ((m = PyModule_Create(&module)) == NULL)
+            return NULL;
+        Py_XINCREF(&FooType);
+        PyModule_AddObject(m, "Foo", (PyObject *) &FooType);
+        return m;
+    }
+
+output:
+
+.. code-block:: bash
+
+    $ python setup.py -q build
+    $ python setup.py -q install
+    $ python -q
+    >>> import foo
+    >>> o = foo.Foo()
+    >>> o.foo
+    ''
+    >>> o.foo = "foo"
+    >>> o.foo
+    'foo'
+    >>> o.foo = None
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    TypeError: value should be unicode
+
 Inherit from Other Class
 -------------------------
 
