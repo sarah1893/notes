@@ -22,5 +22,14 @@
   gtag('config', '{{ tracking_id }}');
 </script>
 {% endif -%}
+{%- if pagename == '404' -%}
+<script>
+  gtag('event', '404', {
+    'event_category': 'error',
+    'event_label': document.referrer,
+    'non_interaction': true
+  });
+</script>
+{%- endif -%}
 {% endblock %}
 {% set css_files = css_files + [ "_static/style.css" ] %}

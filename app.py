@@ -2,7 +2,7 @@
 
 import os
 
-from flask import Flask, abort, send_from_directory
+from flask import Flask, abort, send_from_directory, render_template
 from flask_sslify import SSLify
 from flask_seasurf import SeaSurf
 from flask_talisman import Talisman
@@ -39,7 +39,7 @@ csp = {
     "frame-ancestors": "'none'",
     "object-src": "'none'",
 }
-app = Flask(__name__)
+app = Flask(__name__, template_folder=ROOT)
 app.config["SECRET_KEY"] = os.urandom(16)
 app.config["SESSION_COOKIE_NAME"] = "__Secure-session"
 app.config["SESSION_COOKIE_SAMESITE"] = "Strict"
@@ -51,6 +51,12 @@ talisman = Talisman(app, force_https=False, content_security_policy=csp)
 
 if "DYNO" in os.environ:
     sslify = SSLify(app, skips=[".well-known"])
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    """Redirect to 404.html."""
+    return render_template("404.html"), 404
 
 
 @app.after_request

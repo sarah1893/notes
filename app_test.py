@@ -13,6 +13,7 @@ from app import (
     static_proxy,
     index_redirection,
     add_feature_policy,
+    page_not_found,
 )
 
 from app import ROOT
@@ -138,6 +139,11 @@ class PysheeetTest(LiveServerTestCase):
             add_feature_policy(resp)
             self.assertEqual(resp.status_code, 200)
             resp.close()
+
+    def test_page_not_found(self):
+        """Test page not found."""
+        html, status_code = page_not_found(None)
+        self.assertEqual(status_code, 404)
 
 
 if __name__ == "__main__":
