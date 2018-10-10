@@ -7,14 +7,7 @@ import os
 from werkzeug.exceptions import NotFound
 from flask_testing import LiveServerTestCase
 
-from app import (
-    acme,
-    find_key,
-    static_proxy,
-    index_redirection,
-    add_feature_policy,
-    page_not_found,
-)
+from app import acme, find_key, static_proxy, index_redirection, page_not_found
 
 from app import ROOT
 from app import app
@@ -49,6 +42,7 @@ class PysheeetTest(LiveServerTestCase):
         self.assertTrue("X-Content-Type-Options" in headers)
         self.assertTrue("Content-Security-Policy" in headers)
         self.assertTrue("Feature-Policy" in headers)
+        self.assertEqual(headers["Feature-Policy"], "geolocation 'none'")
         self.assertEqual(headers["X-Frame-Options"], "SAMEORIGIN")
 
     def check_csrf_cookies(self, resp):
@@ -125,7 +119,6 @@ class PysheeetTest(LiveServerTestCase):
     def test_index_redirection(self):
         """Test index page redirection."""
         resp = index_redirection()
-        add_feature_policy(resp)
         self.assertEqual(resp.status_code, 200)
         resp.close()
 
@@ -136,7 +129,6 @@ class PysheeetTest(LiveServerTestCase):
         for h in htmls:
             u = "notes/" + h
             resp = static_proxy(u)
-            add_feature_policy(resp)
             self.assertEqual(resp.status_code, 200)
             resp.close()
 

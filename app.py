@@ -39,6 +39,9 @@ csp = {
     "frame-ancestors": "'none'",
     "object-src": "'none'",
 }
+
+feature_policy = {"geolocation": "'none'"}
+
 app = Flask(__name__, template_folder=ROOT)
 app.config["SECRET_KEY"] = os.urandom(16)
 app.config["SESSION_COOKIE_NAME"] = "__Secure-session"
@@ -47,7 +50,12 @@ app.config["CSRF_COOKIE_NAME"] = "__Secure-csrf-token"
 app.config["CSRF_COOKIE_HTTPONLY"] = True
 app.config["CSRF_COOKIE_SECURE"] = True
 csrf = SeaSurf(app)
-talisman = Talisman(app, force_https=False, content_security_policy=csp)
+talisman = Talisman(
+    app,
+    force_https=False,
+    content_security_policy=csp,
+    feature_policy=feature_policy,
+)
 
 if "DYNO" in os.environ:
     sslify = SSLify(app, skips=[".well-known"])
@@ -57,13 +65,6 @@ if "DYNO" in os.environ:
 def page_not_found(e):
     """Redirect to 404.html."""
     return render_template("404.html"), 404
-
-
-@app.after_request
-def add_feature_policy(response):
-    """Add feature policy."""
-    response.headers["Feature-Policy"] = "geolocation 'none'"
-    return response
 
 
 @app.route("/<path:path>")
