@@ -14,7 +14,7 @@ test: clean build
 	pycodestyle $(SRC)
 	pydocstyle $(SRC)
 	bandit $(SRC)
-	coverage run app_test.py && coverage report --fail-under=90 -m $(SRC)
+	coverage run app_test.py && coverage report --fail-under=100 -m $(SRC)
 ifeq ($(PY36), 1)
 	black --quiet --diff --check --line-length 79 $(SRC)
 endif
