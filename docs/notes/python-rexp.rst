@@ -58,15 +58,15 @@ Compare HTML tags
     >>> s = urllib.urlopen('https://www.python.org')
     >>> html = s.read()
     >>> s.close()
-    >>> print "open tags"
+    >>> print("open tags")
     open tags
     >>> re.findall('<[^/>][^>]*>', html)[0:2]
     ['<!doctype html>', '<!--[if lt IE 7]>']
-    >>> print "close tags"
+    >>> print("close tags")
     close tags
     >>> re.findall('</[^>]+>', html)[0:2]
     ['</script>', '</title>']
-    >>> print "self-closing tags"
+    >>> print("self-closing tags")
 
 Group Comparison
 ----------------

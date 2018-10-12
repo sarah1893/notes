@@ -85,12 +85,12 @@ python2 take ``str`` char as byte character
 .. code-block:: python
 
     >>> s= 'Café'
-    >>> print [_c for _c in s]
+    >>> print([_c for _c in s])
     ['C', 'a', 'f', '\xc3', '\xa9']
     >>> len(s)
     5
     >>> s = u'Café'
-    >>> print [_c for _c in s]
+    >>> print([_c for _c in s])
     [u'C', u'a', u'f', u'\xe9']
     >>> len(s)
     4
