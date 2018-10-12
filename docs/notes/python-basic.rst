@@ -1,3 +1,7 @@
+.. meta::
+    :description lang=en: Collect useful snippets of Python
+    :keywords: Python, Python Cheat Sheet
+
 =======================
 Python basic cheatsheet
 =======================

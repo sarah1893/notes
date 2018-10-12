@@ -1,5 +1,10 @@
+.. meta::
+    :description lang=en: Collect useful snippets of SQLAlchemy
+    :keywords: Python, Python3, SQLAlchemy Cheat Sheet
+
+============================
 Python SQLAlchemy Cheatsheet
-=============================
+============================
 
 .. contents:: Table of Contents
     :backlinks: none

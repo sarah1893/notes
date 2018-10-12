@@ -1,3 +1,7 @@
+.. meta::
+    :description lang=en: Collect useful snippets of new features in Python3
+    :keywords: Python, Python3, New in Python3
+
 =========================
 New in Python3 cheatsheet
 =========================

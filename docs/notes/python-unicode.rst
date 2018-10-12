@@ -1,3 +1,7 @@
+.. meta::
+    :description lang=en: Collect useful snippets of unicode
+    :keywords: Python, Python3, Python Unicode, Python Unicode Cheat Sheet
+
 ==========================
 Python unicode cheatsheet
 ==========================
