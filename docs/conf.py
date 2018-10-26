@@ -124,8 +124,8 @@ html_theme_options = {
     'github_repo': 'pysheeet',
     'github_banner': True,
     'show_related': False,
-    'head_font_family': 'Georgia',
-    'font_family': 'Georgia'
+    'body_max_width': 'none',
+    'body_min_width': 'none',
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
