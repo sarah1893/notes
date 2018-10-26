@@ -21,7 +21,7 @@ or suggestion, please create an issue on `GitHub Issues`_.
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    notes/python-basic
    notes/python-new-py3
