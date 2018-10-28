@@ -10,8 +10,8 @@ Python C Extensions Cheatsheet
     :backlinks: none
 
 
-Simple setup.py for c extension
-----------------------------------
+Simple setup.py for C Extension
+--------------------------------
 
 .. code-block:: python
 
@@ -41,7 +41,7 @@ Customize CFLAGS
 
     setup(name="foo", version="1.0", ext_modules=[ext])
 
-Doc string
+Doc String
 ----------
 
 .. code-block:: c
@@ -1128,7 +1128,7 @@ output:
     >>> bar.gcd(3, 7)
     1
 
-Run a Python command from C
+Run a Python Command from C
 ----------------------------
 
 .. code-block:: c
@@ -1155,7 +1155,7 @@ output:
     $ ./foo "print('Hello Python')"
     Hello Python
 
-Run a Python file from C
+Run a Python File from C
 -------------------------
 
 .. code-block:: c
@@ -1538,8 +1538,8 @@ Compare the performance with pure Python
     >>> s = time(); _ = cfib(35); e = time(); e - s
     0.07283687591552734
 
-Error handling when using ctypes
----------------------------------
+ctypes Error handling
+----------------------
 
 .. code-block:: python
 
