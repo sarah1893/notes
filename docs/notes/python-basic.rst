@@ -11,7 +11,7 @@ Python Basic Cheatsheet
 
 
 Python Naming Rule
---------------------
+-------------------
 
 .. code-block:: python
 
@@ -60,8 +60,8 @@ Python Naming Rule
     _
 
 
-Using ``__future__`` backport features
----------------------------------------
+Backport Features
+------------------
 
 .. code-block:: python
 
@@ -108,7 +108,7 @@ Using ``__future__`` backport features
 .. _future: https://docs.python.org/2/reference/simple_stmts.html#future
 __ future_
 
-Check python version
+Check Python Version
 --------------------
 
 .. code-block:: python
@@ -124,7 +124,7 @@ Check python version
     >>> py37
     False
 
-Check object attributes
+Check Object Attributes
 -----------------------
 
 .. code-block:: python
@@ -134,7 +134,8 @@ Check object attributes
     ['__add__', '__class__', ...]
 
 Define a function ``__doc__``
-------------------------------
+Document Functions
+-------------------
 
 .. code-block:: python
 
@@ -149,7 +150,7 @@ Define a function ``__doc__``
     # Or using help function
     >>> help(example)
 
-Check instance type
+Check Instance Type
 -------------------
 
 .. code-block:: python
@@ -158,7 +159,7 @@ Check instance type
     >>> isinstance(ex,int)
     True
 
-Check, Get, Set attribute
+Check, Get, Set Attribute
 -------------------------
 
 .. code-block:: python
@@ -191,7 +192,7 @@ Check, Get, Set attribute
     >>> ex.name
     'example'
 
-Check inheritance
+Check Inheritance
 -----------------
 
 .. code-block:: python
@@ -205,8 +206,8 @@ Check inheritance
     >>> issubclass(Example, object)
     True
 
-Check all global variables
---------------------------
+Check Global Variables
+-----------------------
 
 .. code-block:: python
 
@@ -215,8 +216,8 @@ Check all global variables
     >>> globals()
     {'args': (1, 2, 3, 4, 5), ...}
 
-Check **callable**
--------------------
+Check Callable
+---------------
 
 .. code-block:: python
 
@@ -229,7 +230,7 @@ Check **callable**
     >>> callable(fun)
     True
 
-Get function/class name
+Get Function/Class Name
 -----------------------
 
 .. code-block:: python
@@ -247,8 +248,8 @@ Get function/class name
     'example_function'
 
 
-``__new__`` & ``__init__``
---------------------------
+New and Init
+-------------
 
 .. code-block:: python
 
@@ -276,7 +277,7 @@ Get function/class name
     __new__ Hello
 
 
-The diamond problem
+The Diamond Problem
 --------------------
 
 .. code-block:: python
@@ -306,8 +307,8 @@ The diamond problem
     This is ClsB
 
 
-Representations of your class behave
-------------------------------------
+Representation of Class
+------------------------
 
 .. code-block:: python
 
@@ -322,7 +323,7 @@ Representations of your class behave
     >>> Example()
     Example __repr__
 
-Break up a long string
+Break Up a Long String
 -----------------------
 
 .. code-block:: python
@@ -356,8 +357,8 @@ Break up a long string
     >>> s
     'This is a very very very long python string'
 
-Get list item **SMART**
-------------------------
+Get Items from List
+-------------------
 
 .. code-block:: python
 
@@ -427,8 +428,8 @@ Get list item **SMART**
     [['Python'], [], []]
 
 
-Get dictionary item **SMART**
-------------------------------
+Get Items from Dictionary
+-------------------------
 
 .. code-block:: python
 
@@ -473,8 +474,8 @@ Get dictionary item **SMART**
     >>> c
     {'x': 55, 'y': 66, 'a': 'foo', 'b': 'bar'}
 
-Set a list/dict **SMART**
---------------------------
+Set Items to a List/Dictionary
+-------------------------------
 
 .. code-block:: python
 
@@ -502,8 +503,8 @@ Set a list/dict **SMART**
     [0, 1, 4, 9, 16]
 
 
-``set`` operations
--------------------
+Python Set
+-----------
 
 .. code-block:: python
 
@@ -599,8 +600,8 @@ NamedTuple
     >>> print(e.a, e[1], e[1] + e.b)
     1 2 4
 
-``__iter__`` - Delegating Iteration
-------------------------------------
+Delegating Iteration
+---------------------
 
 .. code-block:: python
 
@@ -646,7 +647,7 @@ Using Generator as Iterator
     ...
     0 1 2 3 4 5 6 7 8 9
 
-Emulating a list
+Emulating a List
 ----------------
 
 .. code-block:: python
@@ -676,11 +677,11 @@ Emulating a list
     >>> emul = EmuList(range(5))
     >>> emul
     EmuList: [0, 1, 2, 3, 4]
-    >>> emul[1:3]  #  __getitem__
+    >>> emul[1:3]  # __getitem__
     [1, 2]
-    >>> emul[0:4:2]  #  __getitem__
+    >>> emul[0:4:2]  # __getitem__
     [0, 2]
-    >>> len(emul)  #  __len__
+    >>> len(emul)  # __len__
     5
     >>> emul.append(5)
     >>> emul
@@ -695,7 +696,7 @@ Emulating a list
     True
 
 
-Emulating a dictionary
+Emulating a Dictionary
 ----------------------
 
 .. code-block:: python
@@ -812,7 +813,7 @@ Decorator
     'example'
 
 
-Decorator with arguments
+Decorator with Arguments
 ------------------------
 
 .. code-block:: python
@@ -844,8 +845,8 @@ Decorator with arguments
     Val is 10
     This is example function.
 
-for: exp else: exp
-------------------
+Loop with Else Clause
+----------------------
 
 .. code-block:: python
 
@@ -880,8 +881,8 @@ for: exp else: exp
     ...
     break occurred
 
-try: exp else: exp
-------------------
+Exception with Else Clause
+---------------------------
 
 .. code-block:: python
 
@@ -896,8 +897,8 @@ try: exp else: exp
     No exception
     No exception occurred
 
-Lambda function
----------------
+Lambda
+-------
 
 .. code-block:: python
 
@@ -919,8 +920,8 @@ Lambda function
     ... False)(3)
     True
 
-Option arguments - (\*args, \*\*kwargs)
----------------------------------------
+Option arguments
+-----------------
 
 .. code-block:: python
 
@@ -940,8 +941,8 @@ Option arguments - (\*args, \*\*kwargs)
     (1, 2, 3, 4, 5)
     {'1': 1, '2': 2, '3': 3}
 
-``type()`` declare (create) a ``class``
-----------------------------------------
+Declare a Class
+----------------
 
 .. code-block:: python
 
@@ -959,6 +960,7 @@ Option arguments - (\*args, \*\*kwargs)
     55
 
     # equal to
+
     >>> class Fib(object):
     ...     val = 10
     ...     def fib(self, n):
@@ -973,7 +975,7 @@ Option arguments - (\*args, \*\*kwargs)
     55
 
 
-Callable object
+Callable Object
 ---------------
 
 .. code-block:: python
@@ -988,8 +990,8 @@ Callable object
     >>> ex()
     I am callable!
 
-Context Manager - ``with`` statement
--------------------------------------
+Context Manager
+----------------
 
 .. code-block:: python
 
@@ -1028,8 +1030,8 @@ Context Manager - ``with`` statement
                 conn.send(msg)
                 conn.close()
 
-Using ``@contextmanager``
---------------------------
+Using contextlib
+-----------------
 
 .. code-block:: python
 
@@ -1046,15 +1048,15 @@ Using ``@contextmanager``
     with opening('example.txt') as fd:
        fd.read()
 
-Using ``with`` statement open file
-------------------------------------
+Open a File
+------------
 
 .. code-block:: python
 
     >>> with open("/etc/passwd",'r') as f:
     ...    content = f.read()
 
-Reading file chunk
+Reading File Chunks
 -------------------
 
 .. code-block:: python
@@ -1073,8 +1075,8 @@ Reading file chunk
 
     10.245.1.3  www.registry.io
 
-Property - Managed attributes
------------------------------
+Property
+--------
 
 .. code-block:: python
 
@@ -1120,8 +1122,8 @@ Property - Managed attributes
     ...     val = property(fget=_val_getter, fset=_val_setter, fdel=_val_deleter, doc=None)
     ...
 
-Computed attributes - Using property
-------------------------------------
+Computed Attributes
+--------------------
 
 .. code-block:: python
 
@@ -1139,8 +1141,8 @@ Computed attributes - Using property
     ``@property`` compute the value of attribute only when we need.
     Not store in memory previously.
 
-Descriptor - manage attributes
-------------------------------
+Descriptor
+----------
 
 .. code-block:: python
 
@@ -1180,8 +1182,8 @@ Descriptor - manage attributes
     >>> hasattr(ex3, 'x')
     False
 
-``@staticmethod``, ``@classmethod``
--------------------------------------
+Static and Class Methond
+-------------------------
 
 .. code-block:: python
 
@@ -1213,8 +1215,8 @@ Descriptor - manage attributes
       File "", line 1, in
     TypeError: unbound method instmethod() ...
 
-Abstract method - Metaclass
----------------------------
+Abstract Method
+----------------
 
 .. code-block:: python
 
@@ -1247,8 +1249,8 @@ Abstract method - Metaclass
     >>> ex.absmethod()
     abstract
 
-Common Use **Magic**
----------------------
+Common Magic
+-------------
 
 .. code-block:: python
 
@@ -1313,8 +1315,8 @@ Common Use **Magic**
     __xor__(self, other)
 
 
-Parsing csv string
---------------------
+Parsing CSV
+------------
 
 .. code-block:: python
 
@@ -1341,8 +1343,8 @@ Parsing csv string
     ['foo', 'bar', 'baz']
 
 
-Using ``__slots__`` to save memory
------------------------------------
+Using slot to Save Memory
+--------------------------
 
 .. code-block:: python
 
