@@ -3,7 +3,7 @@
     :keywords: Python, Python3, Python C Extensions, Python C Extensions Cheat Sheet
 
 ==============================
-Python C Extensions cheatsheet
+Python C Extensions Cheatsheet
 ==============================
 
 .. contents:: Table of Contents

@@ -3,7 +3,7 @@
     :keywords: Python, Python3, Python Generator, Python Generator Cheat Sheet
 
 ===========================
-Python generator cheatsheet
+Python Generator Cheatsheet
 ===========================
 
 .. contents:: Table of Contents

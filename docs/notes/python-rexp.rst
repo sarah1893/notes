@@ -1,5 +1,5 @@
 ====================================
-Python Regular Expression cheatsheet
+Python Regular Expression Cheatsheet
 ====================================
 
 .. contents:: Table of Contents
@@ -42,7 +42,7 @@ Compare HTML tags
     >>> re.search('<[^/>]+/>', '<br />') != None
     True
 
-``re.findall()`` match string 
+``re.findall()`` match string
 -----------------------------
 
 .. code-block:: python
@@ -174,13 +174,13 @@ Substitute String
     # substitute with group reference
     >>> date = r'2016-01-01'
     >>> re.sub(r'(\d{4})-(\d{2})-(\d{2})',r'\2/\3/\1/',date)
-    '01/01/2016/'    
+    '01/01/2016/'
 
     # camelcase to underscore
     >>> def convert(s):
     ...     res = re.sub(r'(.)([A-Z][a-z]+)',r'\1_\2', s)
     ...     return re.sub(r'([a-z])([A-Z])',r'\1_\2', res).lower()
-    ... 
+    ...
     >>> convert('CamelCase')
     'camel_case'
     >>> convert('CamelCamelCase')
@@ -266,7 +266,7 @@ Match URL
     ...             \.([a-z\.]{2,6})         # match domain
     ...             ([\/\w \.-]*)\/?$        # match api or file
     ...             ''', re.X)
-    >>> 
+    >>>
     >>> exp.match('www.google.com')
     <_sre.SRE_Match object at 0x10f01ddf8>
     >>> exp.match('http://www.example')

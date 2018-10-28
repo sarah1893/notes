@@ -1,5 +1,5 @@
 ======================
-Python test cheatsheet
+Python Test Cheatsheet
 ======================
 
 .. contents:: Table of Contents

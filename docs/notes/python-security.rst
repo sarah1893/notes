@@ -1,5 +1,5 @@
 ==========================
-Python security cheatsheet
+Python Security Cheatsheet
 ==========================
 
 .. contents:: Table of Contents

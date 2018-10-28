@@ -3,7 +3,7 @@
     :keywords: Python, Python Cheat Sheet
 
 =======================
-Python basic cheatsheet
+Python Basic Cheatsheet
 =======================
 
 .. contents:: Table of Contents

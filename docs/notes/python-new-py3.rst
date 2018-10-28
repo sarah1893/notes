@@ -3,7 +3,7 @@
     :keywords: Python, Python3, New in Python3
 
 =========================
-New in Python3 cheatsheet
+New in Python3 Cheatsheet
 =========================
 
 

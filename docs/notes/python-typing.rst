@@ -3,7 +3,7 @@
     :keywords: Python3, Static Typing, Python Type hints, Type hints Cheat Sheet
 
 ========================
-Python typing cheatsheet
+Python Typing Cheatsheet
 ========================
 
 .. contents:: Table of Contents

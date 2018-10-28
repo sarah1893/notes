@@ -3,7 +3,7 @@
     :keywords: Python, Python3, Python Socket, Python Socket Cheat Sheet
 
 ========================
-Python socket cheatsheet
+Python Socket Cheatsheet
 ========================
 
 .. contents:: Table of Contents

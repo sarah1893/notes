@@ -23,8 +23,8 @@ or suggestion, please create an issue on `GitHub Issues`_.
 .. toctree::
    :maxdepth: 1
 
-   notes/python-basic
    notes/python-new-py3
+   notes/python-basic
    notes/python-typing
    notes/python-unicode
    notes/python-generator

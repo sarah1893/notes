@@ -42,8 +42,8 @@ PDF Version
 Cheat Sheets
 ==============
 
-- `basic`_
 - `new in python3`_
+- `basic`_
 - `typing`_
 - `unicode`_
 - `generator`_
