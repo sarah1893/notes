@@ -133,7 +133,6 @@ Check Object Attributes
     >>> dir(list)
     ['__add__', '__class__', ...]
 
-Define a function ``__doc__``
 Document Functions
 -------------------
 
