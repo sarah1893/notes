@@ -8,8 +8,8 @@
     :keywords: Python, Python Cheat Sheet
 
 
-Welcome to Python cheatsheet!
-=============================================
+Welcome to Python Cheatsheet!
+==============================
 
 Welcome to pysheeet. This project aims at collecting useful python snippets
 in order to enhance pythoneers' coding experiences. Any snippets are welcome.
