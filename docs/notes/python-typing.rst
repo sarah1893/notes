@@ -253,7 +253,7 @@ Context Manager
     with cm as f:
         print(f.read())
 
-Asynchronous Contents Manager
+Asynchronous Context Manager
 -----------------------------
 
 .. code-block:: python
