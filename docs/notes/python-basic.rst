@@ -1313,7 +1313,6 @@ Common Magic
     __or__(self, other)
     __xor__(self, other)
 
-
 Parsing CSV
 ------------
 
@@ -1340,7 +1339,6 @@ Parsing CSV
     >>> for x in csv.reader([s]): print(x)
     ...
     ['foo', 'bar', 'baz']
-
 
 Using slot to Save Memory
 --------------------------
@@ -1404,3 +1402,19 @@ output:
     $ python3.6 s.py
     mem usage: 70922240 Byte
     mem usage: 100659200 Byte
+
+Dynamic Execute Python Code
+----------------------------
+
+.. code-block:: python
+
+    >>> py = '''
+    ... def fib(n):
+    ...     a, b = 0, 1
+    ...     for _ in range(n):
+    ...         b, a = b + a, b
+    ...     return a
+    ... print(fib(10))
+    ... '''
+    >>> exec(py, globals(), locals())
+    55
