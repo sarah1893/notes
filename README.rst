@@ -18,6 +18,13 @@ Development Status
 .. image:: https://img.shields.io/badge/License-MIT-blue.svg
      :target: https://raw.githubusercontent.com/crazyguitar/pysheeet/master/LICENSE
 
+Introduction
+=============
+
+Pysheeet was created with intention of collecting python code snippets for
+reducing coding hours and making life easier. Any contributions are welcome.
+Please feel free to fork and send a pull request to this project.
+
 How to run the server
 =======================
 
