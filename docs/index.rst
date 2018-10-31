@@ -12,9 +12,12 @@ Welcome to Python Cheatsheet!
 ==============================
 
 Welcome to pysheeet. This project aims at collecting useful python snippets
-in order to enhance pythoneers' coding experiences. Any snippets are welcome.
-If you'd like to contribute, `fork pysheeet on GitHub`_. If there is any question
-or suggestion, please create an issue on `GitHub Issues`_.
+in order to enhance pythoneers' coding experiences. Please feel free to
+contribute if you have any awesome ideas for improvements to code snippets,
+explanations, etc.
+
+Any snippets are welcome. If you'd like to contribute, `fork pysheeet on GitHub`_.
+If there is any question or suggestion, please create an issue on `GitHub Issues`_.
 
 .. _fork pysheeet on GitHub: https://github.com/crazyguitar/pysheeet
 .. _GitHub Issues: https://github.com/crazyguitar/pysheeet/issues
