@@ -134,7 +134,13 @@ html_theme_options = {
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
 html_title = "pysheeet"
-html_context = {"tracking_id": os.environ.get("TRACKING_ID")}
+html_context = {
+    "tracking_id": os.environ.get("TRACKING_ID"),
+    "carbonad_serve": os.environ.get("CARBONAD_SERVE"),
+    "carbonad_placement": os.environ.get("CARBONAD_PLACEMENT")
+}
+
+has_carbonad = os.environ.get("CARBONAD_SERVE") and os.environ.get("CARBONAD_PLACEMENT")
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #html_short_title = None
@@ -154,6 +160,8 @@ html_context = {"tracking_id": os.environ.get("TRACKING_ID")}
 html_static_path = ['_static']
 
 html_css_files = ['style.css']
+if has_carbonad:
+    html_css_files.append('carbonad.css')
 
 # Add any extra paths that contain custom files (such as robots.txt or
 # .htaccess) here, relative to this directory. These files are copied
@@ -169,23 +177,26 @@ html_extra_path = ['_extra']
 #html_use_smartypants = True
 
 # Custom sidebar templates, maps document names to template names.
-html_sidebars = {
-    'index': [
-        'sidebarintro.html',
-        'link.html',
-        'relations.html',
-        'github.html',
-        'searchbox.html'
-    ],
-    '**': [
-        'sidebarintro.html',
-        'link.html',
-        'github.html',
-        'localtoc.html',
-        'relations.html',
-        'searchbox.html'
-    ]
-}
+sidebar_index = [
+    'sidebarintro.html',
+    'link.html',
+    'github.html',
+]
+sidebar_notes = [
+    'sidebarintro.html',
+    'link.html',
+    'github.html',
+]
+
+if has_carbonad:
+    sidebar_index.append('carbonad.html')
+    sidebar_notes.append('carbonad.html')
+
+sidebar_index.append('searchbox.html')
+sidebar_notes.append('localtoc.html')
+sidebar_notes.append('searchbox.html')
+html_sidebars = {'index': sidebar_index, '**': sidebar_notes}
+
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.

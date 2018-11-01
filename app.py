@@ -29,6 +29,8 @@ csp = {
         "*.cloudflare.com",
         "*.googletagmanager.com",
         "*.google-analytics.com",
+        "*.carbonads.com",
+        "*.carbonads.net",
         "'unsafe-inline'",
         "'unsafe-eval'",
     ],
