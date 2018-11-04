@@ -358,8 +358,12 @@ Calling Python Functions from C
             return NULL;
         }
 
+        // Make sure we own the GIL
+        PyGILState_STATE state = PyGILState_Ensure();
         // similar to py_callback("Awesome Python!")
         rv = PyObject_CallFunction(py_callback, "s", "Awesome Python!");
+        // Restore previous GIL state
+        PyGILState_Release(state);
         return rv;
     }
 
