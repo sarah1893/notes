@@ -325,3 +325,47 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
+
+def add_html_link(app, pagename, templatename, context, doctree):
+    """Append html page."""
+    if pagename in ['404', 'search', 'genindex']:
+        return
+    app.sitemaps.append(pagename + ".html")
+
+
+def create_sitemap(app, exception):
+    """Generate a sitemap.xml"""
+    from xml.etree.ElementTree import ElementTree, Element, SubElement
+    from datetime import datetime
+
+    r = Element("urlset")
+    r.set("xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9")
+    r.set("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance")
+    r.set("xsi:schemaLocation", "http://www.sitemaps.org/schemas/sitemap/0.9" +
+        " http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd")
+
+    for link in app.sitemaps:
+        url = SubElement(r, "url")
+        now = datetime.now()
+        SubElement(url, "loc").text = app.pysheeet + link
+        SubElement(url, "lastmod").text = now.date().isoformat()
+
+    f = app.outdir + "/sitemap.xml"
+    t = ElementTree(r)
+    t.write(f, xml_declaration=True, encoding='utf-8', method="xml")
+
+
+def setup(app):
+    """Customize setup."""
+    site = os.environ.get("PYSHEEET")
+    if not site:
+        return
+
+    if site[-1] != '/':
+        site += '/'
+
+    # create a sitemap
+    app.pysheeet = site
+    app.sitemaps = []
+    app.connect('html-page-context', add_html_link)
+    app.connect('build-finished', create_sitemap)
