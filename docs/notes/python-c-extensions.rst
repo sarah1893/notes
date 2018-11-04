@@ -105,6 +105,108 @@ output:
     $ python -c "import foo; foo.foo()"
     'foo'
 
+Release the GIL
+---------------
+
+.. code-block:: c
+
+    #include <Python.h>
+
+    static PyObject* foo(PyObject* self)
+    {
+        Py_BEGIN_ALLOW_THREADS
+        sleep(3);
+        Py_END_ALLOW_THREADS
+        Py_RETURN_NONE;
+    }
+
+    static PyMethodDef methods[] = {
+        {"foo", (PyCFunction)foo, METH_NOARGS, NULL},
+        {NULL, NULL, 0, NULL}
+    };
+
+    static struct PyModuleDef module = {
+        PyModuleDef_HEAD_INIT, "Foo", NULL, -1, methods
+    };
+
+    PyMODINIT_FUNC PyInit_foo(void)
+    {
+        return PyModule_Create(&module);
+    }
+
+output:
+
+.. code-block:: bash
+
+    $ python setup.py -q build
+    $ python setup.py -q install
+    $ python -c "
+    > import threading
+    > import foo
+    > from datetime import datetime
+    > def f(n):
+    >     now = datetime.now()
+    >     print(f'{now}: thread {n}')
+    >     foo.foo()
+    > ts = [threading.Thread(target=f, args=(n,)) for n in range(3)]
+    > [t.start() for t in ts]
+    > [t.join() for t in ts]"
+    2018-11-04 20:15:34.860454: thread 0
+    2018-11-04 20:15:34.860592: thread 1
+    2018-11-04 20:15:34.860705: thread 2
+
+
+.. warning::
+
+    In C extension code, blocking I/O should put into ``Py_BEGIN_ALLOW_THREADS``
+    and ``Py_BEGIN_ALLOW_THREADS`` block for releasing the GIL temporarily;
+    Otherwise, blocking I/O operation have to wait until previous operation finish.
+    In addition, the GIL can only be safely released when there is **NO** Python C API
+    functions between ``Py_BEGIN_ALLOW_THREADS`` and ``Py_BEGIN_ALLOW_THREADS``.
+
+.. code-block:: c
+
+    #include <Python.h>
+
+    static PyObject* foo(PyObject* self)
+    {
+        sleep(3);
+        Py_RETURN_NONE;
+    }
+
+    static PyMethodDef methods[] = {
+        {"foo", (PyCFunction)foo, METH_NOARGS, NULL},
+        {NULL, NULL, 0, NULL}
+    };
+
+    static struct PyModuleDef module = {
+        PyModuleDef_HEAD_INIT, "Foo", NULL, -1, methods
+    };
+
+    PyMODINIT_FUNC PyInit_foo(void)
+    {
+        return PyModule_Create(&module);
+    }
+
+output:
+
+.. code-block:: bash
+
+    $ python -c "
+    > import threading
+    > import foo
+    > from datetime import datetime
+    > def f(n):
+    >     now = datetime.now()
+    >     print(f'{now}: thread {n}')
+    >     foo.foo()
+    > ts = [threading.Thread(target=f, args=(n,)) for n in range(3)]
+    > [t.start() for t in ts]
+    > [t.join() for t in ts]"
+    2018-11-04 20:16:44.055932: thread 0
+    2018-11-04 20:16:47.059718: thread 1
+    2018-11-04 20:16:50.063579: thread 2
+
 Get Reference Count
 --------------------
 
