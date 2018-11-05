@@ -84,6 +84,7 @@
     bottom: 0;
     display: block;
     color: #555 !important;
+    text-align: right;
     width: 100%;
   }
 }
