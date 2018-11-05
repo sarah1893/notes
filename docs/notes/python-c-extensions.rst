@@ -207,6 +207,142 @@ output:
     2018-11-04 20:16:47.059718: thread 1
     2018-11-04 20:16:50.063579: thread 2
 
+Acquire the GIL
+---------------
+
+.. code-block:: c
+
+    #include <pthread.h>
+    #include <Python.h>
+
+    typedef struct {
+        PyObject *sec;
+        PyObject *py_callback;
+    } foo_args;
+
+    void *
+    foo_thread(void *args)
+    {
+        long n = -1;
+        PyObject *rv = NULL, *sec = NULL,* py_callback = NULL;
+        foo_args *a = NULL;
+
+        if (!args)
+            return NULL;
+
+        a = (foo_args *)args;
+        sec = a->sec;
+        py_callback = a->py_callback;
+
+        n = PyLong_AsLong(sec);
+        if ((n == -1) && PyErr_Occurred()) {
+            return NULL;
+        }
+
+        sleep(n);  // slow task
+
+        // acquire GIL
+        PyGILState_STATE state = PyGILState_Ensure();
+        rv = PyObject_CallFunction(py_callback, "s", "Awesome Python!");
+        // release GIL
+        PyGILState_Release(state);
+        Py_XDECREF(rv);
+        return NULL;
+    }
+
+    static PyObject *
+    foo(PyObject *self, PyObject *args)
+    {
+        long i = 0, n = 0;
+        pthread_t *arr = NULL;
+        PyObject *py_callback = NULL;
+        PyObject *sec = NULL, *num = NULL;
+        PyObject *rv = NULL;
+        foo_args a = {};
+
+        if (!PyArg_ParseTuple(args, "OOO:callback", &num, &sec, &py_callback))
+            return NULL;
+
+        // allow releasing GIL
+        Py_BEGIN_ALLOW_THREADS
+
+        if (!PyLong_Check(sec) || !PyLong_Check(num)) {
+            PyErr_SetString(PyExc_TypeError, "should be int");
+            goto error;
+        }
+
+        if (!PyCallable_Check(py_callback)) {
+            PyErr_SetString(PyExc_TypeError, "should be callable");
+            goto error;
+        }
+
+        n = PyLong_AsLong(num);
+        if (n == -1 && PyErr_Occurred())
+            goto error;
+
+        arr = (pthread_t *)PyMem_RawCalloc(n, sizeof(pthread_t));
+        if (!arr)
+            goto error;
+
+        a.sec = sec;
+        a.py_callback = py_callback;
+        for (i = 0; i < n; i++) {
+            if (pthread_create(&arr[i], NULL, foo_thread, &a)) {
+                PyErr_SetString(PyExc_TypeError, "create a thread failed");
+                goto error;
+            }
+        }
+
+        for (i = 0; i < n; i++) {
+            if (pthread_join(arr[i], NULL)) {
+                PyErr_SetString(PyExc_TypeError, "thread join failed");
+                goto error;
+            }
+        }
+        Py_XINCREF(Py_None);
+        rv = Py_None;
+    error:
+        PyMem_RawFree(arr);
+        Py_XDECREF(sec);
+        Py_XDECREF(num);
+        Py_XDECREF(py_callback);
+        // restore GIL
+        Py_END_ALLOW_THREADS
+        return rv;
+    }
+
+    static PyMethodDef methods[] = {
+        {"foo", (PyCFunction)foo, METH_VARARGS, NULL},
+        {NULL, NULL, 0, NULL}
+    };
+
+    static struct PyModuleDef module = {
+        PyModuleDef_HEAD_INIT, "foo", NULL, -1, methods
+    };
+
+    PyMODINIT_FUNC PyInit_foo(void)
+    {
+        return PyModule_Create(&module);
+    }
+
+output:
+
+.. code-block:: bash
+
+    $ python setup.py -q build
+    $ python setup.py -q install
+    $ pyton -q
+    >>> import foo
+    >>> from datetime import datetime
+    >>> def cb(s):
+    ...     now = datetime.now()
+    ...     print(f'{now}: {s}')
+    ...
+    >>> foo.foo(3, 1, cb)
+    2018-11-05 09:33:50.642543: Awesome Python!
+    2018-11-05 09:33:50.642634: Awesome Python!
+    2018-11-05 09:33:50.642672: Awesome Python!
+
 Get Reference Count
 --------------------
 
