@@ -39,3 +39,11 @@ If there is any question or suggestion, please create an issue on `GitHub Issues
    notes/python-asyncio
    notes/python-tests
    notes/python-c-extensions
+
+Appendix
+--------
+
+.. toctree::
+    :maxdepth: 1
+
+    appendix/python-asyncio

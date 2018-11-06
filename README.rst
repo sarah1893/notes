@@ -55,6 +55,11 @@ Cheat Sheets
 - `tests`_
 - `c extensions`_
 
+Appendix
+=========
+
+- `Appendix: asyncio <docs/appendix/python-asyncio.rst>`_
+
 
 .. _basic: docs/notes/python-basic.rst
 .. _new in python3: docs/notes/python-new-py3.rst
