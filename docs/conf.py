@@ -51,7 +51,7 @@ master_doc = 'index'
 
 # General information about the project.
 year = datetime.now().year
-project = u'python-cheatsheet'
+project = u'pysheeet'
 copyright = u'2016-{}, crazyguitar'.format(year)
 author = u'crazyguitar'
 
