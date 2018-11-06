@@ -1206,6 +1206,67 @@ Get domain name
     ('192.30.253.112', 443)
     ('192.30.253.112', 443)
 
+Gather Results
+--------------
+
+.. code-block:: python
+
+    import asyncio
+    import ssl
+
+
+    path = ssl.get_default_verify_paths()
+    sslctx = ssl.SSLContext()
+    sslctx.verify_mode = ssl.CERT_REQUIRED
+    sslctx.check_hostname = True
+    sslctx.load_verify_locations(path.cafile)
+
+
+    async def fetch(host, port):
+        r, w = await asyncio.open_connection(host, port, ssl=sslctx)
+        req = "GET / HTTP/1.1\r\n"
+        req += f"Host: {host}\r\n"
+        req += "Connection: close\r\n"
+        req += "\r\n"
+
+        # send request
+        w.write(req.encode())
+
+        # recv response
+        resp = ""
+        while True:
+            line = await r.readline()
+            if not line:
+                break
+            line = line.decode("utf-8")
+            resp += line
+
+        # close writer
+        w.close()
+        await w.wait_closed()
+        return resp
+
+
+    async def main():
+        loop = asyncio.get_running_loop()
+        url = ["python.org", "github.com", "google.com"]
+        fut = [fetch(u, 443) for u in url]
+        resps = await asyncio.gather(*fut)
+        for r in resps:
+            print(r.split("\r\n")[0])
+
+
+    asyncio.run(main())
+
+output:
+
+.. code-block:: bash
+
+    $ python fetch.py
+    HTTP/1.1 301 Moved Permanently
+    HTTP/1.1 200 OK
+    HTTP/1.1 301 Moved Permanently
+
 Simple asyncio UDP echo server
 --------------------------------
 
