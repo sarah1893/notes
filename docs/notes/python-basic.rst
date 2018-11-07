@@ -1418,3 +1418,19 @@ Dynamic Execute Python Code
     ... '''
     >>> exec(py, globals(), locals())
     55
+
+Cache
+-----
+
+.. code-block:: python
+
+    >>> from functools import lru_cache
+    >>> @lru_cache(maxsize=None)
+    ... def fib(n):
+    ...     if n < 2:
+    ...         return n
+    ...     return fib(n - 1) + fib(n - 2)
+    ...
+    >>> f = [fib(n) for n in range(16)]
+    >>> fib.cache_info()
+    CacheInfo(hits=28, misses=16, maxsize=None, currsize=16)
