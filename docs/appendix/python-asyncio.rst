@@ -8,8 +8,8 @@ Asyncio
     :backlinks: none
 
 
-What is @asyncio.coroutine?
----------------------------
+What is Coroutine?
+-------------------
 
 .. code-block:: python
 
@@ -53,8 +53,8 @@ output:
     Hello Foo
 
 
-What is a Task?
----------------
+What is Task?
+--------------
 
 .. code-block:: python
 
@@ -119,41 +119,8 @@ output:
     Hello Bar
     hello Foo
 
-Inline callback
----------------
-
-.. code-block:: python
-
-    >>> import asyncio
-    >>> async def foo():
-    ...     await asyncio.sleep(1)
-    ...     return "foo done"
-    ...
-    >>> async def bar():
-    ...     await asyncio.sleep(.5)
-    ...     return "bar done"
-    ...
-    >>> async def ker():
-    ...     await asyncio.sleep(3)
-    ...     return "ker done"
-    ...
-    >>> async def task():
-    ...     res = await foo()
-    ...     print(res)
-    ...     res = await bar()
-    ...     print(res)
-    ...     res = await ker()
-    ...     print(res)
-    ...
-    >>> loop = asyncio.get_event_loop()
-    >>> loop.run_until_complete(task())
-    foo done
-    bar done
-    ker done
-
-
-What event loop doing? (Without polling)
-----------------------------------------
+How does event loop work?
+-------------------------
 
 .. code-block:: python
 
@@ -243,8 +210,8 @@ output:
     Bar
 
 
-What ``asyncio.wait`` doing?
------------------------------
+How does ``asyncio.wait`` work?
+--------------------------------
 
 .. code-block:: python
 
@@ -324,8 +291,8 @@ Simple asyncio.run
     >>> ret = run(getaddrinfo('google.com', 443))
     >>> ret = asyncio.run(getaddrinfo('google.com', 443))
 
-What `loop.sock_*` do?
------------------------
+How does ``loop.sock_*`` work?
+-------------------------------
 
 .. code-block:: python
 
@@ -433,8 +400,8 @@ output:
     asyncio
 
 
-What ``loop.create_server`` do?
---------------------------------
+How does ``loop.create_server`` work?
+-------------------------------------
 
 .. code-block:: python
 

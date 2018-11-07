@@ -810,8 +810,8 @@ output:
     [832040, 1346269, 2178309]
 
 
-What "with ThreadPoolExecutor" doing?
--------------------------------------
+What does "with ThreadPoolExecutor" work?
+-----------------------------------------
 
 .. code-block:: python
 
@@ -828,6 +828,7 @@ What "with ThreadPoolExecutor" doing?
         print(res)
 
     # equal to
+
     e = futures.ThreadPoolExecutor(3)
     fut = e.submit(fib, 30)
     fut.result()
