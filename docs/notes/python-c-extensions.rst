@@ -10,8 +10,8 @@ Python C Extensions Cheatsheet
     :backlinks: none
 
 
-Simple setup.py for C Extension
---------------------------------
+Simple setup.py
+----------------
 
 .. code-block:: python
 
@@ -473,8 +473,8 @@ output:
     >>> foo.qux(x=3)
     (3, None)
 
-Calling Python Functions from C
---------------------------------
+Calling Python Functions
+-------------------------
 
 .. code-block:: c
 
@@ -1370,8 +1370,8 @@ output:
     >>> bar.gcd(3, 7)
     1
 
-Run a Python Command from C
-----------------------------
+Run a Python Command
+---------------------
 
 .. code-block:: c
 
@@ -1397,8 +1397,8 @@ output:
     $ ./foo "print('Hello Python')"
     Hello Python
 
-Run a Python File from C
--------------------------
+Run a Python File
+-----------------
 
 .. code-block:: c
 
@@ -1457,8 +1457,8 @@ output:
     $ ./foo foo.py arg1 arg2 arg3
     ['./foo', 'foo.py', 'arg1', 'arg2', 'arg3']
 
-Import a Python Module from C
-------------------------------
+Import a Python Module
+-----------------------
 
 .. code-block:: c
 
@@ -1534,8 +1534,8 @@ output:
     $ ./foo
     '{"foo": "Foo", "bar": 123}'
 
-Import All Attributes of a Module
-----------------------------------
+Import everything of a Module
+------------------------------
 
 .. code-block:: c
 
