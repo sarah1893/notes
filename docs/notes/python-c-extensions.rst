@@ -156,13 +156,10 @@ output:
     2018-11-04 20:15:34.860705: thread 2
 
 
-.. warning::
-
-    In C extension code, blocking I/O should put into ``Py_BEGIN_ALLOW_THREADS``
-    and ``Py_BEGIN_ALLOW_THREADS`` block for releasing the GIL temporarily;
-    Otherwise, blocking I/O operation have to wait until previous operation finish.
-    In addition, the GIL can only be safely released when there is **NO** Python C API
-    functions between ``Py_BEGIN_ALLOW_THREADS`` and ``Py_BEGIN_ALLOW_THREADS``.
+In C extension, blocking I/O should be inserted into a block which is wrapped by
+``Py_BEGIN_ALLOW_THREADS`` and ``Py_END_ALLOW_THREADS`` for releasing the GIL
+temporarily; Otherwise, a blocking I/O operation has to wait until previous
+operation finish. For example
 
 .. code-block:: c
 
@@ -206,6 +203,11 @@ output:
     2018-11-04 20:16:44.055932: thread 0
     2018-11-04 20:16:47.059718: thread 1
     2018-11-04 20:16:50.063579: thread 2
+
+.. warning::
+
+    The GIL can only be safely released when there is **NO** Python C API
+    functions between ``Py_BEGIN_ALLOW_THREADS`` and ``Py_END_ALLOW_THREADS``.
 
 Acquire the GIL
 ---------------
