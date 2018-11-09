@@ -10,8 +10,8 @@ Python C Extensions Cheatsheet
     :backlinks: none
 
 
-Simple setup.py for C Extension
---------------------------------
+Simple setup.py
+----------------
 
 .. code-block:: python
 
@@ -241,10 +241,10 @@ Acquire the GIL
 
         sleep(n);  // slow task
 
-        // acquire GIL
+        // acquire the GIL
         PyGILState_STATE state = PyGILState_Ensure();
         rv = PyObject_CallFunction(py_callback, "s", "Awesome Python!");
-        // release GIL
+        // release the GIL
         PyGILState_Release(state);
         Py_XDECREF(rv);
         return NULL;
@@ -342,6 +342,50 @@ output:
     2018-11-05 09:33:50.642543: Awesome Python!
     2018-11-05 09:33:50.642634: Awesome Python!
     2018-11-05 09:33:50.642672: Awesome Python!
+
+If threads are created from C/C++, those threads do not hold the GIL. Without
+acquiring the GIL, the interpreter cannot access Python functions safely. For
+example
+
+.. code-block:: c
+
+    void *
+    foo_thread(void *args)
+    {
+        ...
+        // without acquiring the GIL
+        rv = PyObject_CallFunction(py_callback, "s", "Awesome Python!");
+        Py_XDECREF(rv);
+        return NULL;
+    }
+
+output:
+
+.. code-block:: bash
+
+    >>> import foo
+    >>> from datetime import datetime
+    >>> def cb(s):
+    ...     now = datetime.now()
+    ...     print(f"{now}: {s}")
+    ...
+    >>> foo.foo(1, 1, cb)
+    [2]    8590 segmentation fault  python -q
+
+.. warning::
+
+    In order to call python function safely, we can simply warp **Python Functions**
+    between ``PyGILState_Ensure`` and ``PyGILState_Release`` in C extension code.
+
+    .. code-block:: c
+
+        PyGILState_STATE state = PyGILState_Ensure();
+        // Perform Python actions
+        result = PyObject_CallFunction(callback)
+        // Error handling
+        PyGILState_Release(state);
+
+
 
 Get Reference Count
 --------------------
@@ -473,8 +517,8 @@ output:
     >>> foo.qux(x=3)
     (3, None)
 
-Calling Python Functions from C
---------------------------------
+Calling Python Functions
+-------------------------
 
 .. code-block:: c
 
@@ -1370,8 +1414,8 @@ output:
     >>> bar.gcd(3, 7)
     1
 
-Run a Python Command from C
-----------------------------
+Run a Python Command
+---------------------
 
 .. code-block:: c
 
@@ -1397,8 +1441,8 @@ output:
     $ ./foo "print('Hello Python')"
     Hello Python
 
-Run a Python File from C
--------------------------
+Run a Python File
+-----------------
 
 .. code-block:: c
 
@@ -1457,8 +1501,8 @@ output:
     $ ./foo foo.py arg1 arg2 arg3
     ['./foo', 'foo.py', 'arg1', 'arg2', 'arg3']
 
-Import a Python Module from C
-------------------------------
+Import a Python Module
+-----------------------
 
 .. code-block:: c
 
@@ -1534,8 +1578,8 @@ output:
     $ ./foo
     '{"foo": "Foo", "bar": 123}'
 
-Import All Attributes of a Module
-----------------------------------
+Import everything of a Module
+------------------------------
 
 .. code-block:: c
 
