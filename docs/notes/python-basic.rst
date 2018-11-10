@@ -132,16 +132,16 @@ Check Object Attributes
 
 .. code-block:: python
 
-    # example of check list attributes
-    >>> dir(list)
+    >>> dir(list)  # check all attr of list
     ['__add__', '__class__', ...]
 
 Document Functions
 -------------------
 
+Define a function document
+
 .. code-block:: python
 
-    # Define a function document
     >>> def example():
     ...   """ This is an example function """
     ...   print("Example function")
@@ -149,7 +149,10 @@ Document Functions
     >>> example.__doc__
     ' This is an example function '
 
-    # Or using help function
+Or using help function
+
+.. code-block:: python
+
     >>> help(example)
 
 Check Instance Type
@@ -172,10 +175,13 @@ Check, Get, Set Attribute
     ...   def printex(self):
     ...     print("This is an example")
     ...
-
-    # Check object has attributes
-    # hasattr(obj, 'attr')
     >>> ex = Example()
+
+Check an object has attributes
+
+.. code-block:: python
+
+    >>> # hasattr(obj, 'attr')
     >>> hasattr(ex,"name")
     True
     >>> hasattr(ex,"printex")
@@ -183,13 +189,19 @@ Check, Get, Set Attribute
     >>> hasattr(ex,"print")
     False
 
-    # Get object attribute
-    # getattr(obj, 'attr')
+Get an object's attribute
+
+.. code-block:: python
+
+    >>> # getattr(obj, 'attr')
     >>> getattr(ex,'name')
     'ex'
 
-    # Set object attribute
-    # setattr(obj, 'attr', value)
+Set an object's attribute
+
+.. code-block:: python
+
+    >>> # setattr(obj, 'attr', value)
     >>> setattr(ex,'name','example')
     >>> ex.name
     'example'
@@ -213,8 +225,6 @@ Check Global Variables
 
 .. code-block:: python
 
-    # globals() return a dictionary
-    # {'variable name': variable value}
     >>> globals()
     {'args': (1, 2, 3, 4, 5), ...}
 
@@ -253,9 +263,10 @@ Get Function/Class Name
 New and Init
 -------------
 
+``__init__`` will be invoked
+
 .. code-block:: python
 
-    # __init__ will be invoked
     >>> class ClassA(object):
     ...     def __new__(cls, arg):
     ...         print('__new__ ' + arg)
@@ -267,7 +278,10 @@ New and Init
     __new__ Hello
     __init__ Hello
 
-    # __init__ won't be invoked
+``__init__`` won't be invoked
+
+.. code-block:: python
+
     >>> class ClassB(object):
     ...     def __new__(cls, arg):
     ...         print('__new__ ' + arg)
@@ -282,9 +296,9 @@ New and Init
 The Diamond Problem
 --------------------
 
-.. code-block:: python
+The problem of multiple inheritance in searching a method
 
-    # The problem of multiple inheritance in searching a method
+.. code-block:: python
 
     >>> def foo_a(self):
     ...     print("This is ClsA")
@@ -328,6 +342,8 @@ Representation of Class
 Break Up a Long String
 -----------------------
 
+Original long string
+
 .. code-block:: python
 
     # original long string
@@ -335,25 +351,37 @@ Break Up a Long String
     >>> s
     'This is a very very very long python string'
 
-    # single quote with an escaping backslash
+Single quote with an escaping backslash
+
+.. code-block:: python
+
     >>> s = "This is a very very very " \
     ...     "long python string"
     >>> s
     'This is a very very very long python string'
 
-    # using brackets
+Using brackets
+
+.. code-block:: python
+
     >>> s = ("This is a very very very "
     ...      "long python string")
     >>> s
     'This is a very very very long python string'
 
-    # using '+'
+Using ``+``
+
+.. code-block:: python
+
     >>> s = ("This is a very very very " +
     ...      "long python string")
     >>> s
     'This is a very very very long python string'
 
-    # using triple-quote with an escaping backslash
+Using triple-quote with an escaping backslash
+
+.. code-block:: python
+
     >>> s = '''This is a very very very \
     ... long python string'''
     >>> s
@@ -373,18 +401,22 @@ Get Items from List
     [1, 2, 3, 4, 5]
     >>> a[:-1]
     [1, 2, 3, 4]
-
-    # a[start:end:step]
-    >>> a[0:-1:2]
+    >>> a[0:-1:2] # a[start:end:step]
     [1, 3]
 
-    # using slice object
-    # slice(start,end,step)
+Use slice object
+
+.. code-block:: python
+
+    >>> # slice(start,end,step)
     >>> s = slice(0, -1, 2)
     >>> a[s]
     [1, 3]
 
-    # Get index and item in loop
+Get index and item in loop
+
+.. code-block:: python
+
     >>> for i, v in enumerate(range(3)):
     ...     print((i, v))
     ...
@@ -392,13 +424,19 @@ Get Items from List
     (1, 1)
     (2, 2)
 
-    # Transfer two list into tuple list
+Transfer two list into tuple list
+
+.. code-block:: python
+
     >>> a = [1, 2, 3, 4, 5]
     >>> b = [2, 4, 5, 6, 8]
     >>> zip(a, b)
     [(1, 2), (2, 4), (3, 5), (4, 6), (5, 8)]
 
-    # with filter
+With filter
+
+.. code-block:: python
+
     >>> [x for x in range(5) if x > 1]
     [2, 3, 4]
     >>> l = ['1', '2', 3, 'Hello', 4]
@@ -406,20 +444,29 @@ Get Items from List
     >>> filter(predicate, l)
     [3, 4]
 
-    # collect distinct objects
+Collect distinct objects
+
+.. code-block:: python
+
     >>> a = [1, 2, 3, 3, 3]
     >>> list({_ for _ in a})
     [1, 2, 3]
-    # or
+    >>> # or
     >>> list(set(a))
     [1, 2, 3]
 
-    # reverse
+Reverse
+
+.. code-block:: python
+
     >>> a = [1, 2, 3, 4, 5]
     >>> a[::-1]
     [5, 4, 3, 2, 1]
 
-    # be careful
+Be careful
+
+.. code-block:: python
+
     >>> a = [[]] * 3
     >>> b = [[] for _ in range(3)]
     >>> a[0].append("Hello")
@@ -433,35 +480,52 @@ Get Items from List
 Get Items from Dictionary
 -------------------------
 
+Get dictionary all keys
+
 .. code-block:: python
 
-    # get dictionary all keys
     >>> a = {"1":1, "2":2, "3":3}
     >>> b = {"2":2, "3":3, "4":4}
     >>> a.keys()
     ['1', '3', '2']
 
-    # get dictionary key and value as tuple
+Get dictionary key and value as tuple
+
+.. code-block:: python
+
+    >>> a = {"1":1, "2":2, "3":3}
     >>> a.items()
     [('1', 1), ('3', 3), ('2', 2)]
 
-    # find same key between two dictionary
+Find same key between two dictionary
+
+.. code-block:: python
+
+    >>> a = {"1":1, "2":2, "3":3}
     >>> [_ for _ in a.keys() if _ in b.keys()]
     ['3', '2']
-    # better way
+    >>> # better way
     >>> c = set(a).intersection(set(b))
     >>> list(c)
     ['3', '2']
-    # or
+    >>> # or
     >>> [_ for _ in a if _ in b]
     ['3', '2']
 
-    # update dictionary
+Update dictionary
+
+.. code-block:: python
+
+    >>> a = {"1":1, "2":2, "3":3}
+    >>> b = {"2":2, "3":3, "4":4}
     >>> a.update(b)
     >>> a
     {'1': 1, '3': 3, '2': 2, '4': 4}
 
-    # merge two dictionaries (python 3.4 or lower)
+Merge two dictionaries (python 3.4 or lower)
+
+.. code-block:: python
+
     >>> a = {"x": 55, "y": 66}
     >>> b = {"a": "foo", "b": "bar"}
     >>> c = a.copy()
@@ -469,7 +533,10 @@ Get Items from Dictionary
     >>> c
     {'y': 66, 'x': 55, 'b': 'bar', 'a': 'foo'}
 
-    # merge two dictionaries (python 3.5 or above)
+Merge two dictionaries (python 3.5 or above)
+
+.. code-block:: python
+
     >>> a = {"x": 55, "y": 66}
     >>> b = {"a": "foo", "b": "bar"}
     >>> c = {**a, **b}
@@ -479,19 +546,26 @@ Get Items from Dictionary
 Set Items to a List/Dictionary
 -------------------------------
 
+Get a list with init value
+
 .. code-block:: python
 
-    # get a list with init value
     >>> ex = [0] * 10
     >>> ex
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-    # extend two list
+Extend two lists
+
+.. code-block:: python
+
     >>> a = [1, 2, 3]; b = ['a', 'b']
     >>> a + b
     [1, 2, 3, 'a', 'b']
 
-    # using list comprehension
+Using list comprehension
+
+.. code-block:: python
+
     >>> [x for x in range(10)]
     [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     >>> fn = lambda x: x**2
@@ -500,7 +574,10 @@ Set Items to a List/Dictionary
     >>> {'{0}'.format(x): x for x in range(3)}
     {'1': 1, '0': 0, '2': 2}
 
-    # using builtin function "map"
+Using builtin function ``map``
+
+.. code-block:: python
+
     >>> map(fn, range(5))
     [0, 1, 4, 9, 16]
 
@@ -508,9 +585,10 @@ Set Items to a List/Dictionary
 Python Set
 -----------
 
+Set comprehension
+
 .. code-block:: python
 
-    # set comprehension
     >>> a = [1, 2, 5, 6, 6, 6, 7]
     >>> s = {x for x in a}
     >>> s
@@ -522,7 +600,10 @@ Python Set
     >>> s
     set([6, 5, -1, 7])
 
-    # uniquify list
+Uniquify a list
+
+.. code-block:: python
+
     >>> a = [1, 2, 2, 2, 3, 4, 5, 5]
     >>> a
     [1, 2, 2, 2, 3, 4, 5, 5]
@@ -530,60 +611,84 @@ Python Set
     >>> ua
     [1, 2, 3, 4, 5]
 
-    # union two set
+Union two sets
+
+.. code-block:: python
+
     >>> a = set([1, 2, 2, 2, 3])
     >>> b = set([5, 5, 6, 6, 7])
     >>> a | b
     set([1, 2, 3, 5, 6, 7])
-    # or
+    >>> # or
     >>> a = [1, 2, 2, 2, 3]
     >>> b = [5, 5, 6, 6, 7]
     >>> set(a + b)
     set([1, 2, 3, 5, 6, 7])
 
-    # append item to set
+Append items to a set
+
+.. code-block:: python
+
     >>> a = set([1, 2, 3, 3, 3])
     >>> a.add(5)
     >>> a
     set([1, 2, 3, 5])
-    # or
+    >>> # or
     >>> a = set([1, 2, 3, 3, 3])
     >>> a |= set([1, 2, 3, 4, 5, 6])
     >>> a
     set([1, 2, 3, 4, 5, 6])
 
-    # intersection two set
+Intersection two sets
+
+.. code-block:: python
+
     >>> a = set([1, 2, 2, 2, 3])
     >>> b = set([1, 5, 5, 6, 6, 7])
     >>> a & b
     set([1])
 
-    # get two list common items
+Get common items from sets
+
+.. code-block:: python
+
     >>> a = [1, 1, 2, 3]
     >>> b = [1, 3, 5, 5, 6, 6]
     >>> com = list(set(a) & set(b))
     >>> com
     [1, 3]
 
-    # b contains a
+b contains a
+
+.. code-block:: python
+
     >>> a = set([1, 2])
     >>> b = set([1, 2, 5, 6])
     >>> a <=b
     True
 
-    # a contains b
+a contains b
+
+.. code-block:: python
+
     >>> a = set([1, 2, 5, 6])
     >>> b = set([1, 5, 6])
     >>> a >= b
     True
 
-    # set diff
+Set diff
+
+.. code-block:: python
+
     >>> a = set([1, 2, 3])
     >>> b = set([1, 5, 6, 7, 7])
     >>> a - b
     set([2, 3])
 
-    # symmetric diff
+Symmetric diff
+
+.. code-block:: python
+
     >>> a = set([1,2,3])
     >>> b = set([1, 5, 6, 7, 7])
     >>> a ^ b
@@ -744,9 +849,12 @@ Emulating a Dictionary
 Decorator
 ---------
 
+**New in Python 2.4**
+
+- PEP `318 <https://www.python.org/dev/peps/pep-0318/>`_ - Decorators for Functions and Methods
+
 .. code-block:: python
 
-    # see: PEP318
     >>> from functools import wraps
     >>> def decorator(func):
     ...   @wraps(func)
@@ -766,7 +874,10 @@ Decorator
     Inside example function.
     After calling example.
 
-    # equivalent to
+Equals to
+
+.. code-block:: python
+
     ... def example():
     ...   print("Inside example function.")
     ...
@@ -776,15 +887,14 @@ Decorator
     Inside example function.
     After calling example.
 
-.. note::
 
-    ``@wraps`` preserve attributes of the original function,
-    otherwise attributes of decorated function will be replaced
-    by **wrapper function**
+``@wraps`` preserve attributes of the original function, otherwise attributes
+of the decorated function will be replaced by **wrapper function**. For example
+
+Without ``@wraps``
 
 .. code-block:: python
 
-    # without @wraps
     >>> def decorator(func):
     ...     def wrapper(*args, **kwargs):
     ...         print('wrap function')
@@ -798,7 +908,10 @@ Decorator
     >>> example.__name__  # attr of function lose
     'wrapper'
 
-    # with @wraps
+With ``@wraps``
+
+.. code-block:: python
+
     >>> from functools import wraps
     >>> def decorator(func):
     ...     @wraps(func)
@@ -813,7 +926,6 @@ Decorator
     ...
     >>> example.__name__  # attr of function preserve
     'example'
-
 
 Decorator with Arguments
 ------------------------
@@ -838,7 +950,10 @@ Decorator with Arguments
     Val is 10
     This is example function.
 
-    # equivalent to
+Equals to
+
+.. code-block:: python
+
     >>> def example():
     ...   print("This is example function.")
     ...
@@ -850,10 +965,12 @@ Decorator with Arguments
 Loop with Else Clause
 ----------------------
 
+See document: `More Control Flow Tools <https://docs.python.org/3/tutorial/controlflow.html>`_
+
+For loop's else clause runs when no break occurs
+
 .. code-block:: python
 
-    # see document: More Control Flow Tools
-    # forloop’s else clause runs when no break occurs
     >>> for x in range(5):
     ...     print(x, end=' ')
     ... else:
@@ -870,7 +987,10 @@ Loop with Else Clause
     ...
     break occurred
 
-    # above statement equivalent to
+Above example equals to
+
+.. code-block:: python
+
     >>> flag = False
     >>> for x in range(5):
     ...     if x % 2 == 0:
@@ -888,7 +1008,6 @@ Exception with Else Clause
 
 .. code-block:: python
 
-    # No exception occur will go into else.
     >>> try:
     ...     print("No exception")
     ... except:
@@ -914,7 +1033,10 @@ Lambda
     >>> (lambda x: x if x>3 else 3)(5)
     5
 
-    # multiline lambda example
+Multiline lambda example
+
+.. code-block:: python
+
     >>> (lambda x:
     ... True
     ... if x>0
@@ -961,7 +1083,9 @@ Declare a Class
     >>> f.fib(f.val)
     55
 
-    # equal to
+Equals to
+
+.. code-block:: python
 
     >>> class Fib(object):
     ...     val = 10
@@ -1105,7 +1229,10 @@ Property
         raise TypeError("Expected int")
     TypeError: Expected int
 
-    # equivalent to
+Equals to
+
+.. code-block:: python
+
     >>> class Example(object):
     ...     def __init__(self, value):
     ...        self._val = value
@@ -1127,6 +1254,9 @@ Property
 Computed Attributes
 --------------------
 
+``@property`` computes a value of a attribute only when we need. Not store in
+memory previously.
+
 .. code-block:: python
 
     >>> class Example(object):
@@ -1137,11 +1267,6 @@ Computed Attributes
     >>> ex = Example()
     >>> ex.square3
     8
-
-.. note::
-
-    ``@property`` compute the value of attribute only when we need.
-    Not store in memory previously.
 
 Descriptor
 ----------
@@ -1187,10 +1312,11 @@ Descriptor
 Static and Class Methond
 -------------------------
 
+``@classmethod`` is bound to a class. ``@staticmethod`` is similar to a python
+function but define in a class.
+
 .. code-block:: python
 
-    # @classmethod: bound to class
-    # @staticmethod: like python function but in class
     >>> class example(object):
     ...   @classmethod
     ...   def clsmethod(cls):
@@ -1220,9 +1346,10 @@ Static and Class Methond
 Abstract Method
 ----------------
 
+``abc`` is used to define methods but not implement
+
 .. code-block:: python
 
-    # usually using in define methods but not implement
     >>> from abc import ABCMeta, abstractmethod
     >>> class base(object):
     ...   __metaclass__ = ABCMeta
@@ -1238,7 +1365,10 @@ Abstract Method
     >>> ex.absmethod()
     abstract
 
-    # another better way to define a meta class
+Another common way is to ``raise NotImplementedError``
+
+.. code-block:: python
+
     >>> class base(object):
     ...   def absmethod(self):
     ...     raise NotImplementedError
@@ -1321,8 +1451,6 @@ Parsing CSV
 
 .. code-block:: python
 
-    # python2 and python3 compatible
-
     >>> try:
     ...     from StringIO import StringIO # for py2
     ... except ImportError:
@@ -1335,7 +1463,9 @@ Parsing CSV
     ...
     ['foo', 'bar', 'baz']
 
-    # or
+Or
+
+.. code-block:: python
 
     >>> import csv
     >>> s = "foo,bar,baz"
