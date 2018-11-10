@@ -1422,6 +1422,23 @@ Dynamic Execute Python Code
 Cache
 -----
 
+**New in Python 3.2**
+
+Without Cache
+
+.. code-block:: python
+
+    >>> import time
+    >>> def fib(n):
+    ...     if n < 2:
+    ...         return n
+    ...     return fib(n - 1) + fib(n - 2)
+    ...
+    >>> s = time.time(); _ = fib(32); e = time.time(); e - s
+    1.1562161445617676
+
+With Cache (dynamic programming)
+
 .. code-block:: python
 
     >>> from functools import lru_cache
@@ -1431,6 +1448,7 @@ Cache
     ...         return n
     ...     return fib(n - 1) + fib(n - 2)
     ...
-    >>> f = [fib(n) for n in range(16)]
+    >>> s = time.time(); _ = fib(32); e = time.time(); e - s
+    2.9087066650390625e-05
     >>> fib.cache_info()
-    CacheInfo(hits=28, misses=16, maxsize=None, currsize=16)
+    CacheInfo(hits=30, misses=33, maxsize=None, currsize=33)
