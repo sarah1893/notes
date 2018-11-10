@@ -63,11 +63,20 @@ Python Naming Rule
 Backport Features
 ------------------
 
+**New in Python 2.1**
+
+- PEP `236 <https://www.python.org/dev/peps/pep-0236>`_ - Back to the __future__
+
+``from __future__ import feature`` is a `future statement`__.
+It uses for backporting features from other python versions to current
+python version, not like original import.
+
+.. _future: https://docs.python.org/2/reference/simple_stmts.html#future
+__ future_
+
+Backport python3 print_function to python2
+
 .. code-block:: python
-
-    # PEP 236 - Back to the __future__
-
-    # backport python3 print_function in python2
 
     >>> print "Hello World"  # print is a statement
     Hello World
@@ -80,7 +89,9 @@ Backport Features
     >>> print("Hello World") # print become a function
     Hello World
 
-    # backport python3 unicode_literals in python2
+Backport python3 unicode_literals to python2
+
+.. code-block:: python
 
     >>> type("Guido") # string type is str in python2
     <type 'str'>
@@ -88,7 +99,9 @@ Backport Features
     >>> type("Guido") # string type become unicode
     <type 'unicode'>
 
-    # backport PEP 238 -- Changing the Division Operator
+Backport PEP `238 <https://www.python.org/dev/peps/pep-0238>`_ - Changing the Division Operator
+
+.. code-block:: python
 
     >>> 1/2
     0
@@ -97,16 +110,6 @@ Backport Features
     0.5
     >>> 1//2  # return a int (floor division)
     0
-
-
-.. note::
-
-    ``from __future__ import feature`` is a `future statement`__.
-    It use for backporting features of other python version to
-    current python version, not like original import.
-
-.. _future: https://docs.python.org/2/reference/simple_stmts.html#future
-__ future_
 
 Check Python Version
 --------------------
