@@ -45,6 +45,7 @@ Cheat Sheets
 - `basic`_
 - `typing`_
 - `unicode`_
+- `iterator`_
 - `generator`_
 - `regular expression`_
 - `socket`_
@@ -65,6 +66,7 @@ Appendix
 .. _new in python3: docs/notes/python-new-py3.rst
 .. _typing: docs/notes/python-typing.rst
 .. _unicode: docs/notes/python-unicode.rst
+.. _iterator: docs/notes/python-iterator.rst
 .. _generator: docs/notes/python-generator.rst
 .. _regular expression: docs/notes/python-rexp.rst
 .. _socket: docs/notes/python-socket.rst

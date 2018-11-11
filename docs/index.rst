@@ -30,6 +30,7 @@ If there is any question or suggestion, please create an issue on `GitHub Issues
    notes/python-basic
    notes/python-typing
    notes/python-unicode
+   notes/python-iterator
    notes/python-generator
    notes/python-rexp
    notes/python-socket
