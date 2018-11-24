@@ -29,6 +29,7 @@ If there is any question or suggestion, please create an issue on `GitHub Issues
    notes/python-new-py3
    notes/python-code-style
    notes/python-basic
+   notes/python-future
    notes/python-typing
    notes/python-unicode
    notes/python-iterator

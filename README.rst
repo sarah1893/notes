@@ -44,6 +44,7 @@ Cheat Sheets
 - `new in python3`_
 - `code style_`
 - `basic`_
+- `future_`
 - `typing`_
 - `unicode`_
 - `iterator`_
@@ -63,9 +64,10 @@ Appendix
 - `Appendix: asyncio <docs/appendix/python-asyncio.rst>`_
 
 
-.. _basic: docs/notes/python-basic.rst
-.. _code style: docs/notes/python-code-style.rst
 .. _new in python3: docs/notes/python-new-py3.rst
+.. _code style: docs/notes/python-code-style.rst
+.. _basic: docs/notes/python-basic.rst
+.. _future: docs/notes/python-future.rst
 .. _typing: docs/notes/python-typing.rst
 .. _unicode: docs/notes/python-unicode.rst
 .. _iterator: docs/notes/python-iterator.rst
