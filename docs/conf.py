@@ -119,10 +119,12 @@ html_theme = 'alabaster'
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = {
+    'logo': 'logo.svg',
     'show_powered_by': False,
     'github_user': 'crazyguitar',
     'github_repo': 'pysheeet',
     'github_banner': True,
+    'github_type': 'star',
     'show_related': False,
     'body_max_width': 'none',
     'body_min_width': 'none',
@@ -178,14 +180,14 @@ html_extra_path = ['_extra']
 
 # Custom sidebar templates, maps document names to template names.
 sidebar_index = [
+    'about.html',
     'sidebarintro.html',
     'link.html',
-    'github.html',
 ]
 sidebar_notes = [
+    'about.html',
     'sidebarintro.html',
     'link.html',
-    'github.html',
 ]
 
 if has_carbonad:

@@ -1,14 +1,22 @@
-Development Status
-===================
 
-.. image:: https://travis-ci.org/crazyguitar/pysheeet.svg?branch=master
-    :target: https://travis-ci.org/crazyguitar/pysheeet
+.. raw:: html
 
-.. image:: https://coveralls.io/repos/github/crazyguitar/pysheeet/badge.svg?branch=master
-    :target: https://coveralls.io/github/crazyguitar/pysheeet?branch=master
+    <h1 align="center">
+    <br>
+      <a href="https://www.pythonsheets.com"><img src="docs/_static/logo.svg" alt="pysheeet" width=200"></a>
+    </h1>
+    <p align="center">
+      <a href="https://travis-ci.org/crazyguitar/pysheeet">
+        <img src="https://travis-ci.org/crazyguitar/pysheeet.svg?branch=master" alt="Build Status">
+      </a>
+      <a href="https://coveralls.io/github/crazyguitar/pysheeet?branch=master">
+        <img src="https://coveralls.io/repos/github/crazyguitar/pysheeet/badge.svg?branch=master" alt="Coverage">
+      </a>
+      <a href="https://raw.githubusercontent.com/crazyguitar/pysheeet/master/LICENSE">
+        <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License MIT">
+      </a>
+    </p>
 
-.. image:: https://img.shields.io/badge/License-MIT-blue.svg
-     :target: https://raw.githubusercontent.com/crazyguitar/pysheeet/master/LICENSE
 
 Introduction
 =============
