@@ -9,8 +9,12 @@ Python Basic Cheatsheet
 .. contents:: Table of Contents
     :backlinks: none
 
-Check Python Version
---------------------
+
+Built-in
+--------
+
+Python Version
+^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -25,220 +29,35 @@ Check Python Version
     >>> py37
     False
 
-Check Object Attributes
------------------------
-
-.. code-block:: python
-
-    >>> dir(list)  # check all attr of list
-    ['__add__', '__class__', ...]
-
-Document Functions
--------------------
-
-Define a function document
-
-.. code-block:: python
-
-    >>> def example():
-    ...   """ This is an example function """
-    ...   print("Example function")
-    ...
-    >>> example.__doc__
-    ' This is an example function '
-
-Or using help function
-
-.. code-block:: python
-
-    >>> help(example)
-
-Check Instance Type
--------------------
-
-.. code-block:: python
-
-    >>> ex = 10
-    >>> isinstance(ex,int)
-    True
-
-Check, Get, Set Attribute
--------------------------
-
-.. code-block:: python
-
-    >>> class Example(object):
-    ...   def __init__(self):
-    ...     self.name = "ex"
-    ...   def printex(self):
-    ...     print("This is an example")
-    ...
-    >>> ex = Example()
-
-Check an object has attributes
-
-.. code-block:: python
-
-    >>> # hasattr(obj, 'attr')
-    >>> hasattr(ex,"name")
-    True
-    >>> hasattr(ex,"printex")
-    True
-    >>> hasattr(ex,"print")
-    False
-
-Get an object's attribute
-
-.. code-block:: python
-
-    >>> # getattr(obj, 'attr')
-    >>> getattr(ex,'name')
-    'ex'
-
-Set an object's attribute
-
-.. code-block:: python
-
-    >>> # setattr(obj, 'attr', value)
-    >>> setattr(ex,'name','example')
-    >>> ex.name
-    'example'
-
-Check Inheritance
------------------
-
-.. code-block:: python
-
-    >>> class Example(object):
-    ...   def __init__(self):
-    ...     self.name = "ex"
-    ...   def printex(self):
-    ...     print("This is an Example")
-    ...
-    >>> issubclass(Example, object)
-    True
-
-Check Global Variables
------------------------
+List Global Variables
+^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
     >>> globals()
     {'args': (1, 2, 3, 4, 5), ...}
 
-Check Callable
----------------
+Dynamic Execute Python Code
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
-    >>> a = 10
-    >>> def fun():
-    ...   print("I am callable")
-    ...
-    >>> callable(a)
-    False
-    >>> callable(fun)
-    True
+    >>> py = '''
+    ... def fib(n):
+    ...     a, b = 0, 1
+    ...     for _ in range(n):
+    ...         b, a = b + a, b
+    ...     return a
+    ... print(fib(10))
+    ... '''
+    >>> exec(py, globals(), locals())
+    55
 
-Get Function/Class Name
------------------------
+String
+------
 
-.. code-block:: python
-
-    >>> class ExampleClass(object):
-    ...   pass
-    ...
-    >>> def example_function():
-    ...   pass
-    ...
-    >>> ex = ExampleClass()
-    >>> ex.__class__.__name__
-    'ExampleClass'
-    >>> example_function.__name__
-    'example_function'
-
-
-New and Init
--------------
-
-``__init__`` will be invoked
-
-.. code-block:: python
-
-    >>> class ClassA(object):
-    ...     def __new__(cls, arg):
-    ...         print('__new__ ' + arg)
-    ...         return object.__new__(cls, arg)
-    ...     def __init__(self, arg):
-    ...         print('__init__ ' + arg)
-    ...
-    >>> o = ClassA("Hello")
-    __new__ Hello
-    __init__ Hello
-
-``__init__`` won't be invoked
-
-.. code-block:: python
-
-    >>> class ClassB(object):
-    ...     def __new__(cls, arg):
-    ...         print('__new__ ' + arg)
-    ...         return object
-    ...     def __init__(self, arg):
-    ...         print('__init__ ' + arg)
-    ...
-    >>> o = ClassB("Hello")
-    __new__ Hello
-
-
-The Diamond Problem
---------------------
-
-The problem of multiple inheritance in searching a method
-
-.. code-block:: python
-
-    >>> def foo_a(self):
-    ...     print("This is ClsA")
-    ...
-    >>> def foo_b(self):
-    ...     print("This is ClsB")
-    ...
-    >>> def foo_c(self):
-    ...     print("This is ClsC")
-    ...
-    >>> class Type(type):
-    ...     def __repr__(cls):
-    ...         return cls.__name__
-    ...
-    >>> ClsA = Type("ClsA", (object,), {'foo': foo_a})
-    >>> ClsB = Type("ClsB", (ClsA,), {'foo': foo_b})
-    >>> ClsC = Type("ClsC", (ClsA,), {'foo': foo_c})
-    >>> ClsD = Type("ClsD", (ClsB, ClsC), {})
-    >>> ClsD.mro()
-    [ClsD, ClsB, ClsC, ClsA, <type 'object'>]
-    >>> ClsD().foo()
-    This is ClsB
-
-
-Representation of Class
-------------------------
-
-.. code-block:: python
-
-    >>> class Example(object):
-    ...    def __str__(self):
-    ...       return "Example __str__"
-    ...    def __repr__(self):
-    ...       return "Example __repr__"
-    ...
-    >>> print(str(Example()))
-    Example __str__
-    >>> Example()
-    Example __repr__
-
-Break Up a Long String
------------------------
+Long String
+^^^^^^^^^^^
 
 Original long string
 
@@ -285,34 +104,476 @@ Using triple-quote with an escaping backslash
     >>> s
     'This is a very very very long python string'
 
-Using Generator as Iterator
----------------------------
+List
+----
+
+Get Items from List
+^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
-    # see: PEP289
-    >>> for x in g:
-    ...     print(x, end=' ')
-    ... else:
-    ...     print()
-    ...
-    0 1 2 3 4 5 6 7 8 9
+    >>> a = [1, 2, 3, 4, 5]
+    >>> a[0]
+    1
+    >>> a[-1]
+    5
+    >>> a[0:]
+    [1, 2, 3, 4, 5]
+    >>> a[:-1]
+    [1, 2, 3, 4]
+    >>> a[0:-1:2] # a[start:end:step]
+    [1, 3]
 
-    # equivalent to
-    >>> def generator():
-    ...     for x in range(10):
-    ...         yield x
+Get Index and Item
+^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    >>> for i, v in enumerate(range(3)):
+    ...     print((i, v))
     ...
-    >>> g = generator()
-    >>> for x in g:
+    (0, 0)
+    (1, 1)
+    (2, 2)
+
+Slice
+^^^^^
+
+.. code-block:: python
+
+    >>> # slice(start,end,step)
+    >>> s = slice(0, -1, 2)
+    >>> a[s]
+    [1, 3]
+
+Zip
+^^^
+
+.. code-block:: python
+
+    >>> a = [1, 2, 3, 4, 5]
+    >>> b = [2, 4, 5, 6, 8]
+    >>> zip(a, b)
+    [(1, 2), (2, 4), (3, 5), (4, 6), (5, 8)]
+
+Filter
+^^^^^^
+
+.. code-block:: python
+
+    >>> [x for x in range(5) if x > 1]
+    [2, 3, 4]
+    >>> l = ['1', '2', 3, 'Hello', 4]
+    >>> predicate = lambda x: isinstance(x, int)
+    >>> filter(predicate, l)
+    [3, 4]
+
+Reverse
+^^^^^^^
+
+.. code-block:: python
+
+    >>> a = [1, 2, 3, 4, 5]
+    >>> a[::-1]
+    [5, 4, 3, 2, 1]
+
+Watch Out
+^^^^^^^^^
+
+.. code-block:: python
+
+    >>> a = [[]] * 3
+    >>> b = [[] for _ in range(3)]
+    >>> a[0].append("Hello")
+    >>> a
+    [['Hello'], ['Hello'], ['Hello']]
+    >>> b[0].append("Python")
+    >>> b
+    [['Python'], [], []]
+
+Set
+---
+
+Set comprehension
+^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    >>> a = [1, 2, 5, 6, 6, 6, 7]
+    >>> s = {x for x in a}
+    >>> s
+    set([1, 2, 5, 6, 7])
+    >>> s = {x for x in a if x > 3}
+    >>> s
+    set([5, 6, 7])
+    >>> s = {x if x > 3 else -1 for x in a}
+    >>> s
+    set([6, 5, -1, 7])
+
+Uniquify a List
+^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    >>> a = [1, 2, 2, 2, 3, 4, 5, 5]
+    >>> a
+    [1, 2, 2, 2, 3, 4, 5, 5]
+    >>> ua = list(set(a))
+    >>> ua
+    [1, 2, 3, 4, 5]
+
+Union Two Sets
+^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    >>> a = set([1, 2, 2, 2, 3])
+    >>> b = set([5, 5, 6, 6, 7])
+    >>> a | b
+    set([1, 2, 3, 5, 6, 7])
+    >>> # or
+    >>> a = [1, 2, 2, 2, 3]
+    >>> b = [5, 5, 6, 6, 7]
+    >>> set(a + b)
+    set([1, 2, 3, 5, 6, 7])
+
+Append Items to a Set
+^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    >>> a = set([1, 2, 3, 3, 3])
+    >>> a.add(5)
+    >>> a
+    set([1, 2, 3, 5])
+    >>> # or
+    >>> a = set([1, 2, 3, 3, 3])
+    >>> a |= set([1, 2, 3, 4, 5, 6])
+    >>> a
+    set([1, 2, 3, 4, 5, 6])
+
+Intersection Two Sets
+^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    >>> a = set([1, 2, 2, 2, 3])
+    >>> b = set([1, 5, 5, 6, 6, 7])
+    >>> a & b
+    set([1])
+
+Common Items from Sets
+^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    >>> a = [1, 1, 2, 3]
+    >>> b = [1, 3, 5, 5, 6, 6]
+    >>> com = list(set(a) & set(b))
+    >>> com
+    [1, 3]
+
+Contain
+^^^^^^^
+
+b contains a
+
+.. code-block:: python
+
+    >>> a = set([1, 2])
+    >>> b = set([1, 2, 5, 6])
+    >>> a <=b
+    True
+
+a contains b
+
+.. code-block:: python
+
+    >>> a = set([1, 2, 5, 6])
+    >>> b = set([1, 5, 6])
+    >>> a >= b
+    True
+
+Set Diff
+^^^^^^^^
+
+.. code-block:: python
+
+    >>> a = set([1, 2, 3])
+    >>> b = set([1, 5, 6, 7, 7])
+    >>> a - b
+    set([2, 3])
+
+Symmetric diff
+^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    >>> a = set([1,2,3])
+    >>> b = set([1, 5, 6, 7, 7])
+    >>> a ^ b
+    set([2, 3, 5, 6, 7])
+
+
+Dictionary
+----------
+
+Get All Keys
+^^^^^^^^^^^^
+
+.. code-block:: python
+
+    >>> a = {"1":1, "2":2, "3":3}
+    >>> b = {"2":2, "3":3, "4":4}
+    >>> a.keys()
+    ['1', '3', '2']
+
+Get Key and Value
+^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    >>> a = {"1":1, "2":2, "3":3}
+    >>> a.items()
+
+Find Same Keys
+^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    >>> a = {"1":1, "2":2, "3":3}
+    >>> [_ for _ in a.keys() if _ in b.keys()]
+    ['3', '2']
+    >>> # better way
+    >>> c = set(a).intersection(set(b))
+    >>> list(c)
+    ['3', '2']
+    >>> # or
+    >>> [_ for _ in a if _ in b]
+    ['3', '2']
+    [('1', 1), ('3', 3), ('2', 2)]
+
+Update Dictionary
+^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    >>> a = {"1":1, "2":2, "3":3}
+    >>> b = {"2":2, "3":3, "4":4}
+    >>> a.update(b)
+    >>> a
+    {'1': 1, '3': 3, '2': 2, '4': 4}
+
+Merge Two Dictionaries
+^^^^^^^^^^^^^^^^^^^^^^
+
+Python 3.4 or lower
+
+.. code-block:: python
+
+    >>> a = {"x": 55, "y": 66}
+    >>> b = {"a": "foo", "b": "bar"}
+    >>> c = a.copy()
+    >>> c.update(b)
+    >>> c
+    {'y': 66, 'x': 55, 'b': 'bar', 'a': 'foo'}
+
+
+Python 3.5 or above
+
+.. code-block:: python
+
+    >>> a = {"x": 55, "y": 66}
+    >>> b = {"a": "foo", "b": "bar"}
+    >>> c = {**a, **b}
+    >>> c
+    {'x': 55, 'y': 66, 'a': 'foo', 'b': 'bar'}
+
+File
+----
+
+Open a File
+^^^^^^^^^^^
+
+.. code-block:: python
+
+    >>> with open("/etc/passwd",'r') as f:
+    ...    content = f.read()
+
+Reading File Chunks
+^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+
+    >>> chunk_size = 16
+    >>> content = ''
+    >>> with open('/etc/hosts') as f:
+    ...     for c in iter(lambda: f.read(chunk_size), ''):
+    ...         content += c
+    ...
+    >>> print(content)
+    127.0.0.1	    localhost
+    255.255.255.255	broadcasthost
+    ::1             localhost
+
+Loop
+----
+
+Loop with Else Clause
+^^^^^^^^^^^^^^^^^^^^^
+
+See document: `More Control Flow Tools <https://docs.python.org/3/tutorial/controlflow.html>`_
+
+For loop's else clause runs when no break occurs
+
+.. code-block:: python
+
+    >>> for x in range(5):
     ...     print(x, end=' ')
     ... else:
-    ...     print()
+    ...     print("\nno break occurred")
     ...
-    0 1 2 3 4 5 6 7 8 9
+    0 1 2 3 4
+    no break occurred
+    >>> for x in range(5):
+    ...     if x % 2 == 0:
+    ...         print("break occurred")
+    ...         break
+    ... else:
+    ...     print("no break occurred")
+    ...
+    break occurred
+
+Above example equals to
+
+.. code-block:: python
+
+    >>> flag = False
+    >>> for x in range(5):
+    ...     if x % 2 == 0:
+    ...         flag = True
+    ...         print("break occurred")
+    ...         break
+    ...
+    ... if flag == False:
+    ...     print("no break occurred")
+    ...
+    break occurred
+
+Exception
+---------
+
+Exception with Else
+^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    >>> try:
+    ...     print("No exception")
+    ... except:
+    ...     pass
+    ... else:
+    ...     print("No exception occurred")
+    ...
+    No exception
+    No exception occurred
+
+Function
+--------
+
+Document Functions
+^^^^^^^^^^^^^^^^^^
+
+Define a function document
+
+.. code-block:: python
+
+    >>> def example():
+    ...   """ This is an example function """
+    ...   print("Example function")
+    ...
+    >>> example.__doc__
+    ' This is an example function '
+    >>> help(example)
+
+Option arguments
+^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    >>> def example(a, b=None, *args, **kwargs):
+    ...     print(a, b)
+    ...     print(args)
+    ...     print(kwargs)
+    ...
+    >>> example(1, "var", 2, 3, word="hello")
+    1 var
+    (2, 3)
+    {'word': 'hello'}
+    >>> a_tuple = (1, 2, 3, 4, 5)
+    >>> a_dict = {"1":1, "2":2, "3":3}
+    >>> example(1, "var", *a_tuple, **a_dict)
+    1 var
+    (1, 2, 3, 4, 5)
+    {'1': 1, '2': 2, '3': 3}
+
+Callable
+^^^^^^^^
+
+.. code-block:: python
+
+    >>> a = 10
+    >>> def fun():
+    ...   print("I am callable")
+    ...
+    >>> callable(a)
+    False
+    >>> callable(fun)
+    True
+
+Get Function Name
+^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    >>> def example_function():
+    ...   pass
+    ...
+    >>> example_function.__name__
+    'example_function'
+
+Lambda
+^^^^^^
+
+.. code-block:: python
+
+    >>> fn = lambda x: x**2
+    >>> fn(3)
+    9
+    >>> (lambda x: x**2)(3)
+    9
+    >>> (lambda x: [x*_ for _ in range(5)])(2)
+    [0, 2, 4, 6, 8]
+    >>> (lambda x: x if x>3 else 3)(5)
+    5
+
+Generator
+^^^^^^^^^
+
+.. code-block:: python
+
+    >>> def fib(n):
+    ...     a, b = 0, 1
+    ...     for _ in range(n):
+    ...         yield a
+    ...         b, a = a + b, b
+    ...
+    >>> [f for f in fib(10)]
+    [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
 
 Decorator
----------
+^^^^^^^^^
 
 **New in Python 2.4**
 
@@ -393,7 +654,7 @@ With ``@wraps``
     'example'
 
 Decorator with Arguments
-------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -427,111 +688,62 @@ Equals to
     Val is 10
     This is example function.
 
-Loop with Else Clause
-----------------------
+Cache
+^^^^^
 
-See document: `More Control Flow Tools <https://docs.python.org/3/tutorial/controlflow.html>`_
+**New in Python 3.2**
 
-For loop's else clause runs when no break occurs
-
-.. code-block:: python
-
-    >>> for x in range(5):
-    ...     print(x, end=' ')
-    ... else:
-    ...     print("\nno break occurred")
-    ...
-    0 1 2 3 4
-    no break occurred
-    >>> for x in range(5):
-    ...     if x % 2 == 0:
-    ...         print("break occurred")
-    ...         break
-    ... else:
-    ...     print("no break occurred")
-    ...
-    break occurred
-
-Above example equals to
+Without Cache
 
 .. code-block:: python
 
-    >>> flag = False
-    >>> for x in range(5):
-    ...     if x % 2 == 0:
-    ...         flag = True
-    ...         print("break occurred")
-    ...         break
+    >>> import time
+    >>> def fib(n):
+    ...     if n < 2:
+    ...         return n
+    ...     return fib(n - 1) + fib(n - 2)
     ...
-    ... if flag == False:
-    ...     print("no break occurred")
-    ...
-    break occurred
+    >>> s = time.time(); _ = fib(32); e = time.time(); e - s
+    1.1562161445617676
 
-Exception with Else Clause
----------------------------
+With Cache (dynamic programming)
 
 .. code-block:: python
 
-    >>> try:
-    ...     print("No exception")
-    ... except:
-    ...     pass
-    ... else:
-    ...     print("No exception occurred")
+    >>> from functools import lru_cache
+    >>> @lru_cache(maxsize=None)
+    ... def fib(n):
+    ...     if n < 2:
+    ...         return n
+    ...     return fib(n - 1) + fib(n - 2)
     ...
-    No exception
-    No exception occurred
+    >>> s = time.time(); _ = fib(32); e = time.time(); e - s
+    2.9087066650390625e-05
+    >>> fib.cache_info()
+    CacheInfo(hits=30, misses=33, maxsize=None, currsize=33)
 
-Lambda
--------
+Object
+------
 
-.. code-block:: python
-
-    >>> fn = lambda x: x**2
-    >>> fn(3)
-    9
-    >>> (lambda x: x**2)(3)
-    9
-    >>> (lambda x: [x*_ for _ in range(5)])(2)
-    [0, 2, 4, 6, 8]
-    >>> (lambda x: x if x>3 else 3)(5)
-    5
-
-Multiline lambda example
+List Attributes
+^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
-    >>> (lambda x:
-    ... True
-    ... if x>0
-    ... else
-    ... False)(3)
+    >>> dir(list)  # check all attr of list
+    ['__add__', '__class__', ...]
+
+Get Instance Type
+^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    >>> ex = 10
+    >>> isinstance(ex, int)
     True
 
-Option arguments
------------------
-
-.. code-block:: python
-
-    >>> def example(a, b=None, *args, **kwargs):
-    ...     print(a, b)
-    ...     print(args)
-    ...     print(kwargs)
-    ...
-    >>> example(1, "var", 2, 3, word="hello")
-    1 var
-    (2, 3)
-    {'word': 'hello'}
-    >>> a_tuple = (1, 2, 3, 4, 5)
-    >>> a_dict = {"1":1, "2":2, "3":3}
-    >>> example(1, "var", *a_tuple, **a_dict)
-    1 var
-    (1, 2, 3, 4, 5)
-    {'1': 1, '2': 2, '3': 3}
-
 Declare a Class
-----------------
+^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -565,9 +777,136 @@ Equals to
     >>> f.fib(f.val)
     55
 
+Has / Get / Set Attributes
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    >>> class Example(object):
+    ...   def __init__(self):
+    ...     self.name = "ex"
+    ...   def printex(self):
+    ...     print("This is an example")
+    ...
+    >>> ex = Example()
+    >>> hasattr(ex,"name")
+    True
+    >>> hasattr(ex,"printex")
+    True
+    >>> hasattr(ex,"print")
+    False
+    >>> getattr(ex,'name')
+    'ex'
+    >>> setattr(ex,'name','example')
+    >>> ex.name
+    'example'
+
+Check Inheritance
+^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    >>> class Example(object):
+    ...   def __init__(self):
+    ...     self.name = "ex"
+    ...   def printex(self):
+    ...     print("This is an Example")
+    ...
+    >>> issubclass(Example, object)
+    True
+
+Get Class Name
+^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    >>> class ExampleClass(object):
+    ...   pass
+    ...
+    >>> ex = ExampleClass()
+    >>> ex.__class__.__name__
+    'ExampleClass'
+
+New and Init
+^^^^^^^^^^^^
+
+``__init__`` will be invoked
+
+.. code-block:: python
+
+    >>> class ClassA(object):
+    ...     def __new__(cls, arg):
+    ...         print('__new__ ' + arg)
+    ...         return object.__new__(cls, arg)
+    ...     def __init__(self, arg):
+    ...         print('__init__ ' + arg)
+    ...
+    >>> o = ClassA("Hello")
+    __new__ Hello
+    __init__ Hello
+
+``__init__`` won't be invoked
+
+.. code-block:: python
+
+    >>> class ClassB(object):
+    ...     def __new__(cls, arg):
+    ...         print('__new__ ' + arg)
+    ...         return object
+    ...     def __init__(self, arg):
+    ...         print('__init__ ' + arg)
+    ...
+    >>> o = ClassB("Hello")
+    __new__ Hello
+
+
+The Diamond Problem
+^^^^^^^^^^^^^^^^^^^
+
+The problem of multiple inheritance in searching a method
+
+.. code-block:: python
+
+    >>> def foo_a(self):
+    ...     print("This is ClsA")
+    ...
+    >>> def foo_b(self):
+    ...     print("This is ClsB")
+    ...
+    >>> def foo_c(self):
+    ...     print("This is ClsC")
+    ...
+    >>> class Type(type):
+    ...     def __repr__(cls):
+    ...         return cls.__name__
+    ...
+    >>> ClsA = Type("ClsA", (object,), {'foo': foo_a})
+    >>> ClsB = Type("ClsB", (ClsA,), {'foo': foo_b})
+    >>> ClsC = Type("ClsC", (ClsA,), {'foo': foo_c})
+    >>> ClsD = Type("ClsD", (ClsB, ClsC), {})
+    >>> ClsD.mro()
+    [ClsD, ClsB, ClsC, ClsA, <type 'object'>]
+    >>> ClsD().foo()
+    This is ClsB
+
+Representation of a Class
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    >>> class Example(object):
+    ...    def __str__(self):
+    ...       return "Example __str__"
+    ...    def __repr__(self):
+    ...       return "Example __repr__"
+    ...
+    >>> print(str(Example()))
+    Example __str__
+    >>> Example()
+    Example __repr__
 
 Callable Object
----------------
+^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -582,7 +921,7 @@ Callable Object
     I am callable!
 
 Context Manager
-----------------
+^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -622,7 +961,7 @@ Context Manager
                 conn.close()
 
 Using contextlib
------------------
+^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -639,35 +978,8 @@ Using contextlib
     with opening('example.txt') as fd:
        fd.read()
 
-Open a File
-------------
-
-.. code-block:: python
-
-    >>> with open("/etc/passwd",'r') as f:
-    ...    content = f.read()
-
-Reading File Chunks
--------------------
-
-.. code-block:: python
-
-
-    >>> chunk_size = 16
-    >>> content = ''
-    >>> with open('/etc/hosts') as f:
-    ...     for c in iter(lambda: f.read(chunk_size), ''):
-    ...         content += c
-    ...
-    >>> print(content)
-    127.0.0.1	localhost
-    255.255.255.255	broadcasthost
-    ::1             localhost
-
-    10.245.1.3  www.registry.io
-
 Property
---------
+^^^^^^^^
 
 .. code-block:: python
 
@@ -717,7 +1029,7 @@ Equals to
     ...
 
 Computed Attributes
---------------------
+^^^^^^^^^^^^^^^^^^^
 
 ``@property`` computes a value of a attribute only when we need. Not store in
 memory previously.
@@ -734,7 +1046,7 @@ memory previously.
     8
 
 Descriptor
-----------
+^^^^^^^^^^
 
 .. code-block:: python
 
@@ -775,7 +1087,7 @@ Descriptor
     False
 
 Static and Class Methond
--------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 ``@classmethod`` is bound to a class. ``@staticmethod`` is similar to a python
 function but define in a class.
@@ -809,7 +1121,7 @@ function but define in a class.
     TypeError: unbound method instmethod() ...
 
 Abstract Method
-----------------
+^^^^^^^^^^^^^^^
 
 ``abc`` is used to define methods but not implement
 
@@ -846,8 +1158,71 @@ Another common way is to ``raise NotImplementedError``
     >>> ex.absmethod()
     abstract
 
+Using slot to Save Memory
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    #!/usr/bin/env python3
+
+    import resource
+    import platform
+    import functools
+
+
+    def profile_mem(func):
+        @functools.wraps(func)
+        def wrapper(*a, **k):
+            s = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+            ret = func(*a, **k)
+            e = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+
+            uname = platform.system()
+            if uname == "Linux":
+                print(f"mem usage: {e - s} kByte")
+            elif uname == "Darwin":
+                print(f"mem usage: {e - s} Byte")
+            else:
+                raise Exception("not support")
+            return ret
+        return wrapper
+
+
+    class S(object):
+        __slots__ = ['attr1', 'attr2', 'attr3']
+
+        def __init__(self):
+            self.attr1 = "Foo"
+            self.attr2 = "Bar"
+            self.attr3 = "Baz"
+
+
+    class D(object):
+
+        def __init__(self):
+            self.attr1 = "Foo"
+            self.attr2 = "Bar"
+            self.attr3 = "Baz"
+
+
+    @profile_mem
+    def alloc(cls):
+        _ = [cls() for _ in range(1000000)]
+
+
+    alloc(S)
+    alloc(D)
+
+output:
+
+.. code-block:: console
+
+    $ python3.6 s.py
+    mem usage: 70922240 Byte
+    mem usage: 100659200 Byte
+
 Common Magic
--------------
+^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -910,143 +1285,3 @@ Common Magic
     __and__(self, other)
     __or__(self, other)
     __xor__(self, other)
-
-Parsing CSV
-------------
-
-.. code-block:: python
-
-    >>> try:
-    ...     from StringIO import StringIO # for py2
-    ... except ImportError:
-    ...     from io import StringIO # for py3
-    ...
-    >>> import csv
-    >>> s = "foo,bar,baz"
-    >>> f = StringIO(s)
-    >>> for x in csv.reader(f): print(x)
-    ...
-    ['foo', 'bar', 'baz']
-
-Or
-
-.. code-block:: python
-
-    >>> import csv
-    >>> s = "foo,bar,baz"
-    >>> for x in csv.reader([s]): print(x)
-    ...
-    ['foo', 'bar', 'baz']
-
-Using slot to Save Memory
---------------------------
-
-.. code-block:: python
-
-    #!/usr/bin/env python3
-
-    import resource
-    import platform
-    import functools
-
-
-    def profile_mem(func):
-        @functools.wraps(func)
-        def wrapper(*a, **k):
-            s = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
-            ret = func(*a, **k)
-            e = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
-
-            uname = platform.system()
-            if uname == "Linux":
-                print(f"mem usage: {e - s} kByte")
-            elif uname == "Darwin":
-                print(f"mem usage: {e - s} Byte")
-            else:
-                raise Exception("not support")
-            return ret
-        return wrapper
-
-
-    class S(object):
-        __slots__ = ['attr1', 'attr2', 'attr3']
-
-        def __init__(self):
-            self.attr1 = "Foo"
-            self.attr2 = "Bar"
-            self.attr3 = "Baz"
-
-
-    class D(object):
-
-        def __init__(self):
-            self.attr1 = "Foo"
-            self.attr2 = "Bar"
-            self.attr3 = "Baz"
-
-
-    @profile_mem
-    def alloc(cls):
-        _ = [cls() for _ in range(1000000)]
-
-
-    alloc(S)
-    alloc(D)
-
-output:
-
-.. code-block:: console
-
-    $ python3.6 s.py
-    mem usage: 70922240 Byte
-    mem usage: 100659200 Byte
-
-Dynamic Execute Python Code
-----------------------------
-
-.. code-block:: python
-
-    >>> py = '''
-    ... def fib(n):
-    ...     a, b = 0, 1
-    ...     for _ in range(n):
-    ...         b, a = b + a, b
-    ...     return a
-    ... print(fib(10))
-    ... '''
-    >>> exec(py, globals(), locals())
-    55
-
-Cache
------
-
-**New in Python 3.2**
-
-Without Cache
-
-.. code-block:: python
-
-    >>> import time
-    >>> def fib(n):
-    ...     if n < 2:
-    ...         return n
-    ...     return fib(n - 1) + fib(n - 2)
-    ...
-    >>> s = time.time(); _ = fib(32); e = time.time(); e - s
-    1.1562161445617676
-
-With Cache (dynamic programming)
-
-.. code-block:: python
-
-    >>> from functools import lru_cache
-    >>> @lru_cache(maxsize=None)
-    ... def fib(n):
-    ...     if n < 2:
-    ...         return n
-    ...     return fib(n - 1) + fib(n - 2)
-    ...
-    >>> s = time.time(); _ = fib(32); e = time.time(); e - s
-    2.9087066650390625e-05
-    >>> fib.cache_info()
-    CacheInfo(hits=30, misses=33, maxsize=None, currsize=33)
