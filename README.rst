@@ -50,9 +50,9 @@ Cheat Sheets
 ==============
 
 - `new in python3`_
-- `code style_`
+- `code style`_
 - `basic`_
-- `future_`
+- `future`_
 - `typing`_
 - `unicode`_
 - `iterator`_
