@@ -10,56 +10,6 @@ Python Basic Cheatsheet
     :backlinks: none
 
 
-Python Naming Rule
--------------------
-
-.. code-block:: python
-
-    # see: PEP 8
-
-    # for class
-    #
-    # good:
-    #   MyClass
-    # bad:
-    #   myClass, my_class
-    MyClass
-
-    # for func, module, package, variables
-    #
-    # good:
-    #   var_underscore_separate
-    # bad:
-    #   varCamel, VarCamel
-    var_underscore_separate
-
-    # for public use
-    var
-
-    # for internal use
-    _var
-
-    # convention to avoid conflict keyword
-    var_
-
-    # for private use in class
-    __var
-
-    # for protect use in class
-    _var_
-
-    # "magic" method or attributes
-    # ex: __init__, __file__, __main__
-    __var__
-
-    # for "internal" use throwaway variable
-    # usually used in loop
-    # ex: [_ for _ in range(10)]
-    # or variable not used
-    # for _, a in [(1,2),(3,4)]: print a
-    _
-
-
 Backport Features
 ------------------
 

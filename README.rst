@@ -42,6 +42,7 @@ Cheat Sheets
 ==============
 
 - `new in python3`_
+- `code style_`
 - `basic`_
 - `typing`_
 - `unicode`_
@@ -63,6 +64,7 @@ Appendix
 
 
 .. _basic: docs/notes/python-basic.rst
+.. _code style: docs/notes/python-code-style.rst
 .. _new in python3: docs/notes/python-new-py3.rst
 .. _typing: docs/notes/python-typing.rst
 .. _unicode: docs/notes/python-unicode.rst

@@ -27,6 +27,7 @@ If there is any question or suggestion, please create an issue on `GitHub Issues
    :maxdepth: 1
 
    notes/python-new-py3
+   notes/python-code-style
    notes/python-basic
    notes/python-typing
    notes/python-unicode
