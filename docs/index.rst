@@ -11,7 +11,7 @@
 Welcome to Python Cheatsheet!
 ==============================
 
-Welcome to pysheeet. This project aims at collecting useful python snippets
+Welcome to pysheeet. This project aims at collecting useful Python snippets
 in order to enhance pythoneers' coding experiences. Please feel free to
 contribute if you have any awesome ideas for improvements to code snippets,
 explanations, etc.
@@ -25,6 +25,12 @@ If there is any question or suggestion, please create an issue on `GitHub Issues
 What's New In Python 3
 ----------------------
 
+The official document, `What's New In Python 3`_, displays all of the most
+important changes. However, if you're too busy to read the whole changes,
+this part provides a brief glance of new features in Python 3.
+
+.. _What's New In Python 3: https://docs.python.org/3/whatsnew/index.html
+
 .. toctree::
    :maxdepth: 1
 
@@ -32,6 +38,9 @@ What's New In Python 3
 
 Cheat Sheet
 -----------
+
+This part mainly focuses on common snippets in Python code. The cheat sheet not
+only includes basic Python features but also data structures and algorithms.
 
 .. toctree::
    :maxdepth: 1
@@ -45,15 +54,18 @@ Cheat Sheet
    notes/python-dict
    notes/python-iterator
    notes/python-generator
+   notes/python-typing
 
 
 Advanced Cheat Sheet
 --------------------
 
+The goal of this part is to give common snippets including built-in and 3rd party
+modules usages.
+
 .. toctree::
    :maxdepth: 1
 
-   notes/python-typing
    notes/python-rexp
    notes/python-socket
    notes/python-security
@@ -66,6 +78,8 @@ Advanced Cheat Sheet
 
 Appendix
 --------
+
+The appendix mainly focuses on some critical concepts missing in cheat sheets.
 
 .. toctree::
     :maxdepth: 1
