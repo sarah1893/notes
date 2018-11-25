@@ -25,11 +25,11 @@ If there is any question or suggestion, please create an issue on `GitHub Issues
 What's New In Python 3
 ----------------------
 
-The official document, `What's New In Python 3`_, displays all of the most
+The official document, `What's New In Python`_, displays all of the most
 important changes. However, if you're too busy to read the whole changes,
 this part provides a brief glance of new features in Python 3.
 
-.. _What's New In Python 3: https://docs.python.org/3/whatsnew/index.html
+.. _What's New In Python: https://docs.python.org/3/whatsnew/index.html
 
 .. toctree::
    :maxdepth: 1

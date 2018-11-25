@@ -25,22 +25,13 @@ Pysheeet was created with intention of collecting python code snippets for
 reducing coding hours and making life easier. Any contributions are welcome.
 Please feel free to fork and send a pull request to this project.
 
-How to run the server
-=======================
-
-.. code-block:: console
-
-    $ virtualenv venv
-    $ . venv/bin/activate
-    $ pip install -r requirements.txt
-    $ make
-    $ python app.py
-
-    # URL: localhost:5000
-
 
 What’s New In Python 3
 ======================
+
+This part only provides a quick glance at some important features in Python 3.
+If you're interested in all of the most important features, please read the
+official document, `What’s New in Python <https://docs.python.org/3/whatsnew/index.html>`_.
 
 - `New in Python3 <docs/notes/python-new-py3.rst>`_
 
@@ -89,3 +80,16 @@ PDF Version
 `pdf`_
 
 .. _pdf: https://media.readthedocs.org/pdf/pysheeet/latest/pysheeet.pdf
+
+How to run the server
+=======================
+
+.. code-block:: bash
+
+    $ virtualenv venv
+    $ . venv/bin/activate
+    $ pip install -r requirements.txt
+    $ make
+    $ python app.py
+
+    # URL: localhost:5000
