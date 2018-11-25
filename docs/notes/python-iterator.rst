@@ -2,9 +2,9 @@
     :description lang=en: Collect useful snippets of Python Iterator
     :keywords: Python, Python Cheat Sheet, Python Iterator
 
-==========================
-Python Iterator Cheatsheet
-==========================
+========
+Iterator
+========
 
 Set Items to a List/Dictionary
 -------------------------------

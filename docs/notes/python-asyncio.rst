@@ -2,8 +2,9 @@
     :description lang=en: Collect useful snippets of asyncio
     :keywords: Python, Python3, Asyncio, Asyncio Cheat Sheet
 
-Python Asyncio Cheatsheet
-=========================
+=======
+Asyncio
+=======
 
 .. contents:: Table of Contents
     :backlinks: none

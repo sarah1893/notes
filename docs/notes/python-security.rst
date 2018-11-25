@@ -1,6 +1,6 @@
-==========================
-Python Security Cheatsheet
-==========================
+========
+Security
+========
 
 .. contents:: Table of Contents
     :backlinks: none

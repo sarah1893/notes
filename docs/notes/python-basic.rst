@@ -2,9 +2,9 @@
     :description lang=en: Collect useful snippets of Python
     :keywords: Python, Python Cheat Sheet
 
-=======================
-Python Basic Cheatsheet
-=======================
+=====
+Basic
+=====
 
 .. contents:: Table of Contents
     :backlinks: none

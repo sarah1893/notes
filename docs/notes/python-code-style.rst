@@ -1,6 +1,6 @@
-=======================
-Python Style Cheatsheet
-=======================
+=====
+Style
+=====
 
 .. contents:: Table of Contents
     :backlinks: none

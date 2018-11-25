@@ -1,6 +1,6 @@
-========================
-Python Future Cheatsheet
-========================
+======
+Future
+======
 
 .. contents:: Table of Contents
     :backlinks: none

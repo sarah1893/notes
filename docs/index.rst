@@ -22,18 +22,38 @@ If there is any question or suggestion, please create an issue on `GitHub Issues
 .. _fork pysheeet on GitHub: https://github.com/crazyguitar/pysheeet
 .. _GitHub Issues: https://github.com/crazyguitar/pysheeet/issues
 
+What's New In Python 3
+----------------------
 
 .. toctree::
    :maxdepth: 1
 
    notes/python-new-py3
+
+Cheat Sheet
+-----------
+
+.. toctree::
+   :maxdepth: 1
+
    notes/python-code-style
    notes/python-basic
    notes/python-future
-   notes/python-typing
    notes/python-unicode
+   notes/python-list
+   notes/python-set
+   notes/python-dict
    notes/python-iterator
    notes/python-generator
+
+
+Advanced Cheat Sheet
+--------------------
+
+.. toctree::
+   :maxdepth: 1
+
+   notes/python-typing
    notes/python-rexp
    notes/python-socket
    notes/python-security
