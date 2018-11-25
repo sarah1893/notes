@@ -38,53 +38,54 @@ How to run the server
 
     # URL: localhost:5000
 
+
+What’s New In Python 3
+======================
+
+- `New in Python3 <docs/notes/python-new-py3.rst>`_
+
+
+Cheat Sheet
+===========
+
+- `Code Style <docs/notes/python-code-style.rst>`_
+- `Basics <docs/notes/python-basic.rst>`_
+- `Future <docs/notes/python-future.rst>`_
+- `Unicode <docs/notes/python-unicode.rst>`_
+- `List <docs/notes/python-list.rst>`_
+- `Set <docs/notes/python-set.rst>`_
+- `Dictionary <docs/notes/python-dict.rst>`_
+- `Function <docs/notes/python-func.rst>`_
+- `Class <docs/notes/python-object.rst>`_
+- `Iterator <docs/notes/python-iterator.rst>`_
+- `Generator <docs/notes/python-generator.rst>`_
+- `Typing <docs/notes/python-typing.rst>`_
+- `File <docs/notes/python-io.rst>`_
+
+
+Advanced Cheat Sheet
+====================
+
+- `Regular expression <docs/notes/python-rexp.rst>`_
+- `Socket <docs/notes/python-socket.rst>`_
+- `Asyncio <docs/notes/python-asyncio.rst>`_
+- `Concurrency <docs/notes/python-concurrency.rst>`_
+- `Sqlalchemy <docs/notes/python-sqlalchemy.rst>`_
+- `Security <docs/notes/python-security.rst>`_
+- `Boto3 <docs/notes/python-aws.rst>`_
+- `Tests <docs/notes/python-tests.rst>`_
+- `C Extensions <docs/notes/python-c-extensions.rst>`_
+
+
+Appendix
+=========
+
+- `Why does Decorator Need @wraps <docs/appendix/python-decorator.rst>`_
+- `Yet Another Introduction to Asyncio <docs/appendix/python-asyncio.rst>`_
+
 PDF Version
 ============
 
 `pdf`_
 
 .. _pdf: https://media.readthedocs.org/pdf/pysheeet/latest/pysheeet.pdf
-
-
-Cheat Sheets
-==============
-
-- `new in python3`_
-- `code style`_
-- `basic`_
-- `future`_
-- `typing`_
-- `unicode`_
-- `iterator`_
-- `generator`_
-- `regular expression`_
-- `socket`_
-- `security`_
-- `concurrency`_
-- `sqlalchemy`_
-- `asyncio`_
-- `tests`_
-- `c extensions`_
-
-Appendix
-=========
-
-- `Appendix: asyncio <docs/appendix/python-asyncio.rst>`_
-
-
-.. _new in python3: docs/notes/python-new-py3.rst
-.. _code style: docs/notes/python-code-style.rst
-.. _basic: docs/notes/python-basic.rst
-.. _future: docs/notes/python-future.rst
-.. _typing: docs/notes/python-typing.rst
-.. _unicode: docs/notes/python-unicode.rst
-.. _iterator: docs/notes/python-iterator.rst
-.. _generator: docs/notes/python-generator.rst
-.. _regular expression: docs/notes/python-rexp.rst
-.. _socket: docs/notes/python-socket.rst
-.. _security: docs/notes/python-security.rst
-.. _concurrency: docs/notes/python-concurrency.rst
-.. _sqlalchemy: docs/notes/python-sqlalchemy.rst
-.. _asyncio: docs/notes/python-asyncio.rst
-.. _tests: docs/notes/python-tests.rst
-.. _c extensions: docs/notes/python-c-extensions.rst

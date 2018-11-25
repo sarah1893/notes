@@ -52,11 +52,11 @@ only includes basic Python features but also data structures and algorithms.
    notes/python-list
    notes/python-set
    notes/python-dict
+   notes/python-func
+   notes/python-object
    notes/python-iterator
    notes/python-generator
    notes/python-typing
-   notes/python-func
-   notes/python-object
    notes/python-io
 
 
