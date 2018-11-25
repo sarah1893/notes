@@ -57,6 +57,7 @@ only includes basic Python features but also data structures and algorithms.
    notes/python-typing
    notes/python-func
    notes/python-object
+   notes/python-io
 
 
 Advanced Cheat Sheet
@@ -69,12 +70,11 @@ modules usages.
    :maxdepth: 1
 
    notes/python-rexp
-   notes/python-io
    notes/python-socket
-   notes/python-security
-   notes/python-concurrency
    notes/python-asyncio
+   notes/python-concurrency
    notes/python-sqlalchemy
+   notes/python-security
    notes/python-aws
    notes/python-tests
    notes/python-c-extensions
