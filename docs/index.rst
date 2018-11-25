@@ -55,6 +55,8 @@ only includes basic Python features but also data structures and algorithms.
    notes/python-iterator
    notes/python-generator
    notes/python-typing
+   notes/python-func
+   notes/python-object
 
 
 Advanced Cheat Sheet
@@ -67,6 +69,7 @@ modules usages.
    :maxdepth: 1
 
    notes/python-rexp
+   notes/python-io
    notes/python-socket
    notes/python-security
    notes/python-concurrency
