@@ -58,8 +58,9 @@ Advanced Cheat Sheet
    notes/python-socket
    notes/python-security
    notes/python-concurrency
-   notes/python-sqlalchemy
    notes/python-asyncio
+   notes/python-sqlalchemy
+   notes/python-aws
    notes/python-tests
    notes/python-c-extensions
 
