@@ -87,4 +87,5 @@ The appendix mainly focuses on some critical concepts missing in cheat sheets.
 .. toctree::
     :maxdepth: 1
 
+    appendix/python-decorator
     appendix/python-asyncio
