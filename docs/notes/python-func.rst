@@ -2,6 +2,9 @@
 Function
 ========
 
+.. contents:: Table of Contents
+    :backlinks: none
+
 Document Functions
 ------------------
 
@@ -17,7 +20,7 @@ Define a function document
     ' This is an example function '
     >>> help(example)
 
-Option arguments
+Option Arguments
 ----------------
 
 .. code-block:: python
@@ -31,12 +34,23 @@ Option arguments
     1 var
     (2, 3)
     {'word': 'hello'}
-    >>> a_tuple = (1, 2, 3, 4, 5)
-    >>> a_dict = {"1":1, "2":2, "3":3}
-    >>> example(1, "var", *a_tuple, **a_dict)
-    1 var
-    (1, 2, 3, 4, 5)
-    {'1': 1, '2': 2, '3': 3}
+
+Keyword-Only Arguments
+----------------------
+
+**New in Python 3.0**
+
+.. code-block:: python
+
+    >>> def f(a, b, *, kw):
+    ...     print(a, b, kw)
+    ...
+    >>> f(1, 2, kw=3)
+    1 2 3
+    >>> f(1, 2, 3)
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    TypeError: f() takes 2 positional arguments but 3 were given
 
 Callable
 --------
@@ -103,17 +117,17 @@ Decorator
 
     >>> from functools import wraps
     >>> def decorator(func):
-    ...   @wraps(func)
-    ...   def wrapper(*args, **kwargs):
-    ...     print("Before calling {}.".format(func.__name__))
-    ...     ret = func(*args, **kwargs)
-    ...     print("After calling {}.".format(func.__name__))
-    ...     return ret
-    ...   return wrapper
+    ...     @wraps(func)
+    ...     def wrapper(*args, **kwargs):
+    ...         print("Before calling {}.".format(func.__name__))
+    ...         ret = func(*args, **kwargs)
+    ...         print("After calling {}.".format(func.__name__))
+    ...         return ret
+    ...     return wrapper
     ...
     >>> @decorator
     ... def example():
-    ...   print("Inside example function.")
+    ...     print("Inside example function.")
     ...
     >>> example()
     Before calling example.
@@ -125,7 +139,7 @@ Equals to
 .. code-block:: python
 
     ... def example():
-    ...   print("Inside example function.")
+    ...     print("Inside example function.")
     ...
     >>> example = decorator(example)
     >>> example()
@@ -140,17 +154,17 @@ Decorator with Arguments
 
     >>> from functools import wraps
     >>> def decorator_with_argument(val):
-    ...   def decorator(func):
-    ...     @wraps(func)
-    ...     def wrapper(*args, **kwargs):
-    ...       print("Val is {0}".format(val))
-    ...       return func(*args, **kwargs)
-    ...     return wrapper
-    ...   return decorator
+    ...     def decorator(func):
+    ...         @wraps(func)
+    ...         def wrapper(*args, **kwargs):
+    ...             print("Val is {0}".format(val))
+    ...             return func(*args, **kwargs)
+    ...         return wrapper
+    ...     return decorator
     ...
     >>> @decorator_with_argument(10)
     ... def example():
-    ...   print("This is example function.")
+    ...     print("This is example function.")
     ...
     >>> example()
     Val is 10
@@ -161,7 +175,7 @@ Equals to
 .. code-block:: python
 
     >>> def example():
-    ...   print("This is example function.")
+    ...     print("This is example function.")
     ...
     >>> example = decorator_with_argument(10)(example)
     >>> example()
