@@ -52,6 +52,24 @@ Keyword-Only Arguments
       File "<stdin>", line 1, in <module>
     TypeError: f() takes 2 positional arguments but 3 were given
 
+Annotations
+-----------
+
+**New in Python 3.0**
+
+.. code-block:: python
+
+    >>> def fib(n: int) -> int:
+    ...     a, b = 0, 1
+    ...     for _ in range(n):
+    ...         b, a = a + b, b
+    ...     return a
+    ...
+    >>> fib(10)
+    55
+    >>> fib.__annotations__
+    {'n': <class 'int'>, 'return': <class 'int'>}
+
 Callable
 --------
 
