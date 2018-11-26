@@ -168,3 +168,15 @@ diamond operator ``<>`` in Python 3.
     SyntaxError: with Barry as BDFL, use '<>' instead of '!='
     >>> 1 <> 2
     True
+
+Braces
+------
+
+``braces`` is an Easter egg. The source code can be found on
+`future.c <https://github.com/python/cpython/blob/master/Python/future.c>`_.
+
+.. code-block:: python
+
+    >>> from __future__ import braces
+      File "<stdin>", line 1
+    SyntaxError: not a chance
