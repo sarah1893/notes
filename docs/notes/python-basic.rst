@@ -75,17 +75,8 @@ We can use it to represent a function or a class which has not implemented yet.
 
 Other constants can be found in `Built-in Constants <https://docs.python.org/3/library/constants.html>`_.
 
-Loop
-----
-
-This part shows some common snippets of loop. Further information can be found
-on `More Control Flow Tools <https://docs.python.org/3/tutorial/controlflow.html>`_
-
-For Loop
-^^^^^^^^
-
-Has Else Clause
-"""""""""""""""
+For Loop Has Else Clause
+------------------------
 
 The else part runs when the break does not occur.
 
@@ -111,11 +102,8 @@ Skip else part when the break occurs.
     ...
     break
 
-While Loop
-^^^^^^^^^^
-
-Has Else Clause
-"""""""""""""""
+While Loop Has Else Clause
+--------------------------
 
 .. code-block:: python
 
@@ -128,8 +116,8 @@ Has Else Clause
     ...     print("no break")
     ...
 
-Use do while
-""""""""""""
+While Loop Emulate do while
+---------------------------
 
 In Python, there is no ``do while`` statement because it is unnecessary. We
 can place conditions at the final line of a ``while`` loop to achieve the
@@ -146,11 +134,8 @@ same thing.
     >>> n
     5
 
-Exception
----------
-
-Has Else Clause
-^^^^^^^^^^^^^^^
+Exception Has Else Clause
+-------------------------
 
 .. code-block:: python
 
