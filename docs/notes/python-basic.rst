@@ -13,6 +13,22 @@ This cheat sheet focus on some basic and common semantics or snippets which we
 .. contents:: Table of Contents
     :backlinks: none
 
+Hello world!
+------------
+
+The source code of ``__hello__`` can be found on `frozen.c <https://github.com/python/cpython/blob/master/Python/frozen.c>`_.
+
+.. code-block:: python
+
+    >>> print("Hello world!")
+    Hello world!
+    >>> import __hello__
+    Hello world!
+    >>> import __phello__
+    Hello world!
+    >>> import __phello__.spam
+    Hello world!
+
 
 Get Python Version
 ------------------
@@ -52,7 +68,8 @@ Check Python Version
 Ellipsis
 --------
 
-Ellipsis is a built-in constant. After Python 3.0, we can use ``...`` as
+Ellipsis is a `built-in constant <https://docs.python.org/3/library/constants.html>`_.
+After Python 3.0, we can use ``...`` as
 ``Ellipsis``.
 
 .. code-block:: python
@@ -72,8 +89,6 @@ We can use it to represent a function or a class which has not implemented yet.
     ...
     >>> def foo(): ...
     ...
-
-Other constants can be found in `Built-in Constants <https://docs.python.org/3/library/constants.html>`_.
 
 For Loop Has Else Clause
 ------------------------
