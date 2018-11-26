@@ -13,12 +13,27 @@ Define a function document
 .. code-block:: python
 
     >>> def example():
-    ...   """ This is an example function """
+    ...   """This is an example function."""
     ...   print("Example function")
     ...
     >>> example.__doc__
-    ' This is an example function '
+    'This is an example function.'
     >>> help(example)
+
+Default Arguments
+-----------------
+
+.. code-block:: python
+
+    >>> def add(a, b=0):
+    ...     return a + b
+    ...
+    >>> add(1)
+    1
+    >>> add(1, 2)
+    3
+    >>> add(1, b=2)
+    3
 
 Option Arguments
 ----------------
@@ -34,6 +49,17 @@ Option Arguments
     1 var
     (2, 3)
     {'word': 'hello'}
+
+Unpack Arguments
+----------------
+
+.. code-block:: python
+
+    >>> def foo(a, b, c='BAZ'):
+    ...     print(a, b, c)
+    ...
+    >>> foo(*("FOO", "BAR"), **{"c": "baz"})
+    FOO BAR baz
 
 Keyword-Only Arguments
 ----------------------
