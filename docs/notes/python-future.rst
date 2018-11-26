@@ -13,13 +13,45 @@ Python interprets the code. They **MUST** be at the top of the file. Otherwise,
 Python interpreter will raise ``SyntaxError``.
 
 If you're interested in future statements and want to acquire more explanation,
-further information can be found on `PEP 236 <https://www.python.org/dev/peps/pep-0236>`_.
+further information can be found on `PEP 236 - Back to the __future__  <https://www.python.org/dev/peps/pep-0236>`_
 
+List All New Features
+---------------------
+
+`__future__ <https://docs.python.org/3/library/__future__.html>`_ is a Python
+module. We can use it to check what kind of future features can import to
+current Python interpreter. The fun is ``import __future__`` is **NOT** a future
+statement, it is a import statement.
+
+.. code-block:: python
+
+    >>> from pprint import pprint
+    >>> import __future__
+    >>> pprint(__future__.all_feature_names)
+    ['nested_scopes',
+     'generators',
+     'division',
+     'absolute_import',
+     'with_statement',
+     'print_function',
+     'unicode_literals',
+     'barry_as_FLUFL',
+     'generator_stop',
+     'annotations']
+
+Future statements not only change the behavior of the Python interpreter but
+also import ``__future__._Feature`` into the current program.
+
+.. code-block:: python
+
+    >>> from __future__ import print_function
+    >>> print_function
+    _Feature((2, 6, 0, 'alpha', 2), (3, 0, 0, 'alpha', 0), 65536)
 
 Print Function
 --------------
 
-- PEP `3105 <https://www.python.org/dev/peps/pep-3105>`_ - Make print a function
+PEP `3105 <https://www.python.org/dev/peps/pep-3105>`_ - Make print a function
 
 .. code-block:: python
 
@@ -37,7 +69,7 @@ Print Function
 Unicode
 -------
 
-- PEP `3112 <https://www.python.org/dev/peps/pep-3112>`_ - Bytes literals in Python 3000
+PEP `3112 <https://www.python.org/dev/peps/pep-3112>`_ - Bytes literals in Python 3000
 
 .. code-block:: python
 
@@ -50,7 +82,7 @@ Unicode
 Division
 --------
 
-- PEP `238 <https://www.python.org/dev/peps/pep-0238>`_ - Changing the Division Operator
+PEP `238 <https://www.python.org/dev/peps/pep-0238>`_ - Changing the Division Operator
 
 .. code-block:: python
 
@@ -99,7 +131,7 @@ Python uses string literals to replace the class.
 
 After version 3.7, Python introduces the future statement, ``annotations``, to
 perform postponed evaluation. It will become the default feature in Python 4.
-For further information please refer to `PEP 563 <https://www.python.org/dev/peps/pep-0563>`_.
+For further information please refer to PEP `563 <https://www.python.org/dev/peps/pep-0563>`_.
 
 
 .. code-block:: python
@@ -109,3 +141,25 @@ For further information please refer to `PEP 563 <https://www.python.org/dev/pep
     class Tree(object):
 
         def insert(self, tree: Tree): ...
+
+BDFL Retirement
+---------------
+
+**New in Python 3.1**
+
+PEP `401 <https://www.python.org/dev/peps/pep-0401/>`_ is just an Easter egg.
+This feature brings the current interpreter back to the past. It enables the
+diamond operator ``<>`` in Python 3.
+
+.. code-block:: python
+
+    >>> 1 != 2
+    True
+    >>> from __future__ import barry_as_FLUFL
+    >>> 1 != 2
+      File "<stdin>", line 1
+        1 != 2
+           ^
+    SyntaxError: with Barry as BDFL, use '<>' instead of '!='
+    >>> 1 <> 2
+    True
