@@ -2,8 +2,19 @@
 List
 ====
 
+The list is a common data structure which we use to store objects. Most of the
+time, programmers concern about getting, setting, searching, filtering, and
+sorting. Furthermore, sometimes, we waltz ourself into common pitfalls of
+the memory management. Thus, the main goal of this cheat sheet is to collect
+some common operations and pitfalls.
+
+
 Get Items from a List
 ---------------------
+
+Although getting data from a list is quite simple, we can retrieve data more
+elegantly. Python provides a lot of ways to get data. Following example shows
+how to get data via negative index and slice.
 
 .. code-block:: python
 
@@ -19,6 +30,33 @@ Get Items from a List
     >>> a[0:-1:2] # a[start:end:step]
     [1, 3]
 
+Unpacking a List
+----------------
+
+Sometimes, we want to unpack our list to variables in order to make our code
+become more readable. In this case, we assign N elements to N variables as
+following example.
+
+.. code-block:: python
+
+    >>> arr = [1, 2, 3]
+    >>> a, b, c = arr
+    >>> a, b, c
+    (1, 2, 3)
+
+Based on PEP `3132 <https://www.python.org/dev/peps/pep-3132>`_, we can use a
+single asterisk to unpack N elements to the number of variables which is less
+than N in Python 3.
+
+.. code-block:: python
+
+    >>> arr = [1, 2, 3, 4, 5]
+    >>> a, b, *c, d = arr
+    >>> a, b, d
+    (1, 2, 5)
+    >>> c
+    [3, 4]
+
 Get Index and Item
 ------------------
 
@@ -33,6 +71,10 @@ Get Index and Item
 
 Using a Slice
 -------------
+
+Sometimes, our data may concatenate as a large segment. In this case, we will
+represent the range of data by using ``slice`` objects as explaining variables
+instead of using **slicing** expressions.
 
 .. code-block:: python
 
