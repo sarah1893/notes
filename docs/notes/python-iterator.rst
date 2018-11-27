@@ -25,18 +25,6 @@ Extend two lists
     >>> a + b
     [1, 2, 3, 'a', 'b']
 
-Using list comprehension
-
-.. code-block:: python
-
-    >>> [x for x in range(10)]
-    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    >>> fn = lambda x: x**2
-    >>> [fn(x) for x in range(5)]
-    [0, 1, 4, 9, 16]
-    >>> {'{0}'.format(x): x for x in range(3)}
-    {'1': 1, '0': 0, '2': 2}
-
 Using builtin function ``map``
 
 .. code-block:: python
