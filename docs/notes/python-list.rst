@@ -8,6 +8,9 @@ sorting. Furthermore, sometimes, we waltz ourself into common pitfalls of
 the memory management. Thus, the main goal of this cheat sheet is to collect
 some common operations and pitfalls.
 
+.. contents:: Table of Contents
+    :backlinks: none
+
 
 Get Items from a List
 ---------------------
