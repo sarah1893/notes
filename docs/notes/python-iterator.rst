@@ -78,55 +78,6 @@ Delegating Iteration
     2
     3
 
-Emulating a List
-----------------
-
-.. code-block:: python
-
-    >>> class EmuList(object):
-    ...   def __init__(self, list_):
-    ...     self._list = list_
-    ...   def __repr__(self):
-    ...     return "EmuList: " + repr(self._list)
-    ...   def append(self, item):
-    ...     self._list.append(item)
-    ...   def remove(self, item):
-    ...     self._list.remove(item)
-    ...   def __len__(self):
-    ...     return len(self._list)
-    ...   def __getitem__(self, sliced):
-    ...     return self._list[sliced]
-    ...   def __setitem__(self, sliced, val):
-    ...     self._list[sliced] = val
-    ...   def __delitem__(self, sliced):
-    ...     del self._list[sliced]
-    ...   def __contains__(self, item):
-    ...     return item in self._list
-    ...   def __iter__(self):
-    ...     return iter(self._list)
-    ...
-    >>> emul = EmuList(range(5))
-    >>> emul
-    EmuList: [0, 1, 2, 3, 4]
-    >>> emul[1:3]  # __getitem__
-    [1, 2]
-    >>> emul[0:4:2]  # __getitem__
-    [0, 2]
-    >>> len(emul)  # __len__
-    5
-    >>> emul.append(5)
-    >>> emul
-    EmuList: [0, 1, 2, 3, 4, 5]
-    >>> emul.remove(2)
-    >>> emul
-    EmuList: [0, 1, 3, 4, 5]
-    >>> emul[3] = 6  # __setitem__
-    >>> emul
-    EmuList: [0, 1, 3, 6, 5]
-    >>> 0 in emul  # __contains__
-    True
-
-
 Emulating a Dictionary
 ----------------------
 
