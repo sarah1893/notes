@@ -60,14 +60,23 @@ than N in Python 3.
 Get Index and Item
 ------------------
 
+``enumerate`` is a built-in function. It helps us to acquire indexes
+(or a count) and elements at the same time without using ``range(len(list))``.
+
 .. code-block:: python
 
     >>> for i, v in enumerate(range(3)):
-    ...     print((i, v))
+    ...     print(i, v)
     ...
-    (0, 0)
-    (1, 1)
-    (2, 2)
+    0 0
+    1 1
+    2 2
+    >>> for i, v in enumerate(range(3), 1): # start = 1
+    ...     print(i, v)
+    ...
+    1 0
+    2 1
+    3 2
 
 Using a Slice
 -------------
@@ -87,8 +96,14 @@ instead of using **slicing** expressions.
     >>> record[world]
     'world'
 
-List Comprehension
-------------------
+List Comprehensions
+-------------------
+
+`List comprehensions <https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions>`_
+which was proposed in PEP `202 <https://www.python.org/dev/peps/pep-0202/>`_
+provides a graceful way to create a new list based on another list, sequence,
+or some object which is iterable. In addition, we can use this expression to
+substitute ``map`` and ``filter`` sometimes.
 
 .. code-block:: python
 
@@ -100,6 +115,8 @@ List Comprehension
     [6, 7, 8, 9]
     >>> [x if x > 5 else 0 for x in range(10)]
     [0, 0, 0, 0, 0, 0, 6, 7, 8, 9]
+    >>> [(x, y) for x in range(3) for y in range(2)]
+    [(0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1)]
 
 Zip Multiple Lists
 ------------------
