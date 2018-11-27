@@ -162,3 +162,66 @@ Remove a Directory
 
     >>> from distutils.dir_util import remove_tree
     >>> remove_tree("dir")
+
+Path Join
+---------
+
+.. code-block:: python
+
+    >>> from pathlib import Path
+    >>> p = Path("/Users")
+    >>> p = p / "Guido" / "pysheeet"
+    >>> p
+    PosixPath('/Users/Guido/pysheeet')
+
+Get Absolute Path
+-----------------
+
+.. code-block:: python
+
+    >>> from pathlib import Path
+    >>> p = Path("README.rst")
+    PosixPath('/Users/Guido/pysheeet/README.rst')
+
+Get Home Directory
+------------------
+
+.. code-block:: python
+
+    >>> from pathlib import Path
+    >>> Path.home()
+    PosixPath('/Users/Guido')
+
+Get Current Directory
+---------------------
+
+.. code-block:: python
+
+    >>> from pathlib import Path
+    >>> p = Path("README.rst")
+    >>> p.cwd()
+    PosixPath('/Users/Guido/pysheeet')
+
+Get Path Properties
+-------------------
+
+.. code-block:: python
+
+    >>> from pathlib import Path
+    >>> p = Path("README.rst").absolute()
+    >>> p.root
+    '/'
+    >>> p.anchor
+    '/'
+    >>> p.parent
+    PosixPath('/Users/Guido/pysheeet')
+    >>> p.parent.parent
+    PosixPath('/Users/Guido')
+    >>> p.name
+    'README.rst'
+    >>> p.suffix
+    '.rst'
+    >>> p.stem
+    'README'
+    >>> p.as_uri()
+    'file:///Users/Guido/pysheeet/README.rst'
