@@ -74,11 +74,11 @@ version we want.
 Ellipsis
 --------
 
-Ellipsis is a `built-in constant <https://docs.python.org/3/library/constants.html>`_.
-After Python 3.0, we case use ``...`` as ``Ellipsis``. It may be the most
-enigmatic constant in Python. Based on the official document, we can use it to
-extend slicing syntax. Nevertheless, there are some other conventions in type
-hinting, stub files, or function expressions.
+`Ellipsis <https://docs.python.org/3/library/constants.html#Ellipsis>`_ is a
+built-in constant. After Python 3.0, we case use ``...`` as ``Ellipsis``. It
+may be the most enigmatic constant in Python. Based on the official document,
+we can use it to extend slicing syntax. Nevertheless, there are some other
+conventions in type hinting, stub files, or function expressions.
 
 .. code-block:: python
 
