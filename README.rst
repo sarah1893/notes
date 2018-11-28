@@ -1,14 +1,22 @@
-Development Status
-===================
 
-.. image:: https://travis-ci.org/crazyguitar/pysheeet.svg?branch=master
-    :target: https://travis-ci.org/crazyguitar/pysheeet
+.. raw:: html
 
-.. image:: https://coveralls.io/repos/github/crazyguitar/pysheeet/badge.svg?branch=master
-    :target: https://coveralls.io/github/crazyguitar/pysheeet?branch=master
+    <h1 align="center">
+    <br>
+      <a href="https://www.pythonsheets.com"><img src="docs/_static/logo.svg" alt="pysheeet" width=200"></a>
+    </h1>
+    <p align="center">
+      <a href="https://travis-ci.org/crazyguitar/pysheeet">
+        <img src="https://travis-ci.org/crazyguitar/pysheeet.svg?branch=master" alt="Build Status">
+      </a>
+      <a href="https://coveralls.io/github/crazyguitar/pysheeet?branch=master">
+        <img src="https://coveralls.io/repos/github/crazyguitar/pysheeet/badge.svg?branch=master" alt="Coverage">
+      </a>
+      <a href="https://raw.githubusercontent.com/crazyguitar/pysheeet/master/LICENSE">
+        <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License MIT">
+      </a>
+    </p>
 
-.. image:: https://img.shields.io/badge/License-MIT-blue.svg
-     :target: https://raw.githubusercontent.com/crazyguitar/pysheeet/master/LICENSE
 
 Introduction
 =============
@@ -17,18 +25,54 @@ Pysheeet was created with intention of collecting python code snippets for
 reducing coding hours and making life easier. Any contributions are welcome.
 Please feel free to fork and send a pull request to this project.
 
-How to run the server
-=======================
 
-.. code-block:: console
+What’s New In Python 3
+======================
 
-    $ virtualenv venv
-    $ . venv/bin/activate
-    $ pip install -r requirements.txt
-    $ make
-    $ python app.py
+This part only provides a quick glance at some important features in Python 3.
+If you're interested in all of the most important features, please read the
+official document, `What’s New in Python <https://docs.python.org/3/whatsnew/index.html>`_.
 
-    # URL: localhost:5000
+- `New in Python3 <docs/notes/python-new-py3.rst>`_
+
+
+Cheat Sheet
+===========
+
+- `Code Style <docs/notes/python-code-style.rst>`_
+- `Basics <docs/notes/python-basic.rst>`_
+- `Future <docs/notes/python-future.rst>`_
+- `Unicode <docs/notes/python-unicode.rst>`_
+- `List <docs/notes/python-list.rst>`_
+- `Set <docs/notes/python-set.rst>`_
+- `Dictionary <docs/notes/python-dict.rst>`_
+- `Function <docs/notes/python-func.rst>`_
+- `Class <docs/notes/python-object.rst>`_
+- `Iterator <docs/notes/python-iterator.rst>`_
+- `Generator <docs/notes/python-generator.rst>`_
+- `Typing <docs/notes/python-typing.rst>`_
+- `File <docs/notes/python-io.rst>`_
+
+
+Advanced Cheat Sheet
+====================
+
+- `Regular expression <docs/notes/python-rexp.rst>`_
+- `Socket <docs/notes/python-socket.rst>`_
+- `Asyncio <docs/notes/python-asyncio.rst>`_
+- `Concurrency <docs/notes/python-concurrency.rst>`_
+- `Sqlalchemy <docs/notes/python-sqlalchemy.rst>`_
+- `Security <docs/notes/python-security.rst>`_
+- `Boto3 <docs/notes/python-aws.rst>`_
+- `Tests <docs/notes/python-tests.rst>`_
+- `C Extensions <docs/notes/python-c-extensions.rst>`_
+
+
+Appendix
+=========
+
+- `Why does Decorator Need @wraps <docs/appendix/python-decorator.rst>`_
+- `Yet Another Introduction to Asyncio <docs/appendix/python-asyncio.rst>`_
 
 PDF Version
 ============
@@ -37,40 +81,15 @@ PDF Version
 
 .. _pdf: https://media.readthedocs.org/pdf/pysheeet/latest/pysheeet.pdf
 
+How to run the server
+=======================
 
-Cheat Sheets
-==============
+.. code-block:: bash
 
-- `new in python3`_
-- `basic`_
-- `typing`_
-- `unicode`_
-- `generator`_
-- `regular expression`_
-- `socket`_
-- `security`_
-- `concurrency`_
-- `sqlalchemy`_
-- `asyncio`_
-- `tests`_
-- `c extensions`_
+    $ virtualenv venv
+    $ . venv/bin/activate
+    $ pip install -r requirements.txt
+    $ make
+    $ python app.py
 
-Appendix
-=========
-
-- `Appendix: asyncio <docs/appendix/python-asyncio.rst>`_
-
-
-.. _basic: docs/notes/python-basic.rst
-.. _new in python3: docs/notes/python-new-py3.rst
-.. _typing: docs/notes/python-typing.rst
-.. _unicode: docs/notes/python-unicode.rst
-.. _generator: docs/notes/python-generator.rst
-.. _regular expression: docs/notes/python-rexp.rst
-.. _socket: docs/notes/python-socket.rst
-.. _security: docs/notes/python-security.rst
-.. _concurrency: docs/notes/python-concurrency.rst
-.. _sqlalchemy: docs/notes/python-sqlalchemy.rst
-.. _asyncio: docs/notes/python-asyncio.rst
-.. _tests: docs/notes/python-tests.rst
-.. _c extensions: docs/notes/python-c-extensions.rst
+    # URL: localhost:5000

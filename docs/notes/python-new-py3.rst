@@ -2,9 +2,9 @@
     :description lang=en: Collect useful snippets of new features in Python3
     :keywords: Python, Python3, New in Python3
 
-=========================
-New in Python3 Cheatsheet
-=========================
+==============
+New in Python3
+==============
 
 
 .. contents:: Table of Contents
@@ -257,6 +257,23 @@ Python 3
     >>> a != "Python2"
     True
 
+BDFL retirement
+---------------
+
+**New in Python 3.1**
+
+- PEP 401_ - BDFL Retirement
+
+.. code-block:: python
+
+    >>> from __future__ import barry_as_FLUFL
+    >>> 1 != 2
+      File "<stdin>", line 1
+        1 != 2
+           ^
+    SyntaxError: with Barry as BDFL, use '<>' instead of '!='
+    >>> 1 <> 2
+    True
 
 Not allow ``from module import *`` inside function
 ---------------------------------------------------
@@ -855,3 +872,4 @@ Built-in ``breakpoint()``
 .. _553: https://www.python.org/dev/peps/pep-0553/
 .. _560: https://www.python.org/dev/peps/pep-0560/
 .. _27350: https://bugs.python.org/issue27350
+.. _401: https://www.python.org/dev/peps/pep-0401/

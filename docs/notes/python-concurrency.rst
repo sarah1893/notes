@@ -2,9 +2,9 @@
     :description lang=en: Collect useful snippets of Python concurrency
     :keywords: Python, Python3, Python Concurrency, Python Concurrent Cheat Sheet
 
-=============================
-Python Concurrency Cheatsheet
-=============================
+===========
+Concurrency
+===========
 
 .. contents:: Table of Contents
     :backlinks: none

@@ -2,9 +2,9 @@
     :description lang=en: Collect useful snippets of unicode
     :keywords: Python, Python3, Python Unicode, Python Unicode Cheat Sheet
 
-==========================
-Python Unicode Cheatsheet
-==========================
+=======
+Unicode
+=======
 
 .. contents:: Table of Contents
     :backlinks: none
@@ -181,3 +181,51 @@ Avoid UnicodeDecodeError
 
     >>> u.decode('utf-8', "ignore")
     ''
+
+Long String
+-----------
+
+Original long string
+
+.. code-block:: python
+
+    # original long string
+    >>> s = 'This is a very very very long python string'
+    >>> s
+    'This is a very very very long python string'
+
+Single quote with an escaping backslash
+
+.. code-block:: python
+
+    >>> s = "This is a very very very " \
+    ...     "long python string"
+    >>> s
+    'This is a very very very long python string'
+
+Using brackets
+
+.. code-block:: python
+
+    >>> s = ("This is a very very very "
+    ...      "long python string")
+    >>> s
+    'This is a very very very long python string'
+
+Using ``+``
+
+.. code-block:: python
+
+    >>> s = ("This is a very very very " +
+    ...      "long python string")
+    >>> s
+    'This is a very very very long python string'
+
+Using triple-quote with an escaping backslash
+
+.. code-block:: python
+
+    >>> s = '''This is a very very very \
+    ... long python string'''
+    >>> s
+    'This is a very very very long python string'

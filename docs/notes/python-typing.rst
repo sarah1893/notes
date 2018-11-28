@@ -2,9 +2,9 @@
     :description lang=en: Collect useful snippets of Python typing
     :keywords: Python3, Static Typing, Python Type hints, Type hints Cheat Sheet
 
-========================
-Python Typing Cheatsheet
-========================
+======
+Typing
+======
 
 .. contents:: Table of Contents
     :backlinks: none

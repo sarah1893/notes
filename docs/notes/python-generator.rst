@@ -2,9 +2,9 @@
     :description lang=en: Collect useful snippets of Python generator
     :keywords: Python, Python3, Python Generator, Python Generator Cheat Sheet
 
-===========================
-Python Generator Cheatsheet
-===========================
+=========
+Generator
+=========
 
 .. contents:: Table of Contents
     :backlinks: none

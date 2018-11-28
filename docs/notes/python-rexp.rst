@@ -1,6 +1,6 @@
-====================================
-Python Regular Expression Cheatsheet
-====================================
+==================
+Regular Expression
+==================
 
 .. contents:: Table of Contents
     :backlinks: none

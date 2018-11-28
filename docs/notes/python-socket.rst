@@ -2,9 +2,9 @@
     :description lang=en: Collect useful snippets of Python socket
     :keywords: Python, Python3, Python Socket, Python Socket Cheat Sheet
 
-========================
-Python Socket Cheatsheet
-========================
+======
+Socket
+======
 
 .. contents:: Table of Contents
     :backlinks: none

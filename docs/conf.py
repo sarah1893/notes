@@ -119,10 +119,12 @@ html_theme = 'alabaster'
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = {
+    'logo': 'logo.svg',
     'show_powered_by': False,
     'github_user': 'crazyguitar',
     'github_repo': 'pysheeet',
     'github_banner': True,
+    'github_type': 'star',
     'show_related': False,
     'body_max_width': 'none',
     'body_min_width': 'none',
@@ -152,7 +154,7 @@ has_carbonad = os.environ.get("CARBONAD_SERVE") and os.environ.get("CARBONAD_PLA
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-#html_favicon = None
+html_favicon = '_static/favicon.ico'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -178,14 +180,14 @@ html_extra_path = ['_extra']
 
 # Custom sidebar templates, maps document names to template names.
 sidebar_index = [
+    'about.html',
     'sidebarintro.html',
     'link.html',
-    'github.html',
 ]
 sidebar_notes = [
+    'about.html',
     'sidebarintro.html',
     'link.html',
-    'github.html',
 ]
 
 if has_carbonad:
