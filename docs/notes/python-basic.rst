@@ -222,8 +222,15 @@ runs when no exception occurs between ``try`` and ``except``.
     No exception
     Success
 
-Dynamic Execute Python Code
+Avoid ``exec`` and ``eval``
 ---------------------------
+
+The following snippet shows how to use the built-in function ``exec``. Yet,
+using ``exec`` and ``eval`` are not recommended because of some security issues
+and unreadable code for a human. Further reading can be found on
+`Be careful with exec and eval in Python <http://lucumr.pocoo.org/2011/2/1/exec-in-python/>`_
+and `Eval really is dangerous <Eval really is dangerous>`_
+
 
 .. code-block:: python
 
