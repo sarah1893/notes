@@ -278,6 +278,26 @@ runs when no exception occurs between ``try`` and ``except``.
     No exception
     Success
 
+Function
+--------
+
+Defining a function in Python is flexible. We can define a function with
+function documents, default values, arbitrary arguments, keyword arguments,
+keyword-only arguments, and so on. Following snippet shows some common
+expressions to define functions.
+
+.. code-block:: python
+
+    def foo_with_doc():
+        """Documentation String."""
+
+    def foo_with_arg(arg): ...
+    def foo_with_args(*arg): ...
+    def foo_with_kwarg(a, b="foo"): ...
+    def foo_with_args_kwargs(*args, **kwargs): ...
+    def foo_with_kwonly(a, b, *, k): ...           # python3
+    def foo_with_annotations(a: int) -> int: ...   # python3
+
 Function Annotations
 --------------------
 
