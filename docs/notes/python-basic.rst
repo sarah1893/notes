@@ -411,6 +411,28 @@ return a **generator** instead of return values for creating an **iterator**.
     2
     3
 
+Generator Delegation
+--------------------
+
+Python 3.3 introduced ``yield from`` expression. It allows a generator to
+delegate parts of operations to another generator. In other words, we can
+**yield** a sequence **from** other **generators** in the current **generator function**.
+Further information can be found on PEP `380 <https://www.python.org/dev/peps/pep-0380>`_.
+
+.. code-block:: python
+
+    >>> def fib(n):
+    ...     a, b = 0, 1
+    ...     for _ in range(n):
+    ...         yield a
+    ...         b, a = a + b, b
+    ...
+    >>> def fibonacci(n):
+    ...     yield from fib(n)
+    ...
+    >>> [f for f in fibonacci(5)]
+    [0, 1, 1, 2, 3]
+
 Class
 -----
 
