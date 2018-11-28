@@ -187,6 +187,39 @@ run when the ``break`` occurs in the loop.
     ...
     break
 
+Using ``range``
+---------------
+
+The problem of ``range`` in Python 2 is that ``range`` may take up a lot of
+memory if we need to iterate a loop many times. Consequently, using ``xrange``
+is recommended in Python 2.
+
+.. code-block:: python
+
+    >>> import platform
+    >>> import sys
+    >>> platform.python_version()
+    '2.7.15'
+    >>> sys.getsizeof(range(100000000))
+    800000072
+    >>> sys.getsizeof(xrange(100000000))
+    40
+
+In Python 3, the built-in function ``range`` returns an iterable **range object**
+instead of a list. The behavior of ``range`` is the same as the ``xrange`` in
+Python 2. Therefore, using ``range`` do not take up huge memory anymore if we
+want to run a code block many times within a loop. Further information can be
+found on PEP `3100 <https://www.python.org/dev/peps/pep-3100>`_.
+
+.. code-block:: python
+
+    >>> import platform
+    >>> import sys
+    >>> platform.python_version()
+    '3.7.1'
+    >>> sys.getsizeof(range(100000000))
+    48
+
 while ... else ...
 ------------------
 
