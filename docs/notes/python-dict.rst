@@ -72,3 +72,45 @@ Python 3.5 or above
     >>> c = {**a, **b}
     >>> c
     {'x': 55, 'y': 66, 'a': 'foo', 'b': 'bar'}
+
+Emulating a Dictionary
+----------------------
+
+.. code-block:: python
+
+    >>> class EmuDict(object):
+    ...   def __init__(self, dict_):
+    ...     self._dict = dict_
+    ...   def __repr__(self):
+    ...     return "EmuDict: " + repr(self._dict)
+    ...   def __getitem__(self, key):
+    ...     return self._dict[key]
+    ...   def __setitem__(self, key, val):
+    ...     self._dict[key] = val
+    ...   def __delitem__(self, key):
+    ...     del self._dict[key]
+    ...   def __contains__(self, key):
+    ...     return key in self._dict
+    ...   def __iter__(self):
+    ...     return iter(self._dict.keys())
+    ...
+    >>> _ = {"1":1, "2":2, "3":3}
+    >>> emud = EmuDict(_)
+    >>> emud  # __repr__
+    EmuDict: {'1': 1, '2': 2, '3': 3}
+    >>> emud['1']  # __getitem__
+    1
+    >>> emud['5'] = 5  # __setitem__
+    >>> emud
+    EmuDict: {'1': 1, '2': 2, '3': 3, '5': 5}
+    >>> del emud['2']  # __delitem__
+    >>> emud
+    EmuDict: {'1': 1, '3': 3, '5': 5}
+    >>> for _ in emud:
+    ...     print(emud[_], end=' ')  # __iter__
+    ... else:
+    ...     print()
+    ...
+    1 3 5
+    >>> '1' in emud  # __contains__
+    True
