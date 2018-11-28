@@ -222,6 +222,29 @@ runs when no exception occurs between ``try`` and ``except``.
     No exception
     Success
 
+Function Annotations
+--------------------
+
+Instead of writing string documents in functions to hint the type of parameters
+and return values, we can denote types by **function annotations**. Function annotations
+which the details can be found on PEP `3017 <https://www.python.org/dev/peps/pep-3107>`_
+and PEP `484 <https://www.python.org/dev/peps/pep-0484/>`_ were introduced in
+Python 3.0. They are an **optional** feature in **Python 3**. Using function
+annotations will lose compatibility in **Python 2**. We can solve this issue
+by stub files. In addition, we can do static type checking through
+`mypy <http://mypy-lang.org/>`_.
+
+.. code-block:: python
+
+    >>> def fib(n: int) -> int:
+    ...     a, b = 0, 1
+    ...     for _ in range(n):
+    ...         b, a = a + b, b
+    ...     return a
+    ...
+    >>> fib(10)
+    55
+
 Avoid ``exec`` and ``eval``
 ---------------------------
 
