@@ -278,13 +278,76 @@ runs when no exception occurs between ``try`` and ``except``.
     No exception
     Success
 
+List
+----
+
+Lists are versatile containers. Python provides a lot of ways such as
+**negative index**, **slicing statement**, or **list comprehension** to
+manipulate lists. The following snippet shows some common operations of lists.
+
+.. code-block:: python
+
+    >>> a = [1, 2, 3, 4, 5]
+    >>> a[-1]                     # negative index
+    5
+    >>> a[1:]                     # slicing
+    [2, 3, 4, 5]
+    >>> a[1:-1]
+    [2, 3, 4]
+    >>> a[1:-1:2]
+    [2, 4]
+    >>> a[::-1]                   # reverse
+    [5, 4, 3, 2, 1]
+    >>> a[0] = 0                  # set an item
+    >>> a
+    [0, 2, 3, 4, 5]
+    >>> a.append(6)               # append an item
+    >>> a
+    [0, 2, 3, 4, 5, 6]
+    >>> del a[-1]                 # del an item
+    >>> a
+    [0, 2, 3, 4, 5]
+    >>> b = [x for x in range(3)] # list comprehension
+    >>> b
+    [0, 1, 2]
+    >>> a + b                     # add two lists
+    [0, 2, 3, 4, 5, 0, 1, 2]
+
+Dict
+----
+
+Dictionaries are key-value pairs containers. Like lists, Python supports many
+ways such as **dict comprehensions** to manipulate dictionaries. After
+Python 3.6, dictionaries preserve the insertion order of keys. The Following
+snippet shows some common operations of dictionaries.
+
+.. code-block:: python
+
+    >>> d = {'timmy': 'red', 'barry': 'green', 'guido': 'blue'}
+    >>> d
+    {'timmy': 'red', 'barry': 'green', 'guido': 'blue'}
+    >>> d['timmy'] = "yellow"        # set data
+    >>> d
+    {'timmy': 'yellow', 'barry': 'green', 'guido': 'blue'}
+    >>> del d['guido']               # del data
+    >>> d
+    >>> 'guido' in d                 # contain data
+    False
+    {'timmy': 'yellow', 'barry': 'green'}
+    >>> {k: v for k ,v in d.items()} # dict comprehension
+    {'timmy': 'yellow', 'barry': 'green'}
+    >>> d.keys()                     # list all keys
+    dict_keys(['timmy', 'barry'])
+    >>> d.values()                   # list all values
+    dict_values(['yellow', 'green'])
+
 Function
 --------
 
 Defining a function in Python is flexible. We can define a function with
-function documents, default values, arbitrary arguments, keyword arguments,
-keyword-only arguments, and so on. Following snippet shows some common
-expressions to define functions.
+**function documents**, **default values**, **arbitrary arguments**,
+**keyword arguments**, **keyword-only arguments**, and so on. The Following
+snippet shows some common expressions to define functions.
 
 .. code-block:: python
 
@@ -320,6 +383,112 @@ by stub files. In addition, we can do static type checking through
     ...
     >>> fib(10)
     55
+
+Generators
+----------
+
+Python uses the ``yield`` statement to define a **generator function**. In
+other words, when we call a generator function, the generator function will
+return a **generator** instead of return values for creating an **iterator**.
+
+.. code-block:: python
+
+    >>> def fib(n):
+    ...     a, b = 0, 1
+    ...     for _ in range(n):
+    ...         yield a
+    ...         b, a = a + b, b
+    ...
+    >>> g = fib(10)
+    >>> g
+    <generator object fib at 0x10b240c78>
+    >>> for f in fib(5):
+    ...     print(f)
+    ...
+    0
+    1
+    1
+    2
+    3
+
+Class
+-----
+
+Python supports many common features such as **class documents**, **multiple inheritance**,
+**class variables**, **instance variables**, **static method**, **class method**, and so on.
+Furthermore, Python provides some special methods for programmers to implement
+**iterators**, **context manager**, etc. The following snippet displays common definition
+of a class.
+
+.. code-block:: python
+
+    class A: ...
+    class B: ...
+    class Foo(A, B):
+        """A class document."""
+
+        foo = "class variable"
+
+        def __init__(self, v):
+            self.attr = v
+            self.__private = "private var"
+
+        @staticmethod
+        def bar_static_method(): ...
+
+        @classmethod
+        def bar_class_method(cls): ...
+
+        def bar(self):
+            """A method document."""
+
+        def bar_with_arg(self, arg): ...
+        def bar_with_args(self, *args): ...
+        def bar_with_kwarg(self, kwarg="bar"): ...
+        def bar_with_args_kwargs(self, *args, **kwargs): ...
+        def bar_with_kwonly(self, *, k): ...
+        def bar_with_annotations(self, a: int): ...
+
+``async`` / ``await``
+---------------------
+
+``async`` and ``await`` syntax was introduced from Python 3.5. They were
+designed to be used with an event loop. Some other features such as the
+**asynchronous generator**  were implemented in later versions.
+
+A **coroutine function**
+(``async def``) are used to create a **coroutine** for an event loop. Python
+provides a built-in module, **asyncio**, to write a concurrent code through
+``async``/``await`` syntax. The following snippet shows a simple example of
+using **asyncio**. The code must be run on Python 3.7 or above.
+
+.. code-block:: python
+
+    import asyncio
+
+    async def http_ok(r, w):
+        head = b"HTTP/1.1 200 OK\r\n"
+        head += b"Content-Type: text/html\r\n"
+        head += b"\r\n"
+
+        body = b"<html>"
+        body += b"<body><h1>Hello world!</h1></body>"
+        body += b"</html>"
+
+        _ = await r.read(1024)
+        w.write(head + body)
+        await w.drain()
+        w.close()
+
+    async def main():
+        server = await asyncio.start_server(
+            http_ok, "127.0.0.1", 8888
+        )
+
+        async with server:
+            await server.serve_forever()
+
+    asyncio.run(main())
 
 Avoid ``exec`` and ``eval``
 ---------------------------
