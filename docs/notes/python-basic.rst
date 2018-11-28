@@ -6,8 +6,11 @@
 Basics
 ======
 
-This cheat sheet focus on some basic and common semantics or snippets which we
-**GOOGLE** them many time.
+The main goal of this cheat sheet is to collect some common and basic semantics
+or snippets. The cheat sheet includes some syntax, which we have already known
+but still ambiguous in our mind, or some snippets, which we google them again
+and again. In addition, because **the end Of life date for Python 2** is coming.
+Most of the snippets are mainly based on **Python 3**'s syntax.
 
 
 .. contents:: Table of Contents
@@ -16,7 +19,10 @@ This cheat sheet focus on some basic and common semantics or snippets which we
 Hello world!
 ------------
 
-The source code of ``__hello__`` can be found on `frozen.c <https://github.com/python/cpython/blob/master/Python/frozen.c>`_.
+When we start to learn a new language, we usually learn from printing
+**Hello world!**. In Python, we can use another way to print the  message by
+importing ``__hello__`` module.  The source code can be found on
+`frozen.c <https://github.com/python/cpython/blob/master/Python/frozen.c>`_.
 
 .. code-block:: python
 
@@ -30,20 +36,21 @@ The source code of ``__hello__`` can be found on `frozen.c <https://github.com/p
     Hello world!
 
 
-Get Python Version
-------------------
+Python Version
+--------------
 
-We can use module ``sys`` or ``platform`` to get the current Python version.
+It is important for a programmer to know current Python version because
+not every syntax will work in the current version. In this case, we can get the
+Python version by ``python -V`` or using the module, ``sys``.
 
 .. code-block:: python
 
     >>> import sys
-    >>> sys.version_info
     >>> print(sys.version)
     3.7.1 (default, Nov  6 2018, 18:46:03)
     [Clang 10.0.0 (clang-1000.11.45.5)]
 
-Using ``platform.python_version`` to get Python version.
+We can also use ``platform.python_version`` to get Python version.
 
 .. code-block:: python
 
@@ -51,15 +58,14 @@ Using ``platform.python_version`` to get Python version.
     >>> platform.python_version()
     '3.7.1'
 
-Check Python Version
---------------------
+Sometimes, checking the current Python version is important because we may want
+to enable some features in some specific versions. ``sys.version_info`` provides more
+detail information about the interpreter. We can use it to compare with the
+version we want.
 
 .. code-block:: python
 
     >>> import sys
-    >>> print(sys.version)
-    3.6.5 (default, Apr 24 2018, 10:37:34)
-    [GCC 4.2.1 Compatible Apple LLVM 7.3.0 (clang-703.0.31)]
     >>> sys.version_info >= (3, 6)
     True
     >>> sys.version_info >= (3, 7)
@@ -69,8 +75,10 @@ Ellipsis
 --------
 
 Ellipsis is a `built-in constant <https://docs.python.org/3/library/constants.html>`_.
-After Python 3.0, we can use ``...`` as
-``Ellipsis``.
+After Python 3.0, we case use ``...`` as ``Ellipsis``. It may be the most
+enigmatic constant in Python. Based on the official document, we can use it to
+extend slicing syntax. Nevertheless, there are some other conventions in type
+hinting, stub files, or function expressions.
 
 .. code-block:: python
 
@@ -81,7 +89,8 @@ After Python 3.0, we can use ``...`` as
     >>> type(...)
     <class 'ellipsis'>
 
-We can use it to represent a function or a class which has not implemented yet.
+The following snippet shows that we can use the ellipsis to represent a function
+or a class which has not implemented yet.
 
 .. code-block:: python
 
@@ -89,6 +98,23 @@ We can use it to represent a function or a class which has not implemented yet.
     ...
     >>> def foo(): ...
     ...
+
+For Loop
+--------
+
+In Python, we can access iterable object's items directly through the
+**for statement**. If we need to get indexes and items of an iterable object
+such as list or tuple at the same time, using ``enumerate`` is better than
+``range(len(iterable))``.
+
+.. code-block:: python
+
+    >>> for idx, val in enumerate(["foo", "bar", "baz"]):
+    ...     print(idx, val)
+    ...
+    (0, 'foo')
+    (1, 'bar')
+    (2, 'baz')
 
 For Loop Has Else Clause
 ------------------------
