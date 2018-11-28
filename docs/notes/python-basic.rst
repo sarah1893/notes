@@ -99,6 +99,29 @@ or a class which has not implemented yet.
     >>> def foo(): ...
     ...
 
+if ... elif ... else
+--------------------
+
+The **if statements** are used to control the code flow. Instead of using
+``switch`` or ``case`` statements control the logic of the code, Python uses
+``if ... elif ... else`` sequence. Although someone proposes we can use
+``dict`` to achieve ``switch`` statements, this solution may introduce
+unnecessary overhead such as creating disposable dictionaries and undermine
+a readable code. Thus, the solution is not recommended.
+
+.. code-block:: python
+
+    >>> import random
+    >>> num = random.randint(0, 10)
+    >>> if num < 3:
+    ...     print("less than 3")
+    ... elif num < 5:
+    ...     print("less than 5")
+    ... else:
+    ...     print(num)
+    ...
+    less than 3
+
 for Loop
 --------
 
