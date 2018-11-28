@@ -99,16 +99,22 @@ or a class which has not implemented yet.
     >>> def foo(): ...
     ...
 
-For Loop
+for Loop
 --------
 
 In Python, we can access iterable object's items directly through the
 **for statement**. If we need to get indexes and items of an iterable object
 such as list or tuple at the same time, using ``enumerate`` is better than
-``range(len(iterable))``.
+``range(len(iterable))``. Further information can be found on
+`Looping Techniques <https://docs.python.org/3/tutorial/datastructures.html#looping-techniques>`_.
 
 .. code-block:: python
 
+    >>> for val in ["foo", "bar"]:
+    ...     print(val)
+    ...
+    foo
+    bar
     >>> for idx, val in enumerate(["foo", "bar", "baz"]):
     ...     print(idx, val)
     ...
@@ -116,10 +122,12 @@ such as list or tuple at the same time, using ``enumerate`` is better than
     (1, 'bar')
     (2, 'baz')
 
-For Loop Has Else Clause
-------------------------
+for ... else ...
+----------------
 
-The else part runs when the break does not occur.
+It may be a little weired when we see the ``else`` belongs to a ``for`` loop at
+the first time. The ``else`` clause can assist us to avoid using flag
+variables in loops. A loop’s ``else`` clause runs when no break occurs.
 
 .. code-block:: python
 
@@ -130,9 +138,22 @@ The else part runs when the break does not occur.
     ...
     no break
 
-Skip else part when the break occurs.
+The following snippet shows the difference between using a flag variable and
+the ``else`` clause to control the loop. We can see that the ``else`` does not
+run when the ``break`` occurs in the loop.
 
 .. code-block:: python
+
+    >>> is_break = False
+    >>> for x in range(5):
+    ...     if x % 2 == 0:
+    ...         is_break = True
+    ...         break
+    ...
+    >>> if is_break:
+    ...     print("break")
+    ...
+    break
 
     >>> for x in range(5):
     ...     if x % 2 == 0:
@@ -143,8 +164,12 @@ Skip else part when the break occurs.
     ...
     break
 
-While Loop Has Else Clause
---------------------------
+while ... else ...
+------------------
+
+The ``else`` clause belongs to a while loop serves the same purpose as the
+``else`` clause in a for loop. We can observe that the ``else`` does not run
+when the ``break`` occurs in the while loop.
 
 .. code-block:: python
 
@@ -157,12 +182,13 @@ While Loop Has Else Clause
     ...     print("no break")
     ...
 
-While Loop Emulate do while
----------------------------
+The ``do while`` Statement
+--------------------------
 
-In Python, there is no ``do while`` statement because it is unnecessary. We
-can place conditions at the final line of a ``while`` loop to achieve the
-same thing.
+There are many programming languages such as C/C++, Ruby, or Javascript,
+provide the ``do while`` statement. In Python, there is no ``do while``
+statement. However, we can place the condition and the ``break`` at the end of
+a ``while`` loop to achieve the same thing.
 
 .. code-block:: python
 
@@ -175,8 +201,14 @@ same thing.
     >>> n
     5
 
-Exception Has Else Clause
--------------------------
+try ... except ... else ...
+---------------------------
+
+Most of the time, we handle errors in ``except`` clause and clean up resources
+in ``finally`` clause. Interestingly, the ``try`` statement also provides an
+``else`` clause for us to avoid catching an exception which was raised by the
+code that should not be protected by ``try ... except``. The ``else`` clause
+runs when no exception occurs between ``try`` and ``except``.
 
 .. code-block:: python
 
