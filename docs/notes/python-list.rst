@@ -11,30 +11,98 @@ some common operations and pitfalls.
 .. contents:: Table of Contents
     :backlinks: none
 
+From Scratch
+------------
 
-Get Items from a List
----------------------
-
-Although getting data from a list is quite simple, we can retrieve data more
-elegantly. Python provides a lot of ways to get data. Following example shows
-how to get data via negative index and slice.
+There are so many ways that we can manipulate lists in Python. Before we start
+to learn those versatile manipulations, the following snippet shows the most
+common operations of lists.
 
 .. code-block:: python
 
     >>> a = [1, 2, 3, 4, 5]
-    >>> a[0]
-    1
+    >>> # negative index
     >>> a[-1]
     5
-    >>> a[0:]
-    [1, 2, 3, 4, 5]
-    >>> a[:-1]
-    [1, 2, 3, 4]
-    >>> a[0:-1:2] # a[start:end:step]
-    [1, 3]
+    >>> # slicing list[start:end:step]
+    >>> a[1:]
+    [2, 3, 4, 5]
+    >>> a[1:-1]
+    [2, 3, 4]
+    >>> a[1:-1:2]
+    [2, 4]
+    >>> # reverse
+    >>> a[::-1]
+    [5, 4, 3, 2, 1]
+    >>> a[:0:-1]
+    [5, 4, 3, 2]
+    >>> # set an item
+    >>> a[0] = 0
+    >>> a
+    [0, 2, 3, 4, 5]
+    >>> # append items to list
+    >>> a.append(6)
+    >>> a
+    [0, 2, 3, 4, 5, 6]
+    >>> a.extend([7, 8, 9])
+    >>> a
+    [0, 2, 3, 4, 5, 6, 7, 8, 9]
+    >>> # delete an item
+    >>> del a[-1]
+    >>> a
+    [0, 2, 3, 4, 5, 6, 7, 8]
+    >>> # list comprehension
+    >>> b = [x for x in range(3)]
+    >>> b
+    [0, 1, 2]
+    >>> # add two lists
+    >>> a + b
+    [0, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2]
 
-Unpacking a List
-----------------
+Using ``slice``
+---------------
+
+Sometimes, our data may concatenate as a large segment such as packets. In
+this case, we will represent the range of data by using ``slice`` objects
+as explaining variables instead of using **slicing** expressions.
+
+.. code-block:: python
+
+    >>> icmp = (
+    ...     b"080062988e2100005bff49c20005767c"
+    ...     b"08090a0b0c0d0e0f1011121314151617"
+    ...     b"18191a1b1c1d1e1f2021222324252627"
+    ...     b"28292a2b2c2d2e2f3031323334353637"
+    ... )
+    >>> head = slice(0, 32)
+    >>> data = slice(32, len(icmp))
+    >>> icmp[head]
+    b'080062988e2100005bff49c20005767c'
+
+List Comprehensions
+-------------------
+
+`List comprehensions <https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions>`_
+which was proposed in PEP `202 <https://www.python.org/dev/peps/pep-0202/>`_
+provides a graceful way to create a new list based on another list, sequence,
+or some object which is iterable. In addition, we can use this expression to
+substitute ``map`` and ``filter`` sometimes.
+
+.. code-block:: python
+
+    >>> [x for x in range(10)]
+    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    >>> [(lambda x: x**2)(i) for i in range(10)]
+    [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+    >>> [x for x in range(10) if x > 5]
+    [6, 7, 8, 9]
+    >>> [x if x > 5 else 0 for x in range(10)]
+    [0, 0, 0, 0, 0, 0, 6, 7, 8, 9]
+    >>> [(x, y) for x in range(3) for y in range(2)]
+    [(0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1)]
+
+Unpacking
+---------
 
 Sometimes, we want to unpack our list to variables in order to make our code
 become more readable. In this case, we assign N elements to N variables as
@@ -60,11 +128,13 @@ than N in Python 3.
     >>> c
     [3, 4]
 
-Get Index and Item
-------------------
+Using ``enumerate``
+-------------------
 
 ``enumerate`` is a built-in function. It helps us to acquire indexes
 (or a count) and elements at the same time without using ``range(len(list))``.
+Further information can be found on
+`Looping Techniques <https://docs.python.org/3/tutorial/datastructures.html#looping-techniques>`_.
 
 .. code-block:: python
 
@@ -81,70 +151,31 @@ Get Index and Item
     2 1
     3 2
 
-Using a Slice
--------------
+Zip Lists
+---------
 
-Sometimes, our data may concatenate as a large segment. In this case, we will
-represent the range of data by using ``slice`` objects as explaining variables
-instead of using **slicing** expressions.
-
-.. code-block:: python
-
-
-    >>> record = "Hello world!"
-    >>> hello = slice(0, 5)  # slice(start,end,step)
-    >>> world = slice(6, -1)
-    >>> record[hello]
-    'Hello'
-    >>> record[world]
-    'world'
-
-List Comprehensions
--------------------
-
-`List comprehensions <https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions>`_
-which was proposed in PEP `202 <https://www.python.org/dev/peps/pep-0202/>`_
-provides a graceful way to create a new list based on another list, sequence,
-or some object which is iterable. In addition, we can use this expression to
-substitute ``map`` and ``filter`` sometimes.
+``zip`` enables us to iterate over items contained in multiple lists at a time.
+Iteration stops whenever one of the lists is exhausted. As a result, the
+length of the iteration is the same as the shortest list. If this behavior is
+not desired, we can use ``itertools.zip_longest`` in **Python 3** or
+``itertools.izip_longest`` in **Python 2**.
 
 .. code-block:: python
 
-    >>> [x for x in range(10)]
-    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    >>> [(lambda x: x**2)(i) for i in range(10)]
-    [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
-    >>> [x for x in range(10) if x > 5]
-    [6, 7, 8, 9]
-    >>> [x if x > 5 else 0 for x in range(10)]
-    [0, 0, 0, 0, 0, 0, 6, 7, 8, 9]
-    >>> [(x, y) for x in range(3) for y in range(2)]
-    [(0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (2, 1)]
-
-Zip Multiple Lists
-------------------
-
-.. code-block:: python
-
-    >>> a = [1, 2, 3, 4, 5]
-    >>> b = [2, 4, 5, 6, 8]
+    >>> a = [1, 2, 3]
+    >>> b = [4, 5, 6]
     >>> list(zip(a, b))
-    [(1, 2), (2, 4), (3, 5), (4, 6), (5, 8)]
-    >>> c = [5, 6, 7, 8]
+    [(1, 4), (2, 5), (3, 6)]
+    >>> c = [1]
     >>> list(zip(a, b, c))
-    [(1, 2, 5), (2, 4, 6), (3, 5, 7), (4, 6, 8)]
+    [(1, 4, 1)]
+    >>> from itertools import zip_longest
+    >>> list(zip_longest(a, b, c))
+    [(1, 4, 1), (2, 5, None), (3, 6, None)]
 
-Reverse a List
---------------
 
-.. code-block:: python
-
-    >>> a = [1, 2, 3, 4, 5]
-    >>> a[::-1]
-    [5, 4, 3, 2, 1]
-
-Filter Unnecessary Items
-------------------------
+Filter Items
+------------
 
 .. code-block:: python
 
@@ -155,8 +186,8 @@ Filter Unnecessary Items
     >>> filter(predicate, l)
     [3, 4]
 
-Using Lists as Stacks
----------------------
+Stacks
+------
 
 .. code-block:: python
 
@@ -173,8 +204,8 @@ Using Lists as Stacks
     >>> stack
     [1]
 
-Implement a List-like Object
-----------------------------
+List-like
+---------
 
 .. code-block:: python
 
