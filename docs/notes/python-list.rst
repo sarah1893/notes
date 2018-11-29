@@ -290,6 +290,10 @@ expression* provides a more concise way to remove items.
 Stacks
 ------
 
+There is no need an additional data structure, stack, in Python because the
+``list`` provides ``append`` and ``pop`` methods which enable us use a list as
+a stack.
+
 .. code-block:: python
 
     >>> stack = []
@@ -305,8 +309,12 @@ Stacks
     >>> stack
     [1]
 
-Elements ``in`` List-like
--------------------------
+``in`` Operation
+----------------
+
+We can implement the ``__contains__`` method to make a class do ``in``
+operations. It is a common way for a programmer to emulate
+a membership test operations for custom classes.
 
 .. code-block:: python
 
@@ -337,8 +345,14 @@ Example
     True
     False
 
-Accessing List-like Items
--------------------------
+Accessing Items
+---------------
+
+Making custom classes perform get and set operations like lists is simple. We
+can implement a ``__getitem__`` method and a ``__setitem__`` method to enable
+a class to retrieve and overwrite data by index. In addition, if we want to use
+the function, ``len``, to calculate the number of elements, we can implement a
+``__len__`` method.
 
 .. code-block:: python
 
@@ -384,8 +398,13 @@ Example
     stack: [3, 2]
     num items: 2
 
-Delegating List-like Iteration
-------------------------------
+Delegating Iterations
+---------------------
+
+If a custom container class holds a list and we want iteration work in the
+container, we can implement a ``__iter__`` method to delegate iterations to
+the list. Note that the method, ``__iter__`` should return an *iterator object*,
+so we cannot return the list directly; otherwise, Python raises a ``TypeError``.
 
 .. code-block:: python
 
