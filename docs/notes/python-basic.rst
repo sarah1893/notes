@@ -2,9 +2,9 @@
     :description lang=en: Collect useful snippets of Python
     :keywords: Python, Python Cheat Sheet
 
-======
-Basics
-======
+============
+From Scratch
+============
 
 The main goal of this cheat sheet is to collect some common and basic semantics
 or snippets. The cheat sheet includes some syntax, which we have already known
