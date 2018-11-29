@@ -92,19 +92,56 @@ pitfall, we should use a list comprehension to initialize a list.
 Copy
 ----
 
+Assigning a list to a variable is a common pitfall. This assignment does not
+copy the list to the variable. The variable only refers to the list and increase
+the reference count of the list.
+
 .. code-block:: python
 
+    import sys
     >>> a = [1, 2, 3]
+    >>> sys.getrefcount(a)
+    2
     >>> b = a
-    >>> a
-    [1, 2, 3]
-    >>> b
-    [1, 2, 3]
+    >>> sys.getrefcount(a)
+    3
     >>> b[2] = 123456  # a[2] = 123456
     >>> b
     [1, 2, 123456]
     >>> a
     [1, 2, 123456]
+
+There are two types of copy. The first one is called *shallow copy* (non-recursive copy)
+and the second one is called *deep copy* (recursive copy). Most of the time, it
+is sufficient for us to copy a list by shallow copy. However, if a list is nested,
+we have to use a deep copy.
+
+.. code-block:: python
+
+    >>> # shallow copy
+    >>> a = [1, 2]
+    >>> b = list(a)
+    >>> b[0] = 123
+    >>> a
+    [1, 2]
+    >>> b
+    [123, 2]
+    >>> a = [[1], [2]]
+    >>> b = list(a)
+    >>> b[0][0] = 123
+    >>> a
+    [[123], [2]]
+    >>> b
+    [[123], [2]]
+    >>> # deep copy
+    >>> import copy
+    >>> a = [[1], [2]]
+    >>> b = copy.deepcopy(a)
+    >>> b[0][0] = 123
+    >>> a
+    [[1], [2]]
+    >>> b
+    [[123], [2]]
 
 Using ``slice``
 ---------------
