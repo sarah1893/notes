@@ -59,6 +59,53 @@ common operations of lists.
     >>> a + b
     [0, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2]
 
+Initialize
+----------
+
+Generally speaking, we can create a list through ``*`` operator if the item in
+the list expression is an immutable object.
+
+.. code-block:: python
+
+    >>> >>> a = [None] * 3
+    >>> a
+    [None, None, None]
+    >>> a[0] = "foo"
+    >>> a
+    ['foo', None, None]
+
+However, if the item in the list expression is a mutable object, the ``*``
+operator will copy the reference of the item N times. In order to avoid this
+pitfall, we should use a list comprehension to initialize a list.
+
+.. code-block:: python
+
+    >>> a = [[]] * 3
+    >>> b = [[] for _ in range(3)]
+    >>> a[0].append("Hello")
+    >>> a
+    [['Hello'], ['Hello'], ['Hello']]
+    >>> b[0].append("Python")
+    >>> b
+    [['Python'], [], []]
+
+Copy
+----
+
+.. code-block:: python
+
+    >>> a = [1, 2, 3]
+    >>> b = a
+    >>> a
+    [1, 2, 3]
+    >>> b
+    [1, 2, 3]
+    >>> b[2] = 123456  # a[2] = 123456
+    >>> b
+    [1, 2, 123456]
+    >>> a
+    [1, 2, 123456]
+
 Using ``slice``
 ---------------
 
@@ -251,34 +298,3 @@ List-like
     EmuList: [0, 1, 3, 6, 5]
     >>> 0 in emul  # __contains__
     True
-
-Pitfall - Assign a List to Another Variable
--------------------------------------------
-
-.. code-block:: python
-
-    >>> a = [1, 2, 3]
-    >>> b = a
-    >>> a
-    [1, 2, 3]
-    >>> b
-    [1, 2, 3]
-    >>> b[2] = 123456  # a[2] = 123456
-    >>> b
-    [1, 2, 123456]
-    >>> a
-    [1, 2, 123456]
-
-Pitfall - Init a List with Multiply
------------------------------------
-
-.. code-block:: python
-
-    >>> a = [[]] * 3
-    >>> b = [[] for _ in range(3)]
-    >>> a[0].append("Hello")
-    >>> a
-    [['Hello'], ['Hello'], ['Hello']]
-    >>> b[0].append("Python")
-    >>> b
-    [['Python'], [], []]
