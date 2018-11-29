@@ -21,6 +21,12 @@ common operations of lists.
 .. code-block:: python
 
     >>> a = [1, 2, 3, 4, 5]
+    >>> # contains
+    >>> 2 in a
+    True
+    >>> # positive index
+    >>> a[0]
+    1
     >>> # negative index
     >>> a[-1]
     5
@@ -299,50 +305,114 @@ Stacks
     >>> stack
     [1]
 
-List-like
----------
+Elements ``in`` List-like
+-------------------------
 
 .. code-block:: python
 
-    >>> class EmuList(object):
-    ...   def __init__(self, list_):
-    ...     self._list = list_
-    ...   def __repr__(self):
-    ...     return "EmuList: " + repr(self._list)
-    ...   def append(self, item):
-    ...     self._list.append(item)
-    ...   def remove(self, item):
-    ...     self._list.remove(item)
-    ...   def __len__(self):
-    ...     return len(self._list)
-    ...   def __getitem__(self, sliced):
-    ...     return self._list[sliced]
-    ...   def __setitem__(self, sliced, val):
-    ...     self._list[sliced] = val
-    ...   def __delitem__(self, sliced):
-    ...     del self._list[sliced]
-    ...   def __contains__(self, item):
-    ...     return item in self._list
-    ...   def __iter__(self):
-    ...     return iter(self._list)
-    ...
-    >>> emul = EmuList(range(5))
-    >>> emul
-    EmuList: [0, 1, 2, 3, 4]
-    >>> emul[1:3]  # __getitem__
-    [1, 2]
-    >>> emul[0:4:2]  # __getitem__
-    [0, 2]
-    >>> len(emul)  # __len__
-    5
-    >>> emul.append(5)
-    >>> emul
-    EmuList: [0, 1, 2, 3, 4, 5]
-    >>> emul.remove(2)
-    >>> emul
-    EmuList: [0, 1, 3, 4, 5]
-    >>> emul[3] = 6  # __setitem__
-    >>> emul
-    EmuList: [0, 1, 3, 6, 5]
-    >>> 0 in emul  # __contains__
+    class Stack:
+
+        def __init__(self):
+            self.__list = []
+
+        def push(self, val):
+            self.__list.append(val)
+
+        def pop(self):
+            return self.__list.pop()
+
+        def __contains__(self, item):
+            return True if item in self.__list else False
+
+    stack = Stack()
+    stack.push(1)
+    print(1 in stack)
+    print(0 in stack)
+
+Example
+
+.. code-block:: bash
+
+    python stack.py
     True
+    False
+
+Accessing List-like Items
+-------------------------
+
+.. code-block:: python
+
+    class Stack:
+
+        def __init__(self):
+            self.__list = []
+
+        def push(self, val):
+            self.__list.append(val)
+
+        def pop(self):
+            return self.__list.pop()
+
+        def __repr__(self):
+            return "{}".format(self.__list)
+
+        def __len__(self):
+            return len(self.__list)
+
+        def __getitem__(self, idx):
+            return self.__list[idx]
+
+        def __setitem__(self, idx, val):
+            self.__list[idx] = val
+
+
+    stack = Stack()
+    stack.push(1)
+    stack.push(2)
+    print("stack:", stack)
+
+    stack[0] = 3
+    print("stack:", stack)
+    print("num items:", len(stack))
+
+Example
+
+.. code-block:: bash
+
+    $ python stack.py
+    stack: [1, 2]
+    stack: [3, 2]
+    num items: 2
+
+Delegating List-like Iteration
+------------------------------
+
+.. code-block:: python
+
+    class Stack:
+
+        def __init__(self):
+            self.__list = []
+
+        def push(self, val):
+            self.__list.append(val)
+
+        def pop(self):
+            return self.__list.pop()
+
+        def __iter__(self):
+            return iter(self.__list)
+
+    stack = Stack()
+    stack.push(1)
+    stack.push(2)
+    for s in stack:
+        print(s)
+
+Example
+
+.. code-block:: bash
+
+    $ python stack.py
+    1
+    2
