@@ -67,7 +67,7 @@ the list expression is an immutable object.
 
 .. code-block:: python
 
-    >>> >>> a = [None] * 3
+    >>> a = [None] * 3
     >>> a
     [None, None, None]
     >>> a[0] = "foo"
@@ -111,7 +111,7 @@ Using ``slice``
 
 Sometimes, our data may concatenate as a large segment such as packets. In
 this case, we will represent the range of data by using ``slice`` objects
-as explaining variables instead of using **slicing** expressions.
+as explaining variables instead of using *slicing expressions*.
 
 .. code-block:: python
 
@@ -201,11 +201,12 @@ Further information can be found on
 Zip Lists
 ---------
 
-``zip`` enables us to iterate over items contained in multiple lists at a time.
-Iteration stops whenever one of the lists is exhausted. As a result, the
-length of the iteration is the same as the shortest list. If this behavior is
-not desired, we can use ``itertools.zip_longest`` in **Python 3** or
-``itertools.izip_longest`` in **Python 2**.
+`zip <https://docs.python.org/3/library/functions.html#zip>`_ enables us to
+iterate over items contained in multiple lists at a time. Iteration stops
+whenever one of the lists is exhausted. As a result, the length of the
+iteration is the same as the shortest list. If this behavior is not desired,
+we can use ``itertools.zip_longest`` in **Python 3** or ``itertools.izip_longest``
+in **Python 2**.
 
 .. code-block:: python
 
@@ -224,13 +225,23 @@ not desired, we can use ``itertools.zip_longest`` in **Python 3** or
 Filter Items
 ------------
 
+`filter <https://docs.python.org/3/library/functions.html#filter>`_ is a
+built-in function to assist us to remove unnecessary items. In **Python 2**,
+``filter`` returns a list. However, in **Python 3**, ``filter`` returns an
+*iterable object*. Note that *list comprehension* or *generator
+expression* provides a more concise way to remove items.
+
 .. code-block:: python
 
     >>> [x for x in range(5) if x > 1]
     [2, 3, 4]
     >>> l = ['1', '2', 3, 'Hello', 4]
-    >>> predicate = lambda x: isinstance(x, int)
-    >>> filter(predicate, l)
+    >>> f = lambda x: isinstance(x, int)
+    >>> filter(f, l)
+    <filter object at 0x10bee2198>
+    >>> list(filter(f, l))
+    [3, 4]
+    >>> list((i for i in l if f(i)))
     [3, 4]
 
 Stacks
