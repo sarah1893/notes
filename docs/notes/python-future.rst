@@ -56,7 +56,10 @@ also import ``__future__._Feature`` into the current program.
 Print Function
 --------------
 
-PEP `3105 <https://www.python.org/dev/peps/pep-3105>`_ - Make print a function
+Replacing **print statement** to  **print function** is one of the most
+notorious decision in Python history. However, this change brings some
+flexibilities to extend the ability of ``print``. Further information can
+be found on PEP `3105 <https://www.python.org/dev/peps/pep-3105>`_.
 
 .. code-block:: python
 
@@ -74,7 +77,11 @@ PEP `3105 <https://www.python.org/dev/peps/pep-3105>`_ - Make print a function
 Unicode
 -------
 
-PEP `3112 <https://www.python.org/dev/peps/pep-3112>`_ - Bytes literals in Python 3000
+As **print function**, making text become Unicode is another infamous decision.
+Nevertheless, many modern programming languages’ text is Unicode. This change
+compels us to decode texts early in order to prevent runtime error after we
+run programs for a while. Further information can be found on PEP
+`3112 <https://www.python.org/dev/peps/pep-3112>`_.
 
 .. code-block:: python
 
@@ -87,24 +94,27 @@ PEP `3112 <https://www.python.org/dev/peps/pep-3112>`_ - Bytes literals in Pytho
 Division
 --------
 
-PEP `238 <https://www.python.org/dev/peps/pep-0238>`_ - Changing the Division Operator
+Sometimes, it is counterintuitive when the division result is int or long.
+In this case, Python 3 enables the **true division** by default. However, in
+Python 2, we have to backport ``division`` to the current interpreter. Further
+information can be found on  PEP `238 <https://www.python.org/dev/peps/pep-0238>`_.
 
 .. code-block:: python
 
-    >>> 1/2
+    >>> 1 / 2
     0
     >>> from __future__ import division
-    >>> 1/2   # return a float (classic division)
+    >>> 1 / 2   # return a float (classic division)
     0.5
-    >>> 1//2  # return a int (floor division)
+    >>> 1 // 2  # return a int (floor division)
     0
 
 Annotations
 -----------
 
 Before Python 3.7, we cannot assign annotations in a class or a function if
-it is not available in the current scope. A common situation is the definition of
-a container class.
+it is not available in the current scope. A common situation is the definition
+of a container class.
 
 .. code-block:: python
 

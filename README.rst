@@ -40,7 +40,7 @@ Cheat Sheet
 ===========
 
 - `Code Style <docs/notes/python-code-style.rst>`_
-- `Basics <docs/notes/python-basic.rst>`_
+- `From Scratch <docs/notes/python-basic.rst>`_
 - `Future <docs/notes/python-future.rst>`_
 - `Unicode <docs/notes/python-unicode.rst>`_
 - `List <docs/notes/python-list.rst>`_
