@@ -10,8 +10,11 @@ Unicode
     :backlinks: none
 
 
-Encode: unicode code point to bytes
-------------------------------------
+Encoding
+--------
+
+A *Unicode code point* transfers to a *byte string* is called encoding. The
+following snippet shows how to encode a Unicode string to a byte string.
 
 .. code-block:: python
 
@@ -19,8 +22,10 @@ Encode: unicode code point to bytes
     >>> type(s.encode('utf-8'))
     <class 'bytes'>
 
-Decode: bytes to unicode code point
-------------------------------------
+Decodeing
+---------
+A *byte string* transfers to a *Unicode code point* is called encoding. The
+following snippet shows how to decode a byte string to a Unicode string.
 
 .. code-block:: python
 
@@ -28,7 +33,7 @@ Decode: bytes to unicode code point
     >>> s.decode('utf-8')
     'Café'
 
-Get unicode code point
+Get Unicode code point
 -----------------------
 
 .. code-block:: python
