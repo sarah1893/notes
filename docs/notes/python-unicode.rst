@@ -6,9 +6,21 @@
 Unicode
 =======
 
+The main goal of this cheat sheet is to collect some common snippets which are
+related to Unicode. In Python 3, strings are represented by Unicode instead of
+bytes. Further information can be found on PEP `3100 <https://www.python.org/dev/peps/pep-3100>`_
+
+**ASCII** code is the most well-known standard which defines numeric codes
+for characters. The numeric values only define 128 characters originally,
+so ASCII only contains control codes, digits, lowercase letters, uppercase
+letters, etc. However, it is not enough for us to represent characters such as
+accented characters, Chinese characters, or emoji existed around the world.
+Therefore, **Unicode** was developed to solve this issues. It defines the
+*code point* to represent various characters like ASCII but the number of
+characters is up to 1,111,998.
+
 .. contents:: Table of Contents
     :backlinks: none
-
 
 Encoding
 --------
