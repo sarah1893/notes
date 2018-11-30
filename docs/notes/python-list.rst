@@ -401,7 +401,7 @@ Example
 Delegating Iterations
 ---------------------
 
-If a custom container class holds a list and we want iteration work in the
+If a custom container class holds a list and we want iterations to work on the
 container, we can implement a ``__iter__`` method to delegate iterations to
 the list. Note that the method, ``__iter__``, should return an *iterator object*,
 so we cannot return the list directly; otherwise, Python raises a ``TypeError``.
