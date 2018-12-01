@@ -62,6 +62,44 @@ be found on PEP `414 <https://www.python.org/dev/peps/pep-0414>`_
     >>> s.encode('utf-8').decode('utf-8')
     'Café'
 
+Characters
+----------
+
+Python 2 takes all string characters as bytes. In this case, the length of
+strings may be not equivalent to the number of characters. For example,
+the length of ``Café`` is 5, not 4 because ``é`` is encoded as a 2 bytes
+character.
+
+.. code-block:: python
+
+    >>> s= 'Café'
+    >>> print([_c for _c in s])
+    ['C', 'a', 'f', '\xc3', '\xa9']
+    >>> len(s)
+    5
+    >>> s = u'Café'
+    >>> print([_c for _c in s])
+    [u'C', u'a', u'f', u'\xe9']
+    >>> len(s)
+    4
+
+Python 3 takes all string characters as Unicode code point. The lenght of
+a string is always equivalent to the number of characters.
+
+.. code-block:: python
+
+    >>> s = 'Café'
+    >>> print([_c for _c in s])
+    ['C', 'a', 'f', 'é']
+    >>> len(s)
+    4
+    >>> bs = bytes(s, encoding='utf-8')
+    >>> print(bs)
+    b'Caf\xc3\xa9'
+    >>> len(bs)
+    5
+
+
 Encoding
 --------
 
@@ -102,40 +140,6 @@ Get Unicode code point
     ...
     U+4e2d
     U+6587
-
-
-python2 take ``str`` char as byte character
---------------------------------------------
-
-.. code-block:: python
-
-    >>> s= 'Café'
-    >>> print([_c for _c in s])
-    ['C', 'a', 'f', '\xc3', '\xa9']
-    >>> len(s)
-    5
-    >>> s = u'Café'
-    >>> print([_c for _c in s])
-    [u'C', u'a', u'f', u'\xe9']
-    >>> len(s)
-    4
-
-python3 take ``str`` char as unicode character
------------------------------------------------
-
-.. code-block:: python
-
-    >>> s = 'Café'
-    >>> print([_c for _c in s])
-    ['C', 'a', 'f', 'é']
-    >>> len(s)
-    4
-    >>> bs = bytes(s, encoding='utf-8')
-    >>> print(bs)
-    b'Caf\xc3\xa9'
-    >>> len(bs)
-   5
-
 
 unicode normalization
 ----------------------
