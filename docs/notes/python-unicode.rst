@@ -22,6 +22,46 @@ characters is up to 1,111,998.
 .. contents:: Table of Contents
     :backlinks: none
 
+String
+------
+
+In Python 2, strings are represented in *bytes*, not *Unicode*. Python provides
+different types of string such as Unicode string, raw string, and so on.
+In this case, if we want to declare a Unicode string, we add ``u`` prefix for
+string literals.
+
+.. code-block:: python
+
+    >>> s = 'Café'  # byte string
+    >>> s
+    'Caf\xc3\xa9'
+    >>> type(s)
+    <type 'str'>
+    >>> u = u'Café' # unicode string
+    >>> u
+    u'Caf\xe9'
+    >>> type(u)
+    <type 'unicode'>
+
+In Python 3, strings are represented in *Unicode*. If we want to represent a
+byte string, we add the ``b`` prefix for string literals. Note that the early
+Python versions (3.0-3.2) do not support the ``u`` prefix. In order to ease
+the pain to migrate Unicode aware applications from Python 2, Python 3.3 once
+again supports the ``u`` prefix for string literals. Further information can
+be found on PEP `414 <https://www.python.org/dev/peps/pep-0414>`_
+
+.. code-block:: python
+
+    >>> s = 'Café'
+    >>> type(s)
+    <class 'str'>
+    >>> s
+    'Café'
+    >>> s.encode('utf-8')
+    b'Caf\xc3\xa9'
+    >>> s.encode('utf-8').decode('utf-8')
+    'Café'
+
 Encoding
 --------
 
@@ -62,38 +102,6 @@ Get Unicode code point
     ...
     U+4e2d
     U+6587
-
-python2 ``str`` is equivalent to byte string
----------------------------------------------
-
-.. code-block:: python
-
-    >>> s = 'Café'  # byte string
-    >>> s
-    'Caf\xc3\xa9'
-    >>> type(s)
-    <type 'str'>
-    >>> u = u'Café' # unicode string
-    >>> u
-    u'Caf\xe9'
-    >>> type(u)
-    <type 'unicode'>
-
-
-python3 ``str`` is equivalent to unicode string
--------------------------------------------------
-
-.. code-block:: python
-
-    >>> s = 'Café'
-    >>> type(s)
-    <class 'str'>
-    >>> s
-    'Café'
-    >>> s.encode('utf-8')
-    b'Caf\xc3\xa9'
-    >>> s.encode('utf-8').decode('utf-8')
-    'Café'
 
 
 python2 take ``str`` char as byte character
