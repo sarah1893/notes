@@ -102,6 +102,11 @@ a string is always equivalent to the number of characters.
 Unicode Code Point
 ------------------
 
+`ord <https://docs.python.org/3/library/functions.html#ord>`_ is a powerful
+built-in function to get a Unicode code point from a given character.
+Consequently, If we want to check a Unicode code point of a character, we can
+use ``ord``.
+
 .. code-block:: python
 
     >>> s = u'Café'
@@ -121,8 +126,7 @@ Unicode Code Point
 Encoding
 --------
 
-A *Unicode code point* transfers to a *byte string* is called encoding. The
-following snippet shows how to encode a Unicode string to a byte string.
+A *Unicode code point* transfers to a *byte string* is called encoding.
 
 .. code-block:: python
 
@@ -132,8 +136,8 @@ following snippet shows how to encode a Unicode string to a byte string.
 
 Decodeing
 ---------
-A *byte string* transfers to a *Unicode code point* is called encoding. The
-following snippet shows how to decode a byte string to a Unicode string.
+
+A *byte string* transfers to a *Unicode code point* is called encoding.
 
 .. code-block:: python
 
@@ -143,6 +147,12 @@ following snippet shows how to decode a byte string to a Unicode string.
 
 Unicode Normalization
 ---------------------
+
+Some characters can be represented in two similar form. For example, the
+character, ``é`` can be written as ``e ́`` (Canonical Decomposition) or ``é``
+(Canonical Composition). In this case, we may acquire unexpected results when we
+are comparing two strings even though they look alike. Therefore, we can
+normalize a Unicode form to solve the issue.
 
 .. code-block:: python
 
@@ -179,82 +189,54 @@ Unicode Normalization
 Avoid ``UnicodeDecodeError``
 ----------------------------
 
+Python raises `UnicodeDecodeError` when byte strings cannot decode to Unicode
+code points. If we want to avoid this exception, we can pass *replace*,
+*backslashreplace*, or *ignore* to errors argument in `decode <https://docs.python.org/3/library/stdtypes.html#bytes.decode>`_.
+
 .. code-block:: python
 
-    # raise a UnicodeDecodeError
-
-    >>> u = b"0xff"
-    >>> u.decode('utf-8')
-    Traceback (most recent call last):
+    >>> u = b"\xff"
+    >>> u.decode('utf-8', 'strict')
+        Traceback (most recent call last):
       File "<stdin>", line 1, in <module>
-    UnicodeDecodeError: 'utf-8' codec can't decode byte 0xff in position 0: invalid start byte
-
-    # raise a UnicodeDecodeError
-
-    >>> u.decode('utf-8', "strict")
-    Traceback (most recent call last):
-      File "<stdin>", line 1, in <module>
-    UnicodeDecodeError: 'utf-8' codec can't decode byte 0xff in position 0: invalid start byte
-
-    # use U+FFFD, REPLACEMENT CHARACTER
-
+    UnicodeDecodeError: 'utf-8' codec can\'t decode byte 0xff in position 0: invalid start byte
+    >>> # use U+FFFD, REPLACEMENT CHARACTER
     >>> u.decode('utf-8', "replace")
     '\ufffd'
-
-    # inserts a \xNN escape sequence
-
+    >>> # inserts a \xNN escape sequence
     >>> u.decode('utf-8', "backslashreplace")
     '\\xff'
-
-    # leave the character out of the Unicode result
-
+    >>> # leave the character out of the Unicode result
     >>> u.decode('utf-8', "ignore")
     ''
 
 Long String
 -----------
 
-Original long string
+The following snippet shows common ways to declare a multi-line string in
+Python.
 
 .. code-block:: python
 
     # original long string
-    >>> s = 'This is a very very very long python string'
-    >>> s
-    'This is a very very very long python string'
+    s = 'This is a very very very long python string'
 
-Single quote with an escaping backslash
+    # Single quote with an escaping backslash
+    s = "This is a very very very " \
+        "long python string"
 
-.. code-block:: python
+    # Using brackets
+    s = (
+        "This is a very very very "
+        "long python string"
+    )
 
-    >>> s = "This is a very very very " \
-    ...     "long python string"
-    >>> s
-    'This is a very very very long python string'
+    # Using ``+``
+    s = (
+        "This is a very very very " +
+        "long python string"
+    )
 
-Using brackets
-
-.. code-block:: python
-
-    >>> s = ("This is a very very very "
-    ...      "long python string")
-    >>> s
-    'This is a very very very long python string'
-
-Using ``+``
-
-.. code-block:: python
-
-    >>> s = ("This is a very very very " +
-    ...      "long python string")
-    >>> s
-    'This is a very very very long python string'
-
-Using triple-quote with an escaping backslash
-
-.. code-block:: python
-
-    >>> s = '''This is a very very very \
-    ... long python string'''
-    >>> s
-    'This is a very very very long python string'
+    # Using triple-quote with an escaping backslash
+    s = '''This is a very very very \
+    long python string'''
