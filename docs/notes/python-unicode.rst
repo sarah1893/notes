@@ -199,7 +199,7 @@ code points. If we want to avoid this exception, we can pass *replace*,
     >>> u.decode('utf-8', 'strict')
         Traceback (most recent call last):
       File "<stdin>", line 1, in <module>
-    UnicodeDecodeError: 'utf-8' codec can\'t decode byte 0xff in position 0: invalid start byte
+    UnicodeDecodeError: 'utf-8' codec can't decode byte 0xff in position 0: invalid start byte
     >>> # use U+FFFD, REPLACEMENT CHARACTER
     >>> u.decode('utf-8', "replace")
     '\ufffd'
