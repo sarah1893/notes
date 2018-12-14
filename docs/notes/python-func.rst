@@ -94,6 +94,15 @@ Annotations
 
 **New in Python 3.0**
 
+Annotations can be a useful way to give programmers hints about types of arguments.
+The specification of this feature is on PEP `3107 <https://www.python.org/dev/peps/pep-3107/>`_.
+Python 3.5 introduced ``typing`` module to extend the concept of type hints.
+Moreover, from version 3.6, Python started to offer a general way to define a
+variable with an annotation. Further information can be found on PEP
+`483 <https://www.python.org/dev/peps/pep-0483>`_, PEP
+`484 <https://www.python.org/dev/peps/pep-0484>`_, and PEP
+`526 <https://www.python.org/dev/peps/pep-0526>`_.
+
 .. code-block:: python
 
     >>> def fib(n: int) -> int:
