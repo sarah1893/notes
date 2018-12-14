@@ -1,6 +1,17 @@
+.. meta::
+    :description lang=en: Collect useful snippets of Python Function
+    :keywords: Python, Python Function, Python Cheat Sheet
+
 ========
 Function
 ========
+
+A function can help programmers to wrap their logic into a task for avoiding
+duplicate code. In Python, the definition of a function is so versatile that
+we can use many features such as decorator, annotation, docstrings, default
+arguments and so on to define a function. In this cheat sheet, it collects
+many ways to define a function and demystifies some enigmatic syntax in functions.
+
 
 .. contents:: Table of Contents
     :backlinks: none
