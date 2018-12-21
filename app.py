@@ -60,7 +60,7 @@ talisman = Talisman(
 )
 
 if "DYNO" in os.environ:
-    sslify = SSLify(app, skips=[".well-known"])
+    sslify = SSLify(app, permanent=True, skips=[".well-known"])
 
 
 @app.errorhandler(404)
