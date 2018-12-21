@@ -40,6 +40,10 @@ format of docstrings.
 Default Arguments
 -----------------
 
+Defining a function where the arguments are optional and have a default value
+is quiet simple in Python. We can just assign values in the definition and make
+sure the default arguments appear in the end.
+
 .. code-block:: python
 
     >>> def add(a, b=0):
