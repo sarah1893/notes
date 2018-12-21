@@ -19,7 +19,13 @@ many ways to define a function and demystifies some enigmatic syntax in function
 Document Functions
 ------------------
 
-Define a function document
+Documentation provides programmers hints about how a function is supposed to
+be used. A docstring gives an expedient way to write a readable document of
+functions. PEP `257 <https://www.python.org/dev/peps/pep-0257>`_ defines some
+conventions of docstrings. In order to avoid violating conventions, there are
+several tools such as `doctest <https://docs.python.org/3/library/doctest.html>`_,
+or `pydocstyle <https://github.com/PyCQA/pydocstyle>`_ can help us check the
+format of docstrings.
 
 .. code-block:: python
 
