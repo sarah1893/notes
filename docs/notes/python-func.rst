@@ -41,7 +41,7 @@ Default Arguments
 -----------------
 
 Defining a function where the arguments are optional and have a default value
-is quiet simple in Python. We can just assign values in the definition and make
+is quite simple in Python. We can just assign values in the definition and make
 sure the default arguments appear in the end.
 
 .. code-block:: python
@@ -128,6 +128,10 @@ variable with an annotation. Further information can be found on PEP
 
 Callable
 --------
+
+In some cases such as passing a callback function, we need to check whether an
+object is callable or not. The built-in function, ``callable``, assist us to
+avoid raising a ``TypeError`` if the object is not callable.
 
 .. code-block:: python
 
