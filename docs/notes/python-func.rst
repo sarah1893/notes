@@ -158,6 +158,12 @@ Get Function Name
 Lambda
 ------
 
+Sometimes, we don't want to use the *def* statement to define a short callback
+function. We can use a ``lambda`` expression as a shortcut to define an anonymous
+or an inline function instead. However, only one single expression can be specified
+in ``lambda``. That is, no other features such as multi-line statements,
+conditions, or exception handling can be contained.
+
 .. code-block:: python
 
     >>> fn = lambda x: x**2
