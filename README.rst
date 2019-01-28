@@ -48,7 +48,6 @@ Cheat Sheet
 - `Dictionary <docs/notes/python-dict.rst>`_
 - `Function <docs/notes/python-func.rst>`_
 - `Class <docs/notes/python-object.rst>`_
-- `Iterator <docs/notes/python-iterator.rst>`_
 - `Generator <docs/notes/python-generator.rst>`_
 - `Typing <docs/notes/python-typing.rst>`_
 - `File <docs/notes/python-io.rst>`_
