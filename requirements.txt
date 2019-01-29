@@ -8,7 +8,7 @@ Flask-Testing==0.7.1
 Flask-SeaSurf==0.2.2
 flask-talisman==0.6.0
 gunicorn==19.9.0
-pycodestyle==2.4.0
+pycodestyle==2.5.0
 pydocstyle==3.0.0
 requests==2.21.0
 Sphinx==1.8.3
