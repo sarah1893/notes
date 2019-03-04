@@ -99,6 +99,35 @@ a string is always equivalent to the number of characters.
     >>> len(bs)
     5
 
+Porting unicode(s, 'utf-8')
+---------------------------
+
+The `unicode() <https://docs.python.org/2.7/library/functions.html#unicode>`_
+built-in function was removed in Python 3 so what is the best way to convert
+the expression ``unicode(s, 'utf-8')`` so it works in both Python 2 and 3?
+
+In Python 2:
+
+.. code-block:: python
+
+    >>> s = 'Café'
+    >>> unicode(s, 'utf-8')
+    u'Caf\xe9'
+    >>> s.decode('utf-8')
+    u'Caf\xe9'
+    >>> unicode(s, 'utf-8') == s.decode('utf-8')
+    True
+
+In Python 3:
+
+.. code-block:: python
+
+    >>> s = 'Café'
+    >>> s.decode('utf-8')
+    AttributeError: 'str' object has no attribute 'decode'
+
+So, the real answer is...
+
 Unicode Code Point
 ------------------
 
