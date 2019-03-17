@@ -22,5 +22,5 @@ endif
 deps:
 	pip install -r requirements.txt
 ifeq ($(PY36), 1)
-	pip install black==18.9b0
+	pip install black==19.3b0
 endif
