@@ -110,7 +110,7 @@ Basic types
     var_float: float = 1.
     var_unicode: Text = u'\u2713'
 
-    # cound be none
+    # could be none
     var_could_be_none: Optional[int] = None
     var_could_be_none = 1
 
