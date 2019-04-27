@@ -290,7 +290,7 @@ expression* provides a more concise way to remove items.
 Stacks
 ------
 
-There is no need an additional data structure, stack, in Python because the
+There is no need for an additional data structure, stack, in Python because the
 ``list`` provides ``append`` and ``pop`` methods which enable us use a list as
 a stack.
 
