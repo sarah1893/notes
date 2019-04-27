@@ -26,6 +26,7 @@ Find Same Keys
 .. code-block:: python
 
     >>> a = {"1":1, "2":2, "3":3}
+    >>> b = {"2":2, "3":3, "4":4}
     >>> [_ for _ in a.keys() if _ in b.keys()]
     ['3', '2']
     >>> # better way
