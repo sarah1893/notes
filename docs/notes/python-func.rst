@@ -1,6 +1,17 @@
+.. meta::
+    :description lang=en: Collect useful snippets of Python Function
+    :keywords: Python, Python Function, Python Cheat Sheet
+
 ========
 Function
 ========
+
+A function can help programmers to wrap their logic into a task for avoiding
+duplicate code. In Python, the definition of a function is so versatile that
+we can use many features such as decorator, annotation, docstrings, default
+arguments and so on to define a function. In this cheat sheet, it collects
+many ways to define a function and demystifies some enigmatic syntax in functions.
+
 
 .. contents:: Table of Contents
     :backlinks: none
@@ -8,7 +19,13 @@ Function
 Document Functions
 ------------------
 
-Define a function document
+Documentation provides programmers hints about how a function is supposed to
+be used. A docstring gives an expedient way to write a readable document of
+functions. PEP `257 <https://www.python.org/dev/peps/pep-0257>`_ defines some
+conventions of docstrings. In order to avoid violating conventions, there are
+several tools such as `doctest <https://docs.python.org/3/library/doctest.html>`_,
+or `pydocstyle <https://github.com/PyCQA/pydocstyle>`_ can help us check the
+format of docstrings.
 
 .. code-block:: python
 
@@ -22,6 +39,10 @@ Define a function document
 
 Default Arguments
 -----------------
+
+Defining a function where the arguments are optional and have a default value
+is quite simple in Python. We can just assign values in the definition and make
+sure the default arguments appear in the end.
 
 .. code-block:: python
 
@@ -83,6 +104,15 @@ Annotations
 
 **New in Python 3.0**
 
+Annotations can be a useful way to give programmers hints about types of arguments.
+The specification of this feature is on PEP `3107 <https://www.python.org/dev/peps/pep-3107/>`_.
+Python 3.5 introduced ``typing`` module to extend the concept of type hints.
+Moreover, from version 3.6, Python started to offer a general way to define a
+variable with an annotation. Further information can be found on PEP
+`483 <https://www.python.org/dev/peps/pep-0483>`_, PEP
+`484 <https://www.python.org/dev/peps/pep-0484>`_, and PEP
+`526 <https://www.python.org/dev/peps/pep-0526>`_.
+
 .. code-block:: python
 
     >>> def fib(n: int) -> int:
@@ -98,6 +128,10 @@ Annotations
 
 Callable
 --------
+
+In some cases such as passing a callback function, we need to check whether an
+object is callable or not. The built-in function, ``callable``, assist us to
+avoid raising a ``TypeError`` if the object is not callable.
 
 .. code-block:: python
 
@@ -123,6 +157,12 @@ Get Function Name
 
 Lambda
 ------
+
+Sometimes, we don't want to use the *def* statement to define a short callback
+function. We can use a ``lambda`` expression as a shortcut to define an anonymous
+or an inline function instead. However, only one single expression can be specified
+in ``lambda``. That is, no other features such as multi-line statements,
+conditions, or exception handling can be contained.
 
 .. code-block:: python
 
