@@ -437,3 +437,166 @@ Example
     $ python stack.py
     1
     2
+
+Sorting
+-------
+
+Python list provides a built-in ``list.sort`` method which sorts a list
+`in-place <https://en.wikipedia.org/wiki/In-place_algorithm>`_ without using
+extra memory. Moreover, the return value of ``list.sort`` is ``None`` in
+order to avoid confusion with ``sorted`` and the function can only be used for
+``list``.
+
+.. code-block:: python
+
+    >>> l = [5, 4, 3, 2, 1]
+    >>> l.sort()
+    >>> l
+    [1, 2, 3, 4, 5]
+    >>> l.sort(reverse=True)
+    >>> l
+    [5, 4, 3, 2, 1]
+
+The ``sorted`` function does not modify any iterable object in-place. Instead,
+it returns a new sorted list. Using ``sorted`` is safer than ``list.sort`` if
+some list's elements are read-only or immutable. Besides, another difference
+between ``list.sort`` and ``sorted`` is that ``sorted`` accepts any **iterable
+object**.
+
+.. code-block:: python
+
+    >>> l = [5, 4, 3, 2, 1]
+    >>> new = sorted(l)
+    >>> new
+    [1, 2, 3, 4, 5]
+    >>> l
+    [5, 4, 3, 2, 1]
+    >>> d = {3: 'andy', 2: 'david', 1: 'amy'}
+    >>> sorted(d)  # sort iterable
+    [1, 2, 3]
+
+To sort a list with its elements are tuples, using ``operator.itemgetter`` is
+helpful because it assigns a key function to the ``sorted`` key parameter. Note
+that the key should be comparable; otherwise, it will raise a ``TypeError``.
+
+.. code-block:: python
+
+    >>> from operator import itemgetter
+    >>> l = [('andy', 10), ('david', 8), ('amy', 3)]
+    >>> l.sort(key=itemgetter(1))
+    >>> l
+    [('amy', 3), ('david', 8), ('andy', 10)]
+
+``operator.itemgetter`` is useful because the function returns a getter
+method which can be applied to other objects with a method ``__getitem__``. For
+example, sorting a list with its elements are dictionary can be achieved by
+using ``operator.itemgetter`` due to all elements have ``__getitem__``.
+
+.. code-block:: python
+
+    >>> from pprint import pprint
+    >>> from operator import itemgetter
+    >>> l = [
+    ...     {'name': 'andy', 'age': 10},
+    ...     {'name': 'david', 'age': 8},
+    ...     {'name': 'amy', 'age': 3},
+    ... ]
+    >>> l.sort(key=itemgetter('age'))
+    >>> pprint(l)
+    [{'age': 3, 'name': 'amy'},
+     {'age': 8, 'name': 'david'},
+     {'age': 10, 'name': 'andy'}]
+
+If it is necessary to sort a list with its elements are neither comparable nor
+having ``__getitem__`` method, assigning a customized key function is feasible.
+
+.. code-block:: python
+
+    >>> class Node(object):
+    ...     def __init__(self, val):
+    ...         self.val = val
+    ...     def __repr__(self):
+    ...         return f"Node({self.val})"
+    ...
+    >>> nodes = [Node(3), Node(2), Node(1)]
+    >>> nodes.sort(key=lambda x: x.val)
+    >>> nodes
+    [Node(1), Node(2), Node(3)]
+    >>> nodes.sort(key=lambda x: x.val, reverse=True)
+    >>> nodes
+    [Node(3), Node(2), Node(1)]
+
+The above snippet can be simplified by using ``operator.attrgetter``. The
+function returns an attribute getter based on the attribute's name. Note that
+the attribute should be comparable; otherwise, ``sorted`` or ``list.sort`` will
+raise ``TypeError``.
+
+.. code-block:: python
+
+    >>> from operator import attrgetter
+    >>> class Node(object):
+    ...     def __init__(self, val):
+    ...         self.val = val
+    ...     def __repr__(self):
+    ...         return f"Node({self.val})"
+    ...
+    >>> nodes = [Node(3), Node(2), Node(1)]
+    >>> nodes.sort(key=attrgetter('val'))
+    >>> nodes
+    [Node(1), Node(2), Node(3)]
+
+If an object has ``__lt__`` method, it means that the object is comparable and
+``sorted`` or ``list.sort`` is not necessary to input a key function to its key
+parameter. A list or an iterable sequence can be sorted directly.
+
+.. code-block:: python
+
+    >>> class Node(object):
+    ...     def __init__(self, val):
+    ...         self.val = val
+    ...     def __repr__(self):
+    ...         return f"Node({self.val})"
+    ...     def __lt__(self, other):
+    ...         return self.val - other.val < 0
+    ...
+    >>> nodes = [Node(3), Node(2), Node(1)]
+    >>> nodes.sort()
+    >>> nodes
+    [Node(1), Node(2), Node(3)]
+
+If an object does not have ``__lt__`` method, it is likely to patch the method
+after a declaration of the object's class. In other words, after the patching,
+the object becomes comparable.
+
+.. code-block:: python
+
+    >>> class Node(object):
+    ...     def __init__(self, val):
+    ...         self.val = val
+    ...     def __repr__(self):
+    ...         return f"Node({self.val})"
+    ...
+    >>> Node.__lt__ = lambda s, o: s.val < o.val
+    >>> nodes = [Node(3), Node(2), Node(1)]
+    >>> nodes.sort()
+    >>> nodes
+    [Node(1), Node(2), Node(3)]
+
+Note that ``sorted`` or ``list.sort`` in Python3 does not support ``cmp``
+parameter which is an **ONLY** valid argument in Python2. If it is necessary to
+use an old comparison function, e.g., some legacy code, ``functools.cmp_to_key``
+is useful since it converts a comparison function to a key function.
+
+.. code-block:: python
+
+    >>> from functools import cmp_to_key
+    >>> class Node(object):
+    ...     def __init__(self, val):
+    ...         self.val = val
+    ...     def __repr__(self):
+    ...         return f"Node({self.val})"
+    ...
+    >>> nodes = [Node(3), Node(2), Node(1)]
+    >>> nodes.sort(key=cmp_to_key(lambda x,y: x.val - y.val))
+    >>> nodes
+    [Node(1), Node(2), Node(3)]
