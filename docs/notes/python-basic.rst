@@ -278,6 +278,22 @@ runs when no exception occurs between ``try`` and ``except``.
     No exception
     Success
 
+String
+------
+
+Unlike other programming languages, Python does not support string’s item
+assignment directly. Therefore, if it is necessary to manipulate string’s
+items, e.g., swap items, we have to convert a string to a list and do a join
+operation after a series item assignments finish.
+
+.. code-block:: python
+
+    >>> a = "Hello Python"
+    >>> l = list(a)
+    >>> l[0], l[6] = 'h', 'p'
+    >>> ''.join(l)
+    'hello python'
+
 List
 ----
 
