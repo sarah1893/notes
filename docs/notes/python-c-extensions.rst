@@ -6,6 +6,20 @@
 C Extensions
 ============
 
+Occasionally, it is unavoidable for pythoneers to write a C extension. For
+example, porting C libraries or new system calls to Python requires to
+implement new object types through C extension. In order to provide a brief
+glance on how C extension works. This cheat sheet mainly focuses on writing a
+Python C extension.
+
+Note that the C extension interface is specific to official CPython. It is
+likely that extension modules do not work on other Python implementations
+such as `PyPy <https://pypy.org/>`_. Even if official CPython, the Python
+C API may be not compatible with different versions, e.g., Python2 and Python3.
+Therefore, if extension modules are considered to be run on other Python
+interpreters, it would be better to use `ctypes <https://docs.python.org/3/library/ctypes.html>`_
+module or `cffi <https://cffi.readthedocs.io/en/latest/>`_.
+
 .. contents:: Table of Contents
     :backlinks: none
 
