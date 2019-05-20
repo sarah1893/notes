@@ -15,7 +15,7 @@ for characters. The numeric values only define 128 characters originally,
 so ASCII only contains control codes, digits, lowercase letters, uppercase
 letters, etc. However, it is not enough for us to represent characters such as
 accented characters, Chinese characters, or emoji existed around the world.
-Therefore, **Unicode** was developed to solve this issues. It defines the
+Therefore, **Unicode** was developed to solve this issue. It defines the
 *code point* to represent various characters like ASCII but the number of
 characters is up to 1,111,998.
 
