@@ -6,6 +6,15 @@
 Typing
 ======
 
+PEP `484 <https://www.python.org/dev/peps/pep-0484/>`_, which provides a
+specification about what a type system should look like in Python3, introduced
+the concept of type hints. Moreover, to better understand the type hints design
+philosophy, it is crucial to read PEP `483 <https://www.python.org/dev/peps/pep-0483/>`_
+that would be helpful to aid a pythoneer to understand reasons why Python
+introduce a type system. The main goal of this cheat sheet is to show some
+common usage about type hints in Python3.
+
+
 .. contents:: Table of Contents
     :backlinks: none
 
