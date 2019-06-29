@@ -57,3 +57,11 @@ Login ssh
         ssh.connect('localhost', username="me", key_filename="key")
         stdin, stdout, stderr = ssh.exec_command("uname")
         print(stdout.read())
+
+.. code-block:: python
+
+    # ssh-keygen -m pem -f key -t rsa -P passphrase
+    # eval $(ssh-agent)
+    # ssh-add key
+    # ssh -i key me@localhost
+
