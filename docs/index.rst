@@ -74,6 +74,7 @@ modules usages.
    notes/python-concurrency
    notes/python-sqlalchemy
    notes/python-security
+   notes/python-ssh
    notes/python-aws
    notes/python-tests
    notes/python-c-extensions
