@@ -90,7 +90,7 @@ b contains a
 
     >>> a = set([1, 2])
     >>> b = set([1, 2, 5, 6])
-    >>> a <=b
+    >>> a <= b
     True
 
 a contains b
