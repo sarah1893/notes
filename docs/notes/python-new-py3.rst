@@ -734,7 +734,7 @@ Matrix multiplication
 
 - PEP 465_ - A dedicated infix operator for matrix multiplication
 
-.. code-block:: python
+.. code-block:: Python3
 
     >>> # "@" represent matrix multiplication
     >>> class Arr:

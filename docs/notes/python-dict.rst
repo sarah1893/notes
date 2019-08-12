@@ -43,7 +43,7 @@ Set a Default Value
 
 .. code-block:: python
 
-    # intuitive but not recommend
+    >>> # intuitive but not recommend
     >>> d = {}
     >>> key = "foo"
     >>> if key not in d:
