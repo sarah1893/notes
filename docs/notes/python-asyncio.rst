@@ -422,7 +422,7 @@ Asynchronous Iterator
     ...         return val
     ...
     >>> async def foo():
-    ...     it = [1,2,3]
+    ...     it = [1, 2, 3]
     ...     async for _ in AsyncIter(it):
     ...         print(_)
     ...
@@ -452,7 +452,7 @@ What is asynchronous iterator
     ...         return val
     ...
     >>> async def foo():
-    ...     _ = [1,2,3]
+    ...     _ = [1, 2, 3]
     ...     running = True
     ...     it = AsyncIter(_)
     ...     while running:

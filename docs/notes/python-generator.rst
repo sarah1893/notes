@@ -569,7 +569,7 @@ What ``@contextmanager`` actually doing?
 
     class GeneratorCM(object):
 
-        def __init__(self,gen):
+        def __init__(self, gen):
             self._gen = gen
 
         def __enter__(self):
