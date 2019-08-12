@@ -209,7 +209,7 @@ Context Manager
     import socket
 
     class Socket(object):
-        def __init__(self,host,port):
+        def __init__(self, host, port):
             self.host = host
             self.port = port
 

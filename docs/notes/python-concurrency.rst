@@ -665,7 +665,7 @@ Scheduler with blocking function
                     tasks.append(s_wait.pop(_))
             try:
                 task = tasks.popleft()
-                why,what = task.next()
+                why, what = task.next()
                 if why == 'recv':
                     r_wait[what] = task
                 elif why == 'send':
@@ -677,7 +677,7 @@ Scheduler with blocking function
 
     def fib_server():
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR,1)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         sock.bind(('localhost',5566))
         sock.listen(5)
         while True:
