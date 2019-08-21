@@ -67,6 +67,9 @@ Compare HTML tags
     >>> re.findall('</[^>]+>', html)[0:2]
     ['</script>', '</title>']
     >>> print("self-closing tags")
+    self-closing tags
+    >>> re.findall('<[^/>]+/>', html)[0:2]
+    []
 
 Group Comparison
 ----------------
