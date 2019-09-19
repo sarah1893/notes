@@ -11,4 +11,4 @@ pycodestyle==2.5.0
 pydocstyle==4.0.1
 requests==2.22.0
 Sphinx==2.2.0
-Werkzeug==0.15.6
+Werkzeug==0.16.0
