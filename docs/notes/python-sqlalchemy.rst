@@ -168,7 +168,7 @@ Get Table from MetaData
     engine = create_engine(db_uri)
 
     # Create MetaData instance
-    metadata = MetaData(engine, reflect=True)
+    metadata = MetaData(engine).reflect()
     print(metadata.tables)
 
     # Get Table
@@ -434,7 +434,7 @@ select() - Create a "SELECT" Statement
     engine = create_engine(db_uri)
     conn = engine.connect()
 
-    meta = MetaData(engine,reflect=True)
+    meta = MetaData(engine).reflect()
     table = meta.tables['user']
 
     # select * from 'user'
@@ -485,7 +485,7 @@ join() - Joined Two Tables via "JOIN" Statement
     db_uri = 'sqlite:///db.sqlite'
     engine = create_engine(db_uri)
 
-    meta = MetaData(engine, reflect=True)
+    meta = MetaData(engine).reflect()
     email_t = Table('email_addr', meta,
           Column('id', Integer, primary_key=True),
           Column('email',String),
@@ -522,7 +522,7 @@ Delete Rows from Table
     engine = create_engine(db_uri)
     conn = engine.connect()
 
-    meta = MetaData(engine, reflect=True)
+    meta = MetaData(engine).reflect()
     user_t = meta.tables['user']
 
     # select * from user_t
@@ -570,7 +570,7 @@ Check Table Existing
         print(_t)
 
     # check all table in database
-    meta = MetaData(engine, reflect=True)
+    meta = MetaData(engine).reflect()
     for _t in meta.tables:
         print(_t)
 
