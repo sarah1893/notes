@@ -124,6 +124,7 @@ Mac address & byte format convert
 
 .. code-block:: python
 
+    >>> import binascii
     >>> mac = '00:11:32:3c:c3:0b'
     >>> byte = binascii.unhexlify(mac.replace(':',''))
     >>> byte
@@ -139,17 +140,17 @@ Simple TCP Echo Server
     import socket
 
     class Server(object):
-        def __init__(self,host,port):
+        def __init__(self, host, port):
             self._host = host
             self._port = port
         def __enter__(self):
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR,1)
-            sock.bind((self._host,self._port))
+            sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            sock.bind((self._host, self._port))
             sock.listen(10)
             self._sock = sock
             return self._sock
-        def __exit__(self,*exc_info):
+        def __exit__(self, *exc_info):
             if exc_info[0]:
                 import traceback
                 traceback.print_exception(*exc_info)
@@ -158,7 +159,7 @@ Simple TCP Echo Server
     if __name__ == '__main__':
         host = 'localhost'
         port = 5566
-        with Server(host,5566) as s:
+        with Server(host, 5566) as s:
             while True:
                 conn, addr = s.accept()
                 msg = conn.recv(1024)
@@ -265,7 +266,7 @@ output:
 
 .. code-block:: bash
 
-    $ python3 ipv6.py
+    $ python3 ipv6.py &
     [1] 23914
     $ nc -4 127.0.0.1 5566
     ('::ffff:127.0.0.1', 42604, 0, 0)
@@ -294,7 +295,7 @@ Simple TCP Echo Server Via SocketServer
     ...     print(self.client_address)
     ...     self.request.sendall(data)
     ...
-    >>> host = ('localhost',5566)
+    >>> host = ('localhost', 5566)
     >>> s = SocketServer.TCPServer(
     ...   host, handler)
     >>> s.serve_forever()
@@ -419,16 +420,16 @@ Simple UDP Echo Server
     import socket
 
     class UDPServer(object):
-        def __init__(self,host,port):
+        def __init__(self, host, port):
             self._host = host
             self._port = port
 
         def __enter__(self):
             sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            sock.bind((self._host,self._port))
+            sock.bind((self._host, self._port))
             self._sock = sock
             return sock
-       def __exit__(self,*exc_info):
+       def __exit__(self, *exc_info):
             if exc_info[0]:
                 import traceback
                 traceback.print_exception(*exc_info)
@@ -437,7 +438,7 @@ Simple UDP Echo Server
     if __name__ == '__main__':
         host = 'localhost'
         port = 5566
-        with UDPServer(host,port) as s:
+        with UDPServer(host, port) as s:
             while True:
                 msg, addr = s.recvfrom(1024)
                 s.sendto(msg, addr)
@@ -464,7 +465,7 @@ Simple UDP Echo Server Via SocketServer
     ...     s.sendto(m,self.client_address)
     ...     print(self.client_address)
     ...
-    >>> host = ('localhost',5566)
+    >>> host = ('localhost', 5566)
     >>> s = SocketServer.UDPServer(
     ...   host, handler)
     >>> s.serve_forever()
@@ -488,9 +489,9 @@ Simple UDP client - Sender
     >>> sock = socket.socket(
     ...   socket.AF_INET,
     ...   socket.SOCK_DGRAM)
-    >>> host = ('localhost',5566)
+    >>> host = ('localhost', 5566)
     >>> while True:
-    ...   sock.sendto("Hello\n",host)
+    ...   sock.sendto("Hello\n", host)
     ...   time.sleep(5)
     ...
 
@@ -510,11 +511,11 @@ Broadcast UDP Packets
     >>> import socket
     >>> import time
     >>> sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    >>> sock.bind(('',0))
+    >>> sock.bind(('', 0))
     >>> sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST,1)
     >>> while True:
     ...   m = '{0}\n'.format(time.time())
-    ...   sock.sendto(m,('<broadcast>',5566))
+    ...   sock.sendto(m, ('<broadcast>', 5566))
     ...   time.sleep(5)
     ...
 
@@ -623,12 +624,12 @@ Simple Asynchronous TCP Server - Thread
     ...     conn.send(msg)
     ...
     >>> sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    >>> sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR,1)
-    >>> sock.bind(('localhost',5566))
+    >>> sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    >>> sock.bind(('localhost', 5566))
     >>> sock.listen(5)
     >>> while True:
     ...   conn,addr = sock.accept()
-    ...   t=Thread(target=work,args=(conn,))
+    ...   t=Thread(target=work, args=(conn,))
     ...   t.daemon=True
     ...   t.start()
     ...
@@ -657,9 +658,9 @@ Simple Asynchronous TCP Server - select
     from select import select
     import socket
 
-    host = ('localhost',5566)
+    host = ('localhost', 5566)
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR,1)
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sock.bind(host)
     sock.listen(5)
     rl = [sock]
@@ -667,7 +668,7 @@ Simple Asynchronous TCP Server - select
     ml = {}
     try:
         while True:
-            r, w, _ = select(rl,wl,[])
+            r, w, _ = select(rl, wl, [])
             # process ready to ready
             for _ in r:
                 if _ == sock:
@@ -855,7 +856,7 @@ Simple Asynchronous TCP Server - epoll
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             s.setblocking(False)
-            s.bind((host,port))
+            s.bind((host, port))
             s.listen(10)
             yield s
         except socket.error:
@@ -983,12 +984,12 @@ Simple Asynchronous TCP Server - kqueue
     resp = {}
 
     @contextlib.contextmanager
-    def Server(host,port):
+    def Server(host, port):
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             s.setblocking(False)
-            s.bind((host,port))
+            s.bind((host, port))
             s.listen(10)
             yield s
         except socket.error:
@@ -1133,11 +1134,11 @@ High-Level API - selectors
     import contextlib
 
     @contextlib.contextmanager
-    def Server(host,port):
+    def Server(host, port):
        try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            s.bind((host,port))
+            s.bind((host, port))
             s.listen(10)
             sel = selectors.DefaultSelector()
             yield s, sel
@@ -1203,11 +1204,11 @@ Simple Non-blocking TLS/SSL socket via selectors
     sslctx.load_cert_chain(certfile="cert.pem", keyfile="key.pem")
 
     @contextlib.contextmanager
-    def Server(host,port):
+    def Server(host, port):
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            s.bind((host,port))
+            s.bind((host, port))
             s.listen(10)
             sel = selectors.DefaultSelector()
             yield s, sel
