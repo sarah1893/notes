@@ -844,6 +844,25 @@ Built-in ``breakpoint()``
     (Pdb) c
 
 
+The walrus operator
+--------------------
+
+**New in Python 3.8**
+
+- PEP 572_ - Assignment Expressions
+
+The goal of the walrus operator is to assign variables within an expression.
+After completing PEP 572, Guido van Rossum, commonly known as BDFL, decided to
+resign as a Python dictator.
+
+
+.. code-block:: python
+
+    >>> f = (0, 1)
+    >>> [(f := (f[1], sum(f)))[0] for i in range(10)]
+    [1, 1, 2, 3, 5, 8, 13, 21, 34, 55]
+
+
 .. _3105: https://www.python.org/dev/peps/pep-3105/
 .. _3138: https://www.python.org/dev/peps/pep-3138/
 .. _3120: https://www.python.org/dev/peps/pep-3120/
@@ -873,3 +892,4 @@ Built-in ``breakpoint()``
 .. _560: https://www.python.org/dev/peps/pep-0560/
 .. _27350: https://bugs.python.org/issue27350
 .. _401: https://www.python.org/dev/peps/pep-0401/
+.. _572: https://www.python.org/dev/peps/pep-0572/
