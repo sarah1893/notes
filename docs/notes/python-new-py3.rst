@@ -863,6 +863,28 @@ resign as a Python dictator.
     [1, 1, 2, 3, 5, 8, 13, 21, 34, 55]
 
 
+Positional-only parameters
+---------------------------
+
+**New in Python 3.8**
+
+- PEP 570_ - Python Positional-Only Parameters
+
+.. code-block:: python
+
+    >>> def f(a, b, /, c, d):
+    ...     print(a, b, c, d)
+    ...
+    >>> f(1, 2, 3, 4)
+    1 2 3 4
+    >>> f(1, 2, c=3, d=4)
+    1 2 3 4
+    >>> f(1, b=2, c=3, d=4)
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    TypeError: f() got some positional-only arguments passed as keyword arguments: 'b'
+
+
 .. _3105: https://www.python.org/dev/peps/pep-3105/
 .. _3138: https://www.python.org/dev/peps/pep-3138/
 .. _3120: https://www.python.org/dev/peps/pep-3120/
@@ -893,3 +915,4 @@ resign as a Python dictator.
 .. _27350: https://bugs.python.org/issue27350
 .. _401: https://www.python.org/dev/peps/pep-0401/
 .. _572: https://www.python.org/dev/peps/pep-0572/
+.. _570: https://www.python.org/dev/peps/pep-0570/
