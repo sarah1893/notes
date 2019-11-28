@@ -71,7 +71,7 @@ Why ``:=`` ?
 
 Developers may confuse the difference between ``:=`` and  ``=``. In fact, they
 serve the same purpose, assigning somethings to variables. Why Python introduced
-``:=`` instead of using ``=`` ? What is the benefit of using ``:=`` ? One
+``:=`` instead of using ``=``? What is the benefit of using ``:=``? One
 reason is from a common mistake made by C/C++ developers. For instance,
 
 .. code-block:: c
@@ -101,12 +101,14 @@ expression.
 However, Yoda style is not readable enough like Yoda speaks non-standardized
 English. Also, unlike C/C++ can detect assigning error during the compile-time
 via compiler options (e.g., -Wparentheses), it is difficult for Python interpreter
-to distinguish such mistakes throughout the runtime. Thus, the final decision
-was to use a new syntax as their solution to implement PEP 572 - assignment
-expressions.
+to distinguish such mistakes throughout the runtime. Thus, the final result
+of PEP 572 was to use a new syntax as a solution to implement *assignment
+expressions*.
 
 The walrus operator was not the first solution for PEP 572. The original proposal
-used ``EXPR as NAME`` to assign values to variables.
+used ``EXPR as NAME`` to assign values to variables. Unfortunately, there are
+some flaws in this solution and other solutions as well. After intense debates,
+the final decision was ``:=``.
 
 
 .. _Yoda conditions: https://en.wikipedia.org/wiki/Yoda_conditions
