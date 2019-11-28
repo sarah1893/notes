@@ -1,6 +1,14 @@
+.. meta::
+    :description lang=en: Design philosophy of pep 572, the walrus operator
+    :keywords: Python3, PEP 572, walrus operator
+
 
 PEP 572 and The Walrus Operator
 ===============================
+
+.. contents:: table of Contents
+    :backlinks: none
+
 
 Introduction
 ------------
