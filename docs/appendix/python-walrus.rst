@@ -98,6 +98,13 @@ expression.
         goto end;
     }
 
+However, Yoda style is not readable enough like Yoda speaks non-standardized
+English. Also, unlike C/C++ can detect assigning error during the compile-time
+via compiler options (e.g., -Wparentheses), it is difficult for Python interpreter
+to distinguish such mistakes throughout the runtime. Thus, the final decision
+was to use a new syntax as their solution to implement PEP 572 - assignment
+expressions.
+
 
 .. _Yoda conditions: https://en.wikipedia.org/wiki/Yoda_conditions
 
