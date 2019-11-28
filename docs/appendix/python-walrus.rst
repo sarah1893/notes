@@ -6,17 +6,17 @@
 PEP 572 and The Walrus Operator
 ===============================
 
+PEP 572 is one of the most significant proposals in Python3 history. After
+finishing this proposal, Guido van Rossum decided to resign as a Python leader.
+This article tries to discuss what kind of problems that the walrus operator
+(``:=``) is to try to solve.
+
 .. contents:: table of Contents
     :backlinks: none
 
 
 Introduction
 ------------
-
-PEP 572 is one of the most significant proposals in Python3 history. After
-finishing this proposal, Guido van Rossum decided to resign as a Python leader.
-This article tries to discuss what kind of problems that the walrus operator
-(``:=``) is to try to solve.
 
 For C/C++ developer, assigning a function return to a variable is common due
 to error code style handling. Managing function errors includes two steps;
