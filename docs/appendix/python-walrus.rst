@@ -105,6 +105,9 @@ to distinguish such mistakes throughout the runtime. Thus, the final decision
 was to use a new syntax as their solution to implement PEP 572 - assignment
 expressions.
 
+The walrus operator was not the first solution for PEP 572. The original proposal
+used ``EXPR as NAME`` to assign values to variables.
+
 
 .. _Yoda conditions: https://en.wikipedia.org/wiki/Yoda_conditions
 
