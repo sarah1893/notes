@@ -64,3 +64,40 @@ The following Python snippet is equal to the previous C example.
     ...     print(os.strerror(errno), file=sys.stderr)
     ...
     No such file or directory
+
+
+Why ``:=`` ?
+------------
+
+Developers may confuse the difference between ``:=`` and  ``=``. In fact, they
+serve the same purpose, assigning somethings to variables. Why Python introduced
+``:=`` instead of using ``=`` ? What is the benefit of using ``:=`` ? One
+reason is from a common mistake made by C/C++ developers. For instance,
+
+.. code-block:: c
+
+    int rc = access("hello_walrus", R_OK);
+
+    // rc is unintentionally assigned to -1
+    if (rc = -1) {
+        fprintf(stderr, "%s", strerror(errno));
+        goto end;
+    }
+
+Rather than comparison, the variable, ``rc``, is mistakenly assigned to -1. To
+prevent this error, some people advocate using `Yoda conditions`_ within an
+expression.
+
+.. code-block:: c
+
+    int rc = access("hello_walrus", R_OK);
+
+    // -1 = rc will raise a compile error
+    if (-1 == rc) {
+        fprintf(stderr, "%s", strerror(errno));
+        goto end;
+    }
+
+
+.. _Yoda conditions: https://en.wikipedia.org/wiki/Yoda_conditions
+
