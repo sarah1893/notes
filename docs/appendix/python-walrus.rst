@@ -12,10 +12,13 @@ PEP 572 and The Walrus Operator
 Abstract
 --------
 
-PEP 572 is one of the most significant proposals in Python3 history. After
-finishing this proposal, Guido van Rossum decided to resign as a Python leader.
-This article tries to discuss what kind of problems that the walrus operator
-(``:=``) is to try to solve.
+PEP 572 is one of the most contentious proposals in Python3 history because
+assigning a value within an expression seems unnecessary. Also, it is ambiguous
+for developers to distinguish the difference between **the walrus operator**
+(``:=``) and the equal operator (``=``). Even though sophisticated developers
+can use ``:=`` smoothly, they may concern the readability of their code. To
+better understand the usage of ``:=``, this article discusses its design
+philosophy and what kind of problems it tries to solve.
 
 
 Introduction
