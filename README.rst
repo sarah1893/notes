@@ -73,6 +73,7 @@ Appendix
 
 - `Why does Decorator Need @wraps <docs/appendix/python-decorator.rst>`_
 - `Yet Another Introduction to Asyncio <docs/appendix/python-asyncio.rst>`_
+- `PEP 572 and the walrus operator <docs/appendix/python-walrus.rst>`_
 
 PDF Version
 ============

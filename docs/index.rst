@@ -89,3 +89,4 @@ The appendix mainly focuses on some critical concepts missing in cheat sheets.
 
     appendix/python-decorator
     appendix/python-asyncio
+    appendix/python-walrus
