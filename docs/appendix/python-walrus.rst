@@ -244,6 +244,7 @@ References
 3. `PEP 572 and decision-making in Python`_
 4. `The PEP 572 endgame`_
 5. `Use assignment expression in stdlib (combined PR)`_
+6. `Improper scope in list comprehension, when used in class declaration`_
 
 .. _PEP 572: https://www.python.org/dev/peps/pep-0572/
 .. _PEP 572 - Assignment Expressions: https://www.python.org/dev/peps/pep-0572/
@@ -251,6 +252,7 @@ References
 .. _PEP 572 and decision-making in Python: https://lwn.net/Articles/757713/
 .. _The PEP 572 endgame: https://lwn.net/Articles/759558/
 .. _Use assignment expression in stdlib (combined PR): https://github.com/python/cpython/pull/8122/files
+.. _improper scope in list comprehension, when used in class declaration: https://bugs.python.org/issue3692
 .. _Yoda conditions: https://en.wikipedia.org/wiki/Yoda_conditions
 .. _bpo-3692: https://bugs.python.org/issue3692
 .. _Python document: https://docs.python.org/3/whatsnew/3.8.html#assignment-expressions
