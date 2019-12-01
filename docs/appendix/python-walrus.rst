@@ -12,12 +12,12 @@ PEP 572 and The Walrus Operator
 Abstract
 --------
 
-PEP 572 is one of the most contentious proposals in Python3 history because
+`PEP 572`_ is one of the most contentious proposals in Python3 history because
 assigning a value within an expression seems unnecessary. Also, it is ambiguous
 for developers to distinguish the difference between **the walrus operator**
 (``:=``) and the equal operator (``=``). Even though sophisticated developers
-can use ``:=`` smoothly, they may concern the readability of their code. To
-better understand the usage of ``:=``, this article discusses its design
+can use "``:=``" smoothly, they may concern the readability of their code. To
+better understand the usage of "``:=``," this article discusses its design
 philosophy and what kind of problems it tries to solve.
 
 
@@ -72,10 +72,11 @@ The following Python snippet is equal to the previous C example.
 Why ``:=`` ?
 ------------
 
-Developers may confuse the difference between ``:=`` and  ``=``. In fact, they
+Developers may confuse the difference between "``:=``" and  "``=``." In fact, they
 serve the same purpose, assigning somethings to variables. Why Python introduced
-``:=`` instead of using ``=``? What is the benefit of using ``:=``? One
-reason is from a common mistake made by C/C++ developers. For instance,
+"``:=``" instead of using "``=``"? What is the benefit of using "``:=``"? One
+reason is to reinforce the visual recognition due to a common mistake made by
+C/C++ developers. For instance,
 
 .. code-block:: cpp
 
@@ -112,7 +113,6 @@ The walrus operator was not the first solution for PEP 572. The original proposa
 used ``EXPR as NAME`` to assign values to variables. Unfortunately, there are
 some rejected reasons in this solution and other solutions as well. After
 intense debates, the final decision was ``:=``.
-
 
 Scopes
 ------
@@ -202,12 +202,14 @@ Conclusion
 ----------
 
 The reason why the walrus operator (``:=``) is so controversial is that code
-readability may decrease. Without judging ``:=`` is ugly, many developers argue
-that distinguishing the functionality between ``:=`` and ``=`` is difficult
-because they serve the same purpose, but behaviors are not consistent. Also,
-writing compact code is not persuasive enough because smaller is not always
-better. However, in some cases, the walrus operator can enhance readability
-(if you understand how to use ``:=``). For example,
+readability may decrease. In fact, in the discussion `mail thread <https://mail.python.org/pipermail/python-ideas/2018-March/049409.html>`_,
+the author of PEP 572, Christoph Groth, had considered using "``=``" to implement
+inline assignment like C/C++. Without judging "``:=``" is ugly, many developers
+argue that distinguishing the functionality between "``:=``" and "``=``" is
+difficult because they serve the same purpose, but behaviors are not consistent.
+Also, writing compact code is not persuasive enough because smaller is not
+always better. However, in some cases, the walrus operator can enhance
+readability (if you understand how to use ``:=``). For example,
 
 .. code-block:: python3
 
@@ -218,7 +220,7 @@ better. However, in some cases, the walrus operator can enhance readability
             break
         buf += data
 
-By using ``:=``, the previous can be simplified.
+By using ``:=``, the previous example can be simplified.
 
 .. code-block:: python3
 
@@ -226,10 +228,29 @@ By using ``:=``, the previous can be simplified.
     while (data := read(1024)):
         buf += data
 
-In addition to the `Python document`_, GitHub `issue-8122`_ provides many great
-examples about improving code readability by ``:=``.
+`Python document`_ and GitHub `issue-8122`_ provides many great examples about
+improving code readability by "``:=``". However, using the walrus operator
+should be careful. Some cases, such as ``foo(x := 3, cat='vector')``, may
+introduce new bugs if developers are not aware of scopes. Although PEP 572
+may be risky for developers to write buggy code, an in-depth understanding of
+design philosophy and useful examples will help us use it to write readable
+code at the right time.
 
+References
+----------
 
+1. `PEP 572 - Assignment Expressions`_
+2. `What’s New In Python 3.8`_
+3. `PEP 572 and decision-making in Python`_
+4. `The PEP 572 endgame`_
+5. `Use assignment expression in stdlib (combined PR)`_
+
+.. _PEP 572: https://www.python.org/dev/peps/pep-0572/
+.. _PEP 572 - Assignment Expressions: https://www.python.org/dev/peps/pep-0572/
+.. _What’s New In Python 3.8: https://docs.python.org/3/whatsnew/3.8.html
+.. _PEP 572 and decision-making in Python: https://lwn.net/Articles/757713/
+.. _The PEP 572 endgame: https://lwn.net/Articles/759558/
+.. _Use assignment expression in stdlib (combined PR): https://github.com/python/cpython/pull/8122/files
 .. _Yoda conditions: https://en.wikipedia.org/wiki/Yoda_conditions
 .. _bpo-3692: https://bugs.python.org/issue3692
 .. _Python document: https://docs.python.org/3/whatsnew/3.8.html#assignment-expressions
