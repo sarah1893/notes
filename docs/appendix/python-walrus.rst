@@ -201,7 +201,36 @@ this corner case, assigning expression is invalid under a class.
 Conclusion
 ----------
 
+The reason why the walrus operator (``:=``) is so controversial is that code
+readability may decrease. Without judging ``:=`` is ugly, many developers argue
+that distinguishing the functionality between ``:=`` and ``=`` is difficult
+because they serve the same purpose, but behaviors are not consistent. Also,
+writing compact code is not persuasive enough because smaller is not always
+better. However, in some cases, the walrus operator can enhance readability
+(if you understand how to use ``:=``). For example,
+
+.. code-block:: python3
+
+    buf = b""
+    while True:
+        data = read(1024)
+        if not data:
+            break
+        buf += data
+
+By using ``:=``, the previous can be simplified.
+
+.. code-block:: python3
+
+    buf = b""
+    while (data := read(1024)):
+        buf += data
+
+In addition to the `Python document`_, GitHub `issue-8122`_ provides many great
+examples about improving code readability by ``:=``.
 
 
 .. _Yoda conditions: https://en.wikipedia.org/wiki/Yoda_conditions
 .. _bpo-3692: https://bugs.python.org/issue3692
+.. _Python document: https://docs.python.org/3/whatsnew/3.8.html#assignment-expressions
+.. _issue-8122: https://github.com/python/cpython/pull/8122/files
