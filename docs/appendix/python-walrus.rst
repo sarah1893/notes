@@ -28,7 +28,7 @@ For C/C++ developer, assigning a function return to a variable is common due
 to error code style handling. Managing function errors includes two steps;
 one is to check the return value; another is to check ``errno``. For example,
 
-.. code-block:: c
+.. code-block:: cpp
 
     #include <stdio.h>
     #include <unistd.h>
@@ -77,7 +77,7 @@ serve the same purpose, assigning somethings to variables. Why Python introduced
 ``:=`` instead of using ``=``? What is the benefit of using ``:=``? One
 reason is from a common mistake made by C/C++ developers. For instance,
 
-.. code-block:: c
+.. code-block:: cpp
 
     int rc = access("hello_walrus", R_OK);
 
@@ -91,7 +91,7 @@ Rather than comparison, the variable, ``rc``, is mistakenly assigned to -1. To
 prevent this error, some people advocate using `Yoda conditions`_ within an
 expression.
 
-.. code-block:: c
+.. code-block:: cpp
 
     int rc = access("hello_walrus", R_OK);
 
@@ -110,9 +110,92 @@ expressions*.
 
 The walrus operator was not the first solution for PEP 572. The original proposal
 used ``EXPR as NAME`` to assign values to variables. Unfortunately, there are
-some flaws in this solution and other solutions as well. After intense debates,
-the final decision was ``:=``.
+some rejected reasons in this solution and other solutions as well. After
+intense debates, the final decision was ``:=``.
 
+
+Scopes
+------
+
+Unlike other expressions, which a variable is bound to a scope, an assignment
+expression belongs to the current scope. The purpose of this design is to
+allow a compact way to write code.
+
+.. code-block:: python3
+
+    >>> if not (env := os.environ.get("HOME")):
+    ...     raise KeyError("env HOME does not find!")
+    ...
+    >>> print(env)
+    /root
+
+In PEP 572, another benefit is to conveniently capture a "witness" for an
+``any()`` or an ``all()`` expression. However, the advantage is not so obvious,
+and examples lack readability. Therefore, this benefit does not discuss here.
+Note that other languages (e.g., C/C++ or Go) may bind an assignment to a
+scope. Take Golang as an example.
+
+.. code-block:: go
+
+    package main
+
+    import (
+        "fmt"
+        "os"
+    )
+
+    func main() {
+        if env := os.Getenv("HOME"); env == "" {
+            panic(fmt.Sprintf("Home does not find"))
+        }
+        fmt.Print(env) // <--- compile error: undefined: env
+    }
+
+Pitfalls
+--------
+
+Although an assigning expression allows writing compact code, there are many
+pitfalls when a developer uses it in a list comprehension. A common ``SyntaxError``
+is to rebind iteration variables.
+
+.. code-block:: python3
+
+    >>> [i := i+1 for i in range(5)]  # invalid
+
+However, updating an iteration variable will reduce readability and introduce
+bugs. Even if Python 3.8 did not implement the walrus operator, a programmer
+should avoid reusing iteration variables within a scope.
+
+Another pitfall is Python prohibits using assignment expressions within a
+comprehension under a class scope.
+
+.. code-block:: python3
+
+    >>> class Example:
+    ...     [(j := i) for i in range(5)] # invalid
+    ...
+
+This limitation was from `bpo-3692`_. The interpreter's behavior is
+unpredictable when a class declaration contains a list comprehension. To avoid
+this corner case, assigning expression is invalid under a class.
+
+.. code-block:: python3
+
+    >>> class Foo:
+    ...     a = [1, 2, 3]
+    ...     b = [4, 5, 6]
+    ...     c = [i for i in zip(a, b)]  # b is defined
+    ...
+    >>> class Bar:
+    ...     a = [1,2,3]
+    ...     b = [4,5,6]
+    ...     c = [x * y for x in a for y in b] # b is undefined
+    ...
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+      File "<stdin>", line 4, in Bar
+      File "<stdin>", line 4, in <listcomp>
+    NameError: name 'b' is not defined
 
 .. _Yoda conditions: https://en.wikipedia.org/wiki/Yoda_conditions
-
+.. _bpo-3692: https://bugs.python.org/issue3692
