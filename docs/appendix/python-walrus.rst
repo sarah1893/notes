@@ -130,10 +130,11 @@ allow a compact way to write code.
     /root
 
 In PEP 572, another benefit is to conveniently capture a "witness" for an
-``any()`` or an ``all()`` expression. However, the advantage is not so obvious,
-and examples lack readability. Therefore, this benefit does not discuss here.
-Note that other languages (e.g., C/C++ or Go) may bind an assignment to a
-scope. Take Golang as an example.
+``any()`` or an ``all()`` expression. Although capturing function inputs can
+assist an interactive debugger, the advantage is not so obvious, and examples
+lack readability. Therefore, this benefit does not discuss here. Note that
+other languages (e.g., C/C++ or Go) may bind an assignment to a scope. Take
+Golang as an example.
 
 .. code-block:: go
 
@@ -196,6 +197,11 @@ this corner case, assigning expression is invalid under a class.
       File "<stdin>", line 4, in Bar
       File "<stdin>", line 4, in <listcomp>
     NameError: name 'b' is not defined
+
+Conclusion
+----------
+
+
 
 .. _Yoda conditions: https://en.wikipedia.org/wiki/Yoda_conditions
 .. _bpo-3692: https://bugs.python.org/issue3692
