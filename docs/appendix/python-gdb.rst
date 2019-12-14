@@ -9,6 +9,19 @@ Python Interpreter in GDB
 .. contents:: Table of Contents
     :backlinks: none
 
+Abstract
+--------
+
+The GNU Debugger (GDB) is the most powerful debugging tool for developers to
+troubleshoot errors in their code. However, it is hard for beginners to learn.
+Fortunately, `GDB Text User Interface (TUI)`_ provides a way for developers to
+review their source code and debug simultaneously. More excitingly, In GDB 7,
+**Python Interpreter** was built into GDB. This feature offers more straightforward
+ways to customize GDB printers and commands through the Python library. By
+discussing examples, this article tries to explore advanced debugging techniques
+via Python to develop tool kits for GDB.
+
+
 Customize GDB print
 -------------------
 
@@ -133,4 +146,4 @@ Reference
 1. `Extending GDB using Python`_
 
 .. _Extending GDB using Python: https://sourceware.org/gdb/onlinedocs/gdb/Python.html#Python
-
+.. _GDB Text User Interface (TUI): https://sourceware.org/gdb/onlinedocs/gdb/TUI.html
