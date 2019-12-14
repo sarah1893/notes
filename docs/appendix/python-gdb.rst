@@ -14,7 +14,6 @@ Customize GDB print
 
 .. code-block:: cpp
 
-    #include <iostream>
     #include <string>
 
     namespace foo {
@@ -60,29 +59,7 @@ Customize GDB print
 
     $ g++ -g foo.cpp
     $ gdb ./a.out
-    (gdb) start
-    Temporary breakpoint 1 at 0xaea: file foo.cpp, line 16.
-    Starting program: /root/a.out
-
-    Temporary breakpoint 1, main (argc=1, argv=0x7fffffffe788) at foo.cpp:16
-    16	{
-    (gdb) list
-    11	};
-    12
-    13	}
-    14
-    15	int main(int argc, char *argv[])
-    16	{
-    17		foo::Foo f("Hello GDB!");
-    18		return 0;
-    19	}
-    (gdb) break 18
-    Breakpoint 2 at 0x555555554b47: file foo.cpp, line 18.
-    (gdb) continue
-    Continuing.
-
-    Breakpoint 2, main (argc=1, argv=0x7fffffffe788) at foo.cpp:18
-    18		return 0;
+    ...
     (gdb) p f
     $1 = {msg = "Hello GDB!"}
     (gdb) set print pretty on
@@ -93,6 +70,61 @@ Customize GDB print
     (gdb) source foo.py
     (gdb) p f
     $3 = message: "Hello GDB!"
+
+
+Customize Commands
+------------------
+
+.. code-block:: cpp
+
+    #include <string>
+
+    int main(int argc, char *argv[])
+    {
+        std::string json = R"({"foo": "FOO","bar": "BAR"})";
+        return 0;
+    }
+
+
+.. code-block:: python3
+
+    import gdb
+    import json
+
+
+    class JsonPrinter(gdb.Command):
+        """Json Pretty Printer"""
+
+        def __init__(self):
+            super().__init__("print-json", gdb.COMMAND_USER)
+
+        def invoke(self, s, from_tty):
+            try:
+                ret = gdb.parse_and_eval(s).string()
+                js = json.loads(ret)
+                print(json.dumps(js, indent=4))
+            except Exception as e:
+                print(f"Parse json error! {e}")
+
+
+    JsonPrinter()
+
+.. code-block:: bash
+
+    $ g++ -g -std=c++14 foo.cpp
+    $ gdb ./a.out
+    $ ...
+    (gdb) p json.c_str()
+    $2 = 0x555555768e70 "{\"foo\": \"FOO\",\"bar\": \"BAR\"}"
+    (gdb) set print pretty on
+    (gdb) p json.c_str()
+    $3 = 0x555555768e70 "{\"foo\": \"FOO\",\"bar\": \"BAR\"}"
+    (gdb) source pretty-json.py
+    (gdb) print-json json.c_str()
+    {
+        "foo": "FOO",
+        "bar": "BAR"
+    }
 
 
 Reference
