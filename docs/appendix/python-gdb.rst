@@ -25,6 +25,21 @@ advanced debugging techniques via Python to develop tool kits for GDB.
 Introduction
 ------------
 
+Before troubleshooting a program’s errors, one of the most important things is
+to establish a preliminary debugging standard operating procedure (SOP). For
+instance, there are some issues a programmer usually meets.
+
+1. Unexpected results (e.g., Logical errors)
+2. Core dump (e.g., Segmentation fault)
+3. Hang or freeze (e.g., Busy loop)
+4. Memory usage is too high (e.g., Leak)
+
+To solve previous problems, GDB provides many “debug procedures,” such as
+``start``, ``step``, and ``break``, to inspect a program’s runtime status.
+Also, GDB empowers developers to write their own GDB scripts to monitor and
+trace programs’ status. By interacting with Python interpreter in GDB, writing
+a GDB script will become more accessible and flexible for a developer to solve
+software issues.
 
 Customize GDB print
 -------------------
