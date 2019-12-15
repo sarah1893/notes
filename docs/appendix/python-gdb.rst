@@ -105,6 +105,21 @@ with TUI.
 3. Ctrl x + 1: Display one window (e.g., source code + command line)
 4. Ctrl x + 2: Display two windows (e.g., source code + command line + assembly)
 
+
+Basic Commands
+~~~~~~~~~~~~~~
+
+**Start/Stop a program**
+
+1. start: Run an executable file and stop at beginning
+2. run / r: Run an executable file until finish or stop at a breakpoint
+3. step / s: Run a program step by step with entering a function
+4. next / n: Run a program step by step without entering a function
+5. continue / c: Run a program until finish or stop at a breakpoint
+6. finish: Step out of the current function
+
+**Set Breakpoints**
+
 Customize GDB print
 -------------------
 
