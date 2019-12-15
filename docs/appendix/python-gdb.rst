@@ -26,8 +26,8 @@ Introduction
 ------------
 
 Before troubleshooting a program’s errors, one of the most important things is
-to establish a preliminary debugging standard operating procedure (SOP). For
-instance, there are some issues a programmer usually meets.
+to recognize software problems to solve. For instance, there are some issues a
+programmer usually meets.
 
 1. Unexpected results (e.g., Logical errors)
 2. Core dump (e.g., Segmentation fault)
@@ -40,6 +40,70 @@ Also, GDB empowers developers to write their own GDB scripts to monitor and
 trace programs’ status. By interacting with Python interpreter in GDB, writing
 a GDB script will become more accessible and flexible for a developer to solve
 software issues.
+
+GDB Review
+----------
+
+Although mastering GDB is a long-term process, a quickstart is not complicated;
+you must unlearn what you have learned like Yoda. The following sections discuss
+some usage of GDB before interacting with Python Interpreter.
+
+Load an Executable
+~~~~~~~~~~~~~~~~~~
+
+Allowing GDB to recognize a program’s debug symbols requires ``-g`` option with
+GCC while compilation(e.g., ``gcc -g -Wall -Werror -o foo foo.c``). Also,
+loading all symbols of an executable file for inspection will not invoke an
+executable file to run at the same time. To run an executable file, please use
+the command: ``run`` or ``start``.
+
+The difference between ``run`` and ``start`` is whether a program will stop at
+entrypoint or not. By using ``start``, programs will stop at beginning and
+developers can review their code and set up breakpoints for debugging. For
+example,
+
+.. code-block:: bash
+
+    $ gdb ./a.out
+    ...
+    (gdb) start
+    Temporary breakpoint 1 at 0xc0a: file a.cpp, line 5.
+    Starting program: /root/a.out
+
+    Temporary breakpoint 1, main (argc=1, argv=0x7fffffffe788) at a.cpp:5
+    5       {
+    (gdb) l
+    1       #include <iostream>
+    2       #include <string>
+    3
+    4       int main(int argc, char *argv[])
+    5       {
+    6               std::string s{"Hello GDB"};
+    7               std::cout << s << std::endl;
+    8               return 0;
+    9       }
+    (gdb) c
+    Continuing.
+    Hello GDB
+    [Inferior 1 (process 4526) exited normally]
+    (gdb) run
+    Starting program: /root/a.out
+    Hello GDB
+    [Inferior 1 (process 4530) exited normally]
+
+Text User Interface
+~~~~~~~~~~~~~~~~~~~
+
+Text User Interface (TUI) allows developers to visualize source code and to
+debug like using Integrated Devekionebt Environment (IDE) to trace problems.
+For a beginner, entering the TUI mode is more understandable than the command
+line mode. The following key bindings are the most common usage for interacting
+with TUI.
+
+1. Ctrl x + a: Enter or leave the TUI mode
+2. Ctrl x + o: Switch the active window
+3. Ctrl x + 1: Display one window (e.g., source code + command line)
+4. Ctrl x + 2: Display two windows (e.g., source code + command line + assembly)
 
 Customize GDB print
 -------------------
