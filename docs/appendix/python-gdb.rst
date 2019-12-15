@@ -120,8 +120,11 @@ Basic Commands
 
 **Set Breakpoints**
 
-Customize GDB print
--------------------
+Interacting with Python
+-----------------------
+
+Customize Print
+~~~~~~~~~~~~~~~
 
 .. code-block:: cpp
 
@@ -184,7 +187,7 @@ Customize GDB print
 
 
 Customize Commands
-------------------
+~~~~~~~~~~~~~~~~~~
 
 .. code-block:: cpp
 
