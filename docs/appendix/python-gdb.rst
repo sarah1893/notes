@@ -36,11 +36,23 @@ interpreter in GDB.
 Interacting with Python
 -----------------------
 
-Although GDB supports customizing commands by using ``define``, writing a
-user-defined command may be inconvenient due to limited API. Fortunately, by
-interacting with Python interpreter in GDB, developers can utilize Python
-libraries to establish their debugging tool kits readily. The following
-examples show how to use Python to simplify debugging processes.
+GDB supports customizing commands by using ``define``. It is useful to run a
+batch of commands to troubleshoot at the same time. For example, a developer
+can display the current frame information by defining a ``sf`` command.
+
+.. code-block:: bash
+
+    # define in .gdbinit
+    define sf
+      where        # find out where the program is
+      info args    # show arguments
+      info locals  # show local variables
+    end
+
+However, writing a user-defined command may be inconvenient due to limited APIs.
+Fortunately, by interacting with Python interpreter in GDB, developers can
+utilize Python libraries to establish their debugging tool kits readily. The
+following examples show how to use Python to simplify debugging processes.
 
 
 Dump memory
