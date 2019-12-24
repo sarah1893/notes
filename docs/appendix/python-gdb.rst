@@ -29,11 +29,58 @@ Troubleshooting software bugs is a big challenge for developers. While GDB
 provides many “debug commands” to inspect programs’ runtime status, its
 non-intuitive usages impede programmers to use it to solve problems. Indeed,
 mastering GDB is a long-term process. However, a quick start is not complicated;
-you must unlearn what you have learned like Yoda. For understanding how to use
-Python in GDB, the following sections will focus on discussing Python GDB API.
+you must unlearn what you have learned like Yoda. To better understand how to
+use Python in GDB, the following sections will focus on discussing Python
+interpreter in GDB.
 
 Interacting with Python
 -----------------------
+
+Although GDB supports customizing commands by using ``define``, writing a
+user-defined command may be inconvenient due to limited API. Fortunately, by
+interacting with Python interpreter in GDB, developers can utilize Python
+libraries to establish their debugging tool kits readily. The following
+examples show how to use Python to simplify debugging processes.
+
+
+Dump memory
+~~~~~~~~~~~
+
+.. code-block:: python
+
+    import gdb
+    import re
+
+    class DumpMemory(gdb.Command):
+        """Dump memory info into a file."""
+
+        def __init__(self):
+            super().__init__("dm", gdb.COMMAND_USER)
+
+        def invoke(self, args, tty):
+            try:
+                pat, f = args.split()
+                # cat /proc/self/maps
+                out = gdb.execute("info proc mappings", tty, True)
+                for l in out.split("\n"):
+                    if re.match(f".*{pat}*", l.strip()):
+                        # dump memory
+                        s, e, *_ = l.split()
+                        gdb.execute(f"dump memory {f} {s} {e}")
+                        break
+            except Exception as e:
+                print("Usage: dm [pattern] [filename]")
+
+    DumpMemory()
+
+.. code-block:: bash
+
+    (gdb) start
+    ...
+    (gdb) source mem.py        # source commands
+    ...
+    (gdb) dm heap a.bin        # dump heap to a.bin
+    (gdb) shell strings a.bin  # display heap strings
 
 Customize Print
 ~~~~~~~~~~~~~~~
