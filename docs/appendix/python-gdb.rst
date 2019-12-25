@@ -58,6 +58,24 @@ following examples show how to use Python to simplify debugging processes.
 Dump memory
 ~~~~~~~~~~~
 
+Inspecting a process’s memory information is an effective way to troubleshoot
+memory issues. Developers check memory address and dump information by
+
+.. code-block:: python
+
+    (gdb) info proc mapping
+    process 4967
+    Mapped address spaces:
+
+          Start Addr           End Addr       Size     Offset objfile
+    ...
+      0x7ffffffde000     0x7ffffffff000    0x21000        0x0 [stack]
+    ...
+    (gdb) # dump stack
+    (gdb) dump memory a.bin 0x7ffffffde000 0x7ffffffff000
+
+
+
 .. code-block:: python
 
     import gdb
