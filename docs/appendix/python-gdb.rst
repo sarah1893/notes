@@ -125,6 +125,57 @@ following steps show how to invoke ``DumpMemory`` in GDB.
     (gdb) shell ls       # ls current dir
     1577283091687.bin  a.cpp  a.out  mem.py
 
+Dump JSON
+~~~~~~~~~
+
+.. code-block:: python
+
+    # dj.py
+    import gdb
+    import re
+    import json
+
+    class DumpJson(gdb.Command):
+        """Dump std::string as a styled JSON."""
+
+        def __init__(self):
+            super().__init__("dj", gdb.COMMAND_USER)
+
+        def get_json(self, args):
+            """Parse std::string to JSON string."""
+            ret = gdb.parse_and_eval(args)
+            typ = str(ret.type)
+            if re.match("^std::.*::string", typ):
+                return json.loads(str(ret))
+            return None
+
+        def invoke(self, args, tty):
+            try:
+                # string to json string
+                s = self.get_json(args)
+                # json string to object
+                o = json.loads(s)
+                print(json.dumps(o, indent=2))
+            except Exception as e:
+                print(f"Parse json error! {args}")
+
+    DumpJson()
+
+.. code-block:: bash
+
+    (gdb) start
+    ...
+    (gdb) ptype json
+    type = std::string
+    (gdb) p json
+    $1 = "{\"foo\": \"FOO\",\"bar\": \"BAR\"}"
+    (gdb) source dj.py
+    (gdb) dj json
+    {
+      "foo": "FOO",
+      "bar": "BAR"
+    }
+
 Customize Print
 ~~~~~~~~~~~~~~~
 
@@ -186,62 +237,6 @@ Customize Print
     (gdb) source foo.py
     (gdb) p f
     $3 = message: "Hello GDB!"
-
-
-Customize Commands
-~~~~~~~~~~~~~~~~~~
-
-.. code-block:: cpp
-
-    #include <string>
-
-    int main(int argc, char *argv[])
-    {
-        std::string json = R"({"foo": "FOO","bar": "BAR"})";
-        return 0;
-    }
-
-
-.. code-block:: python3
-
-    import gdb
-    import json
-
-
-    class JsonPrinter(gdb.Command):
-        """Json Pretty Printer"""
-
-        def __init__(self):
-            super().__init__("print-json", gdb.COMMAND_USER)
-
-        def invoke(self, s, from_tty):
-            try:
-                ret = gdb.parse_and_eval(s).string()
-                js = json.loads(ret)
-                print(json.dumps(js, indent=4))
-            except Exception as e:
-                print(f"Parse json error! {e}")
-
-
-    JsonPrinter()
-
-.. code-block:: bash
-
-    $ g++ -g -std=c++14 foo.cpp
-    $ gdb ./a.out
-    $ ...
-    (gdb) p json.c_str()
-    $2 = 0x555555768e70 "{\"foo\": \"FOO\",\"bar\": \"BAR\"}"
-    (gdb) set print pretty on
-    (gdb) p json.c_str()
-    $3 = 0x555555768e70 "{\"foo\": \"FOO\",\"bar\": \"BAR\"}"
-    (gdb) source pretty-json.py
-    (gdb) print-json json.c_str()
-    {
-        "foo": "FOO",
-        "bar": "BAR"
-    }
-
 
 Reference
 ---------
