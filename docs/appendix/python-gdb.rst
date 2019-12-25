@@ -164,6 +164,14 @@ Dump JSON
 .. code-block:: bash
 
     (gdb) start
+    (gdb) list
+    1       #include <string>
+    2
+    3       int main(int argc, char *argv[])
+    4       {
+    5           std::string json = R"({"foo": "FOO","bar": "BAR"})";
+    6           return 0;
+    7       }
     ...
     (gdb) ptype json
     type = std::string
