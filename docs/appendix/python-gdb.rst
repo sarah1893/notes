@@ -55,7 +55,7 @@ utilize Python libraries to establish their debugging tool kits readily. The
 following examples show how to use Python to simplify debugging processes.
 
 
-Dump memory
+Dump Memory
 ~~~~~~~~~~~
 
 Inspecting a process’s memory information is an effective way to troubleshoot
@@ -111,14 +111,19 @@ contains many useful operations for handling strings.
     DumpMemory()
 
 
+Running the ``dm`` command will invoke ``DumpMemory.invoke``. By sourcing
+or implementing Python scripts in *.gdbinit*, developers can utilize
+user-defined commands to trace bugs when a program is running. For example, the
+following steps show how to invoke ``DumpMemory`` in GDB.
+
 .. code-block:: bash
 
     (gdb) start
     ...
-    (gdb) source mem.py        # source commands
-    ...
-    (gdb) dm heap a.bin        # dump heap to a.bin
-    (gdb) shell strings a.bin  # display heap strings
+    (gdb) source mem.py  # source commands
+    (gdb) dm stack       # dump stack to ${timestamp}.bin
+    (gdb) shell ls       # ls current dir
+    1577283091687.bin  a.cpp  a.out  mem.py
 
 Customize Print
 ~~~~~~~~~~~~~~~
