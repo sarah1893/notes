@@ -70,6 +70,7 @@ contains many useful operations for handling strings.
 
     # mem.py
     import gdb
+    import time
     import re
 
     class DumpMemory(gdb.Command):
@@ -78,24 +79,34 @@ contains many useful operations for handling strings.
         def __init__(self):
             super().__init__("dm", gdb.COMMAND_USER)
 
+        def get_addr(self, p, tty):
+            """Get memory addresses."""
+            cmd = "info proc mappings"
+            out = gdb.execute(cmd, tty, True)
+            addrs = []
+            for l in out.split("\n"):
+                if re.match(f".*{p}*", l):
+                    s, e, *_ = l.split()
+                    addrs.append((s, e))
+            return addrs
+
+        def dump(self, addrs):
+            """Dump memory result."""
+            if not addrs:
+                return
+
+            for s, e in addrs:
+                f = int(time.time() * 1000)
+                gdb.execute(f"dump memory {f}.bin {s} {e}")
+
         def invoke(self, args, tty):
             try:
-                p, f = args.split()
-
                 # cat /proc/self/maps
-                cmd = "info proc mappings"
-                o = gdb.execute(cmd, tty, True).split("\n")
-                m = [l for l in o if re.match(f".*{p}*", l)]
-
-                # check the grep result
-                if len(m) <= 0:
-                    return
-
+                addrs = self.get_addr(args, tty)
                 # dump memory
-                s, e, *_ = m[0].split()
-                gdb.execute(f"dump memory {f} {s} {e}")
+                self.dump(addrs)
             except Exception as e:
-                print("Usage: dm [pattern] [filename]")
+                print("Usage: dm [pattern]")
 
     DumpMemory()
 
