@@ -59,25 +59,16 @@ Dump memory
 ~~~~~~~~~~~
 
 Inspecting a process’s memory information is an effective way to troubleshoot
-memory issues. Developers check memory address and dump information by
+memory issues. Developers can acquire memory contents by ``info proc mappings``
+and ``dump memory``. To simplify these steps, defining a customized command is
+useful. However, the implementation is not straightforward by using pure GDB
+syntax. Even though GDB supports conditions, processing output is not intuitive.
+To solve this problem, using Python API in GDB would be helpful because Python
+contains many useful operations for handling strings.
 
 .. code-block:: python
 
-    (gdb) info proc mapping
-    process 4967
-    Mapped address spaces:
-
-          Start Addr           End Addr       Size     Offset objfile
-    ...
-      0x7ffffffde000     0x7ffffffff000    0x21000        0x0 [stack]
-    ...
-    (gdb) # dump stack
-    (gdb) dump memory a.bin 0x7ffffffde000 0x7ffffffff000
-
-
-
-.. code-block:: python
-
+    # mem.py
     import gdb
     import re
 
@@ -89,19 +80,25 @@ memory issues. Developers check memory address and dump information by
 
         def invoke(self, args, tty):
             try:
-                pat, f = args.split()
+                p, f = args.split()
+
                 # cat /proc/self/maps
-                out = gdb.execute("info proc mappings", tty, True)
-                for l in out.split("\n"):
-                    if re.match(f".*{pat}*", l.strip()):
-                        # dump memory
-                        s, e, *_ = l.split()
-                        gdb.execute(f"dump memory {f} {s} {e}")
-                        break
+                cmd = "info proc mappings"
+                o = gdb.execute(cmd, tty, True).split("\n")
+                m = [l for l in o if re.match(f".*{p}*", l)]
+
+                # check the grep result
+                if len(m) <= 0:
+                    return
+
+                # dump memory
+                s, e, *_ = m[0].split()
+                gdb.execute(f"dump memory {f} {s} {e}")
             except Exception as e:
                 print("Usage: dm [pattern] [filename]")
 
     DumpMemory()
+
 
 .. code-block:: bash
 
