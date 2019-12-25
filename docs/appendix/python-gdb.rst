@@ -128,6 +128,11 @@ following steps show how to invoke ``DumpMemory`` in GDB.
 Dump JSON
 ~~~~~~~~~
 
+Parsing JSON is helpful when a developer is inspecting a JSON string in a
+running program. GDB can parse a ``std::string`` via ``gdb.parse_and_eval``
+and return it as a ``gdb.Value``. By processing ``gdb.Value``, developers can
+pass a JSON string into Python ``json`` API and print it in a pretty format.
+
 .. code-block:: python
 
     # dj.py
