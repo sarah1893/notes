@@ -231,9 +231,6 @@ Inspect a Function
 
 .. code-block:: cpp
 
-
-    #include <iostream>
-
     int fib(int n)
     {
         if (n < 2) {
@@ -244,22 +241,21 @@ Inspect a Function
 
     int main(int argc, char *argv[])
     {
-        std::cout << fib(3) << std::endl;
+        fib(3);
         return 0;
     }
 
 
 .. code-block:: bash
 
-    (gdb) break fib
-    Breakpoint 3 at 0x555555554896: file a.cpp, line 5.
-    (gdb) commands
-    Type commands for breakpoint(s) 3, one per line.
-    End with a line saying just "end".
-    >  silent
-    >  backtrace
-    >  continue
-    >end
+    # fib.gdb
+    break fib
+      commands
+      silent
+      backtrace
+      continue
+    end
+
 
 Reference
 ---------
