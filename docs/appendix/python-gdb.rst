@@ -54,38 +54,75 @@ Fortunately, by interacting with Python interpreter in GDB, developers can
 utilize Python libraries to establish their debugging tool kits readily. The
 following sections show how to use Python to simplify debugging processes.
 
-Highlight Syntax
-----------------
+Dump Memory
+-----------
 
-Syntax highlighting is useful for developers to trace source code or to
-troubleshoot issues. By using ``pygents``, applying color to the source is easy
-without defining ANSI escape code manually. The following example shows how to
-apply color to the ``list`` command output.
+Inspecting a process’s memory information is an effective way to troubleshoot
+memory issues. Developers can acquire memory contents by ``info proc mappings``
+and ``dump memory``. To simplify these steps, defining a customized command is
+useful. However, the implementation is not straightforward by using pure GDB
+syntax. Even though GDB supports conditions, processing output is not intuitive.
+To solve this problem, using Python API in GDB would be helpful because Python
+contains many useful operations for handling strings.
 
 .. code-block:: python
 
+    # mem.py
     import gdb
+    import time
+    import re
 
-    from pygments import highlight
-    from pygments.lexers import CLexer
-    from pygments.formatters import TerminalFormatter
-
-    class PrettyList(gdb.Command):
-        """Print source code with color."""
+    class DumpMemory(gdb.Command):
+        """Dump memory info into a file."""
 
         def __init__(self):
-            super().__init__("pl", gdb.COMMAND_USER)
-            self.lex = CLexer()
-            self.fmt = TerminalFormatter()
+            super().__init__("dm", gdb.COMMAND_USER)
+
+        def get_addr(self, p, tty):
+            """Get memory addresses."""
+            cmd = "info proc mappings"
+            out = gdb.execute(cmd, tty, True)
+            addrs = []
+            for l in out.split("\n"):
+                if re.match(f".*{p}*", l):
+                    s, e, *_ = l.split()
+                    addrs.append((s, e))
+            return addrs
+
+        def dump(self, addrs):
+            """Dump memory result."""
+            if not addrs:
+                return
+
+            for s, e in addrs:
+                f = int(time.time() * 1000)
+                gdb.execute(f"dump memory {f}.bin {s} {e}")
 
         def invoke(self, args, tty):
             try:
-                out = gdb.execute(f"l {args}", tty, True)
-                print(highlight(out, self.lex, self.fmt))
+                # cat /proc/self/maps
+                addrs = self.get_addr(args, tty)
+                # dump memory
+                self.dump(addrs)
             except Exception as e:
-                print(e)
+                print("Usage: dm [pattern]")
 
-    PrettyList()
+    DumpMemory()
+
+
+Running the ``dm`` command will invoke ``DumpMemory.invoke``. By sourcing
+or implementing Python scripts in *.gdbinit*, developers can utilize
+user-defined commands to trace bugs when a program is running. For example, the
+following steps show how to invoke ``DumpMemory`` in GDB.
+
+.. code-block:: bash
+
+    (gdb) start
+    ...
+    (gdb) source mem.py  # source commands
+    (gdb) dm stack       # dump stack to ${timestamp}.bin
+    (gdb) shell ls       # ls current dir
+    1577283091687.bin  a.cpp  a.out  mem.py
 
 Dump JSON
 ---------
@@ -156,75 +193,38 @@ not.
       "bar": "BAR"
     }
 
-Dump Memory
------------
+Highlight Syntax
+----------------
 
-Inspecting a process’s memory information is an effective way to troubleshoot
-memory issues. Developers can acquire memory contents by ``info proc mappings``
-and ``dump memory``. To simplify these steps, defining a customized command is
-useful. However, the implementation is not straightforward by using pure GDB
-syntax. Even though GDB supports conditions, processing output is not intuitive.
-To solve this problem, using Python API in GDB would be helpful because Python
-contains many useful operations for handling strings.
+Syntax highlighting is useful for developers to trace source code or to
+troubleshoot issues. By using ``pygents``, applying color to the source is easy
+without defining ANSI escape code manually. The following example shows how to
+apply color to the ``list`` command output.
 
 .. code-block:: python
 
-    # mem.py
     import gdb
-    import time
-    import re
 
-    class DumpMemory(gdb.Command):
-        """Dump memory info into a file."""
+    from pygments import highlight
+    from pygments.lexers import CLexer
+    from pygments.formatters import TerminalFormatter
+
+    class PrettyList(gdb.Command):
+        """Print source code with color."""
 
         def __init__(self):
-            super().__init__("dm", gdb.COMMAND_USER)
-
-        def get_addr(self, p, tty):
-            """Get memory addresses."""
-            cmd = "info proc mappings"
-            out = gdb.execute(cmd, tty, True)
-            addrs = []
-            for l in out.split("\n"):
-                if re.match(f".*{p}*", l):
-                    s, e, *_ = l.split()
-                    addrs.append((s, e))
-            return addrs
-
-        def dump(self, addrs):
-            """Dump memory result."""
-            if not addrs:
-                return
-
-            for s, e in addrs:
-                f = int(time.time() * 1000)
-                gdb.execute(f"dump memory {f}.bin {s} {e}")
+            super().__init__("pl", gdb.COMMAND_USER)
+            self.lex = CLexer()
+            self.fmt = TerminalFormatter()
 
         def invoke(self, args, tty):
             try:
-                # cat /proc/self/maps
-                addrs = self.get_addr(args, tty)
-                # dump memory
-                self.dump(addrs)
+                out = gdb.execute(f"l {args}", tty, True)
+                print(highlight(out, self.lex, self.fmt))
             except Exception as e:
-                print("Usage: dm [pattern]")
+                print(e)
 
-    DumpMemory()
-
-
-Running the ``dm`` command will invoke ``DumpMemory.invoke``. By sourcing
-or implementing Python scripts in *.gdbinit*, developers can utilize
-user-defined commands to trace bugs when a program is running. For example, the
-following steps show how to invoke ``DumpMemory`` in GDB.
-
-.. code-block:: bash
-
-    (gdb) start
-    ...
-    (gdb) source mem.py  # source commands
-    (gdb) dm stack       # dump stack to ${timestamp}.bin
-    (gdb) shell ls       # ls current dir
-    1577283091687.bin  a.cpp  a.out  mem.py
+    PrettyList()
 
 Inspect a Function
 ------------------
