@@ -189,6 +189,35 @@ pass a JSON string into Python ``json`` API and print it in a pretty format.
       "bar": "BAR"
     }
 
+Pretty List
+~~~~~~~~~~~
+
+.. code-block:: python
+
+    import gdb
+
+    from pygments import highlight
+    from pygments.lexers import CLexer
+    from pygments.formatters import TerminalFormatter
+
+    class PrettyList(gdb.Command):
+        """Print source code with Color."""
+
+        def __init__(self):
+            super().__init__("pl", gdb.COMMAND_USER)
+            self.lex = CLexer()
+            self.fmt = TerminalFormatter()
+
+        def invoke(self, args, tty):
+            try:
+                out = gdb.execute(f"l {args}", tty, True)
+                print(highlight(out, self.lex, self.fmt))
+            except Exception as e:
+                print(e)
+
+    PrettyList()
+
+
 Customize Print
 ~~~~~~~~~~~~~~~
 
