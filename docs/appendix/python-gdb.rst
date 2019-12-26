@@ -30,11 +30,11 @@ provides many “debug commands” to inspect programs’ runtime status, its
 non-intuitive usages impede programmers to use it to solve problems. Indeed,
 mastering GDB is a long-term process. However, a quick start is not complicated;
 you must unlearn what you have learned like Yoda. To better understand how to
-use Python in GDB, the following sections will focus on discussing Python
-interpreter in GDB.
+use Python in GDB, this article will focus on discussing Python interpreter in
+GDB.
 
-Interacting with Python
------------------------
+Define Commands
+---------------
 
 GDB supports customizing commands by using ``define``. It is useful to run a
 batch of commands to troubleshoot at the same time. For example, a developer
@@ -52,11 +52,112 @@ can display the current frame information by defining a ``sf`` command.
 However, writing a user-defined command may be inconvenient due to limited APIs.
 Fortunately, by interacting with Python interpreter in GDB, developers can
 utilize Python libraries to establish their debugging tool kits readily. The
-following examples show how to use Python to simplify debugging processes.
+following sections show how to use Python to simplify debugging processes.
 
+Highlight Syntax
+----------------
+
+Syntax highlighting is useful for developers to trace source code or to
+troubleshoot issues. By using ``pygents``, applying color to the source is easy
+without defining ANSI escape code manually. The following example shows how to
+apply color to the ``list`` command output.
+
+.. code-block:: python
+
+    import gdb
+
+    from pygments import highlight
+    from pygments.lexers import CLexer
+    from pygments.formatters import TerminalFormatter
+
+    class PrettyList(gdb.Command):
+        """Print source code with color."""
+
+        def __init__(self):
+            super().__init__("pl", gdb.COMMAND_USER)
+            self.lex = CLexer()
+            self.fmt = TerminalFormatter()
+
+        def invoke(self, args, tty):
+            try:
+                out = gdb.execute(f"l {args}", tty, True)
+                print(highlight(out, self.lex, self.fmt))
+            except Exception as e:
+                print(e)
+
+    PrettyList()
+
+Dump JSON
+---------
+
+Parsing JSON is helpful when a developer is inspecting a JSON string in a
+running program. GDB can parse a ``std::string`` via ``gdb.parse_and_eval``
+and return it as a ``gdb.Value``. By processing ``gdb.Value``, developers can
+pass a JSON string into Python ``json`` API and print it in a pretty format.
+
+.. code-block:: python
+
+    # dj.py
+    import gdb
+    import re
+    import json
+
+    class DumpJson(gdb.Command):
+        """Dump std::string as a styled JSON."""
+
+        def __init__(self):
+            super().__init__("dj", gdb.COMMAND_USER)
+
+        def get_json(self, args):
+            """Parse std::string to JSON string."""
+            ret = gdb.parse_and_eval(args)
+            typ = str(ret.type)
+            if re.match("^std::.*::string", typ):
+                return json.loads(str(ret))
+            return None
+
+        def invoke(self, args, tty):
+            try:
+                # string to json string
+                s = self.get_json(args)
+                # json string to object
+                o = json.loads(s)
+                print(json.dumps(o, indent=2))
+            except Exception as e:
+                print(f"Parse json error! {args}")
+
+    DumpJson()
+
+The command ``dj`` displays a more readable JSON format in GDB. This command
+helps improve visual recognization when a JSON string large. Also, by using
+this command, it can detect or monitor whether a ``std::string`` is JSON or
+not.
+
+.. code-block:: bash
+
+    (gdb) start
+    (gdb) list
+    1       #include <string>
+    2
+    3       int main(int argc, char *argv[])
+    4       {
+    5           std::string json = R"({"foo": "FOO","bar": "BAR"})";
+    6           return 0;
+    7       }
+    ...
+    (gdb) ptype json
+    type = std::string
+    (gdb) p json
+    $1 = "{\"foo\": \"FOO\",\"bar\": \"BAR\"}"
+    (gdb) source dj.py
+    (gdb) dj json
+    {
+      "foo": "FOO",
+      "bar": "BAR"
+    }
 
 Dump Memory
-~~~~~~~~~~~
+-----------
 
 Inspecting a process’s memory information is an effective way to troubleshoot
 memory issues. Developers can acquire memory contents by ``info proc mappings``
@@ -125,100 +226,8 @@ following steps show how to invoke ``DumpMemory`` in GDB.
     (gdb) shell ls       # ls current dir
     1577283091687.bin  a.cpp  a.out  mem.py
 
-Dump JSON
-~~~~~~~~~
-
-Parsing JSON is helpful when a developer is inspecting a JSON string in a
-running program. GDB can parse a ``std::string`` via ``gdb.parse_and_eval``
-and return it as a ``gdb.Value``. By processing ``gdb.Value``, developers can
-pass a JSON string into Python ``json`` API and print it in a pretty format.
-
-.. code-block:: python
-
-    # dj.py
-    import gdb
-    import re
-    import json
-
-    class DumpJson(gdb.Command):
-        """Dump std::string as a styled JSON."""
-
-        def __init__(self):
-            super().__init__("dj", gdb.COMMAND_USER)
-
-        def get_json(self, args):
-            """Parse std::string to JSON string."""
-            ret = gdb.parse_and_eval(args)
-            typ = str(ret.type)
-            if re.match("^std::.*::string", typ):
-                return json.loads(str(ret))
-            return None
-
-        def invoke(self, args, tty):
-            try:
-                # string to json string
-                s = self.get_json(args)
-                # json string to object
-                o = json.loads(s)
-                print(json.dumps(o, indent=2))
-            except Exception as e:
-                print(f"Parse json error! {args}")
-
-    DumpJson()
-
-.. code-block:: bash
-
-    (gdb) start
-    (gdb) list
-    1       #include <string>
-    2
-    3       int main(int argc, char *argv[])
-    4       {
-    5           std::string json = R"({"foo": "FOO","bar": "BAR"})";
-    6           return 0;
-    7       }
-    ...
-    (gdb) ptype json
-    type = std::string
-    (gdb) p json
-    $1 = "{\"foo\": \"FOO\",\"bar\": \"BAR\"}"
-    (gdb) source dj.py
-    (gdb) dj json
-    {
-      "foo": "FOO",
-      "bar": "BAR"
-    }
-
-Pretty List
-~~~~~~~~~~~
-
-.. code-block:: python
-
-    import gdb
-
-    from pygments import highlight
-    from pygments.lexers import CLexer
-    from pygments.formatters import TerminalFormatter
-
-    class PrettyList(gdb.Command):
-        """Print source code with Color."""
-
-        def __init__(self):
-            super().__init__("pl", gdb.COMMAND_USER)
-            self.lex = CLexer()
-            self.fmt = TerminalFormatter()
-
-        def invoke(self, args, tty):
-            try:
-                out = gdb.execute(f"l {args}", tty, True)
-                print(highlight(out, self.lex, self.fmt))
-            except Exception as e:
-                print(e)
-
-    PrettyList()
-
-Inspecting a Function
-~~~~~~~~~~~~~~~~~~~~~
+Inspect a Function
+------------------
 
 .. code-block:: cpp
 
