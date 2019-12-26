@@ -217,68 +217,40 @@ Pretty List
 
     PrettyList()
 
-
-Customize Print
-~~~~~~~~~~~~~~~
+Inspecting a Function
+~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: cpp
 
-    #include <string>
 
-    namespace foo {
+    #include <iostream>
 
-    class Foo {
-    public:
-        Foo(const std::string &s) : msg(s) {}
-    private:
-        const std::string msg;
-    };
-
+    int fib(int n)
+    {
+        if (n < 2) {
+            return 1;
+        }
+        return fib(n-1) + fib(n-2);
     }
 
     int main(int argc, char *argv[])
     {
-        foo::Foo f("Hello GDB!");
+        std::cout << fib(3) << std::endl;
         return 0;
     }
-
-.. code-block:: python3
-
-    import gdb
-
-    class FooPrinter(object):
-        def __init__(self, val):
-            self.val = val
-
-        def to_string(self):
-            return f"message: {self.val['msg']}"
-
-    # create a customized pretty printer
-    pp = gdb.printing.RegexpCollectionPrettyPrinter('foo')
-
-    # add foo printer to pretty printer
-    pp.add_printer('foo', '^foo::Foo$', FooPrinter);
-
-    # register customized pretty printer
-    obj = gdb.current_objfile()
-    gdb.printing.register_pretty_printer(obj, pp)
 
 
 .. code-block:: bash
 
-    $ g++ -g foo.cpp
-    $ gdb ./a.out
-    ...
-    (gdb) p f
-    $1 = {msg = "Hello GDB!"}
-    (gdb) set print pretty on
-    (gdb) p f
-    $2 = {
-      msg = "Hello GDB!"
-    }
-    (gdb) source foo.py
-    (gdb) p f
-    $3 = message: "Hello GDB!"
+    (gdb) break fib
+    Breakpoint 3 at 0x555555554896: file a.cpp, line 5.
+    (gdb) commands
+    Type commands for breakpoint(s) 3, one per line.
+    End with a line saying just "end".
+    >  silent
+    >  backtrace
+    >  continue
+    >end
 
 Reference
 ---------
