@@ -333,9 +333,15 @@ Reference
 ---------
 
 1. `Extending GDB using Python`_
-2. `GNU GDB Debugger Command Cheat Sheet`_
+2. `gdbinit/Gdbinit`_
+3. `cyrus-and/gdb-dashboard`_
+4. `hugsy/gef`_
+5. `sharkdp/stack-inspector`_
 
 .. _Pygments: https://pygments.org/
 .. _Extending GDB using Python: https://sourceware.org/gdb/onlinedocs/gdb/Python.html#Python
+.. _hugsy/gef: https://github.com/hugsy/gef
+.. _cyrus-and/gdb-dashboard: https://github.com/cyrus-and/gdb-dashboard
+.. _gdbinit/Gdbinit: https://github.com/gdbinit/Gdbinit
+.. _sharkdp/stack-inspector: https://github.com/sharkdp/stack-inspector
 .. _GDB Text User Interface (TUI): https://sourceware.org/gdb/onlinedocs/gdb/TUI.html
-.. _GNU GDB Debugger Command Cheat Sheet: http://www.yolinux.com/TUTORIALS/GDB-Commands.html
