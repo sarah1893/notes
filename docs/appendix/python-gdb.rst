@@ -339,13 +339,15 @@ Reference
 ---------
 
 1. `Extending GDB using Python`_
-2. `gdbinit/Gdbinit`_
-3. `cyrus-and/gdb-dashboard`_
-4. `hugsy/gef`_
-5. `sharkdp/stack-inspector`_
+2. `gcc/gcc/gdbhooks.py`_
+3. `gdbinit/Gdbinit`_
+4. `cyrus-and/gdb-dashboard`_
+5. `hugsy/gef`_
+6. `sharkdp/stack-inspector`_
 
 .. _Pygments: https://pygments.org/
-.. _Extending GDB using Python: https://sourceware.org/gdb/onlinedocs/gdb/Python.html#Python
+.. _Extending GDB using Python: https://sourceware.org/gdb/onlinedocs/gdb/Python.html
+.. _gcc/gcc/gdbhooks.py: https://github.com/gcc-mirror/gcc/blob/master/gcc/gdbhooks.py
 .. _hugsy/gef: https://github.com/hugsy/gef
 .. _cyrus-and/gdb-dashboard: https://github.com/cyrus-and/gdb-dashboard
 .. _gdbinit/Gdbinit: https://github.com/gdbinit/Gdbinit
