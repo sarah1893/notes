@@ -226,8 +226,72 @@ apply color to the ``list`` command output.
 
     PrettyList()
 
-Inspect a Function
-------------------
+Tracepoints
+-----------
+
+Although a developer can insert ``printf``, ``std::cout``, or ``syslog`` to
+inspect functions, printing messages is not an effective way to debug when a
+project is enormous. Developers may waste their time in building source code
+and may acquire little information. Even worse, the output may become too much
+to detect problems. In fact, inspecting functions or variables do not require
+to embed *print functions* in code. By writing a Python script with GDB API,
+developers can customize watchpoints to trace issues dynamically at runtime.
+For example, by implementing a ``gdb.Breakpoint`` and a ``gdb.Command``, it is
+useful for developers to acquire essential information, such as parameters,
+call stacks, or memory usage.
+
+.. code-block:: python
+
+    import gdb
+
+    tp = {}
+
+    class Tracepoint(gdb.Breakpoint):
+        def __init__(self, *args):
+            super().__init__(*args)
+            self.silent = True
+            self.count = 0
+
+        def stop(self):
+            self.count += 1
+            frame = gdb.newest_frame()
+            block = frame.block()
+            sym_and_line = frame.find_sal()
+            framename = frame.name()
+            filename = sym_and_line.symtab.filename
+            line = sym_and_line.line
+            # show tracepoint info
+            print(f"{framename} @ {filename}:{line}")
+            # show args and vars
+            for s in block:
+                if not s.is_argument and not s.is_variable:
+                    continue
+                typ = s.type
+                val = s.value(frame)
+                size = typ.sizeof
+                name = s.name
+                print(f"\t{name}({typ}: {val}) [{size}]")
+            # do not stop at tracepoint
+            return False
+
+    class SetTracepoint(gdb.Command):
+        def __init__(self):
+            super().__init__("tp", gdb.COMMAND_USER)
+
+        def invoke(self, args, tty):
+            try:
+                global tp
+                tp[args] = Tracepoint(args)
+            except Exception as e:
+                print(e)
+
+    def finish(event):
+        for t, p in tp.items():
+            c = p.count
+            print(f"Tracepoint '{t}' Count: {c}")
+
+    gdb.events.exited.connect(finish)
+    SetTracepoint()
 
 .. code-block:: cpp
 
@@ -245,17 +309,25 @@ Inspect a Function
         return 0;
     }
 
-
 .. code-block:: bash
 
-    # fib.gdb
-    break fib
-      commands
-      silent
-      backtrace
-      continue
-    end
-
+    (gdb) source tp.py
+    (gdb) tp fib
+    Breakpoint 1 at 0x606: file a.cpp, line 3.
+    (gdb) run
+    Starting program: /root/a.out
+    fib @ a.cpp:3
+            n(int: 3) [4]
+    fib @ a.cpp:3
+            n(int: 2) [4]
+    fib @ a.cpp:3
+            n(int: 1) [4]
+    fib @ a.cpp:3
+            n(int: 0) [4]
+    fib @ a.cpp:3
+            n(int: 1) [4]
+    [Inferior 1 (process 5399) exited normally]
+    Tracepoint 'fib' Count: 5
 
 Reference
 ---------
