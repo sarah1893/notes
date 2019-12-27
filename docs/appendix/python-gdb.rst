@@ -312,10 +312,15 @@ call stacks, or memory usage.
 .. code-block:: bash
 
     (gdb) source tp.py
+    (gdb) tp main
+    Breakpoint 1 at 0x647: file a.cpp, line 12.
     (gdb) tp fib
-    Breakpoint 1 at 0x606: file a.cpp, line 3.
-    (gdb) run
+    Breakpoint 2 at 0x606: file a.cpp, line 3.
+    (gdb) r
     Starting program: /root/a.out
+    main @ a.cpp:12
+            argc(int: 1) [4]
+            argv(char **: 0x7fffffffe788) [8]
     fib @ a.cpp:3
             n(int: 3) [4]
     fib @ a.cpp:3
@@ -326,7 +331,8 @@ call stacks, or memory usage.
             n(int: 0) [4]
     fib @ a.cpp:3
             n(int: 1) [4]
-    [Inferior 1 (process 5399) exited normally]
+    [Inferior 1 (process 5409) exited normally]
+    Tracepoint 'main' Count: 1
     Tracepoint 'fib' Count: 5
 
 Reference
