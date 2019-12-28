@@ -349,6 +349,13 @@ developers can acquire more useful information comparing with ``std::cout``.
 Profiling
 ---------
 
+Without inserting timestamps, profiling is still feasible through tracepoints.
+By using a ``gdb.FinishBreakpoint`` after a ``gdb.Breakpoint``, GDB sets a
+temporary breakpoint at the return address of a frame for developers to get
+the current timestamp and to calculate the time difference. Note that profiling
+via GDB is not precise. Other tools, such as `Linux perf`_ or `Valgrind`_,
+provide more useful and accurate information to trace performance issues.
+
 .. code-block:: python
 
     import gdb
@@ -417,6 +424,29 @@ Profiling
 
     Profile()
 
+.. code-block:: bash
+
+    (gdb) source prof.py
+    (gdb) prof fib
+    Breakpoint 1 at 0x606: file a.cpp, line 3.
+    (gdb) r
+    Starting program: /root/a.out
+    fib(int) @ a.cpp:3
+            n: 1 [int]
+            Cost: 0.0007786750793457031
+    fib(int) @ a.cpp:3
+            n: 0 [int]
+            Cost: 0.002572298049926758
+    fib(int) @ a.cpp:3
+            n: 2 [int]
+            Cost: 0.008517265319824219
+    fib(int) @ a.cpp:3
+            n: 1 [int]
+            Cost: 0.0014069080352783203
+    fib(int) @ a.cpp:3
+            n: 3 [int]
+            Cost: 0.01870584487915039
+
 Reference
 ---------
 
@@ -435,3 +465,5 @@ Reference
 .. _gdbinit/Gdbinit: https://github.com/gdbinit/Gdbinit
 .. _sharkdp/stack-inspector: https://github.com/sharkdp/stack-inspector
 .. _GDB Text User Interface (TUI): https://sourceware.org/gdb/onlinedocs/gdb/TUI.html
+.. _Linux perf: https://github.com/torvalds/linux/tree/master/tools/perf
+.. _Valgrind: https://valgrind.org/
