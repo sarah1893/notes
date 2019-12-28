@@ -592,7 +592,7 @@ Conclusion
 
 Integrating Python interpreter into GDB offers many flexible ways to
 troubleshoot issues. While many integrated development environments (IDEs) may
-embed GDB to debug visually, GDB allows developers to establish their commands
+embed GDB to debug visually, GDB allows developers to implement their commands
 and parse variables’ output at runtime. By using debugging scripts, developers
 can monitor and record necessary information without modifying their code.
 Honestly, inserting or enabling debugging code blocks may change a program’s
@@ -600,7 +600,7 @@ behaviors, and developers should get rid of this bad habit. Also, when a problem
 is reproduced, GDB can attach that process and examine its status without stopping
 it. Obviously, debugging via GDB is inevitable if a challenging issue emerges.
 With Python API in GDB, developing a script to troubleshoot becomes more
-accessible and more straightforward for developers.
+accessible that leads to developers establishing their debugging methods diversely.
 
 
 Reference
