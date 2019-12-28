@@ -549,7 +549,7 @@ developers can parse ``struct stat`` and output information in a readable format
 By sourcing the previous Python script, the ``PrettyPrinter`` can recognize
 ``struct stat`` and output a readable format for developers to inspect file
 attributes. Without inserting functions to parse and print ``struct stat``, it
-is more convenient to acquire a better output from Python API.
+is a more convenient way to acquire a better output from Python API.
 
 .. code-block:: bash
 
