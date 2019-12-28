@@ -597,6 +597,7 @@ Reference
 4. `cyrus-and/gdb-dashboard`_
 5. `hugsy/gef`_
 6. `sharkdp/stack-inspector`_
+7. `gdb Debugging Full Example (Tutorial)`_
 
 .. _Pygments: https://pygments.org/
 .. _Extending GDB using Python: https://sourceware.org/gdb/onlinedocs/gdb/Python.html
@@ -608,3 +609,4 @@ Reference
 .. _GDB Text User Interface (TUI): https://sourceware.org/gdb/onlinedocs/gdb/TUI.html
 .. _Linux perf: https://github.com/torvalds/linux/tree/master/tools/perf
 .. _Valgrind: https://valgrind.org/
+.. _gdb Debugging Full Example (Tutorial): http://www.brendangregg.com/blog/2016-08-09/gdb-example-ncurses.html
