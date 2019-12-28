@@ -346,6 +346,76 @@ developers can acquire more useful information comparing with ``std::cout``.
     Tracepoint 'main' Count: 1
     Tracepoint 'fib' Count: 5
 
+Profiling
+---------
+
+.. code-block:: python
+
+    import gdb
+    import time
+
+    class EndPoint(gdb.FinishBreakpoint):
+        def __init__(self, breakpoint, *a, **kw):
+            super().__init__(*a, **kw)
+            self.silent = True
+            self.breakpoint = breakpoint
+
+        def stop(self):
+            # normal finish
+            end = time.time()
+            start, out = self.breakpoint.stack.pop()
+            diff = end - start
+            print(out.strip())
+            print(f"\tCost: {diff}")
+            return False
+
+    class StartPoint(gdb.Breakpoint):
+        def __init__(self, *a, **kw):
+            super().__init__(*a, **kw)
+            self.silent = True
+            self.stack = []
+
+        def stop(self):
+            start = time.time()
+            # start, end, diff
+            frame = gdb.newest_frame()
+            sym_and_line = frame.find_sal()
+            func = frame.function().name
+            filename = sym_and_line.symtab.filename
+            line = sym_and_line.line
+            block = frame.block()
+
+            args = []
+            for s in block:
+                if not s.is_argument:
+                    continue
+                name = s.name
+                typ = s.type
+                val = s.value(frame)
+                args.append(f"{name}: {val} [{typ}]")
+
+            # format
+            out = ""
+            out += f"{func} @ {filename}:{line}\n"
+            for a in args:
+                out += f"\t{a}\n"
+
+            # append current status to a breakpoint stack
+            self.stack.append((start, out))
+            EndPoint(self, internal=True)
+            return False
+
+    class Profile(gdb.Command):
+        def __init__(self):
+            super().__init__("prof", gdb.COMMAND_USER)
+
+        def invoke(self, args, tty):
+            try:
+                StartPoint(args)
+            except Exception as e:
+                print(e)
+
+    Profile()
 
 Reference
 ---------
