@@ -600,7 +600,7 @@ behaviors, and developers should get rid of this bad habit. Also, when a problem
 is reproduced, GDB can attach that process and examine its status without stopping
 it. Obviously, debugging via GDB is inevitable if a challenging issue emerges.
 With Python API in GDB, developing a script for debugging becomes more
-accessible and more straightforward to troubleshoot.
+accessible and more straightforward for developers to troubleshoot.
 
 
 Reference
