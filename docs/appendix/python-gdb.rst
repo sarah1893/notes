@@ -2,9 +2,9 @@
     :description lang=en: Python interpreter in GNU Debugger (GDB)
     :keywords: Python, Python3, GDB
 
-=========================
-Python Interpreter in GDB
-=========================
+==================================
+Python Interpreter in GNU Debugger
+==================================
 
 .. contents:: Table of Contents
     :backlinks: none
