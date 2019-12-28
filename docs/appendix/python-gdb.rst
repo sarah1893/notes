@@ -315,10 +315,10 @@ arguments, variables, and stacks. For instance, by setting a tracepoint at
         return 0;
     }
 
-The following output shows the result of tracing the function ``fib``. In this
-case, tracepoints display all information a developer needs, including arguments'
-value, recursive flow, and variables' size. By using tracepoints, developers can
-acquire more useful information comparing with ``std::cout``.
+The following output shows the result of an inspection of the function ``fib``.
+In this case, tracepoints display all information a developer needs, including
+arguments' value, recursive flow, and variables' size. By using tracepoints,
+developers can acquire more useful information comparing with ``std::cout``.
 
 .. code-block:: bash
 
