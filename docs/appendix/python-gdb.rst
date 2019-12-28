@@ -242,6 +242,7 @@ call stacks, or memory usage.
 
 .. code-block:: python
 
+    # tp.py
     import gdb
 
     tp = {}
@@ -293,6 +294,11 @@ call stacks, or memory usage.
     gdb.events.exited.connect(finish)
     SetTracepoint()
 
+Instead of inserting ``std::cout`` at the beginning of functions, using a
+tracepoint at a function's entry point provides useful information to inspect
+arguments, variables, and stacks. For instance, by setting a tracepoint at
+``fib``, it is helpful to examine memory usage, stack, and the number of calls.
+
 .. code-block:: cpp
 
     int fib(int n)
@@ -308,6 +314,11 @@ call stacks, or memory usage.
         fib(3);
         return 0;
     }
+
+The following output shows the result of tracing the function ``fib``. In this
+case, tracepoints display all information a developer needs, including arguments'
+value, recursive flow, and variables' size. By using tracepoints, developers can
+acquire more useful information comparing with ``std::cout``.
 
 .. code-block:: bash
 
@@ -334,6 +345,7 @@ call stacks, or memory usage.
     [Inferior 1 (process 5409) exited normally]
     Tracepoint 'main' Count: 1
     Tracepoint 'fib' Count: 5
+
 
 Reference
 ---------
