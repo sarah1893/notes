@@ -424,6 +424,11 @@ provide more useful and accurate information to trace performance issues.
 
     Profile()
 
+
+The following output shows the profiling result by setting a tracepoint at the
+function ``fib``. It is convenient to inspect the function's performance and
+stack at the same time.
+
 .. code-block:: bash
 
     (gdb) source prof.py
@@ -446,6 +451,142 @@ provide more useful and accurate information to trace performance issues.
     fib(int) @ a.cpp:3
             n: 3 [int]
             Cost: 0.01870584487915039
+
+Pretty Print
+------------
+
+Although ``set print pretty on`` in GDB offers a better format to inspect
+variables, developers may require to parse variables' value for readability.
+Take the system call ``stat`` as an example. While it provides useful information
+to examine file attributes, the output values, such as the permission, may not
+be readable for debugging. By implementing a user-defined pretty print,
+developers can parse ``struct stat`` and output information in a readable format.
+
+.. code-block:: python
+
+    import gdb
+    import pwd
+    import grp
+    import stat
+    import time
+
+    from datetime import datetime
+
+
+    class StatPrint:
+        def __init__(self, val):
+            self.val = val
+
+        def get_filetype(self, st_mode):
+            out = "file type: "
+            if stat.S_ISDIR(st_mode):
+                return out + "directory"
+            if stat.S_ISCHR(st_mode):
+                return out + "character device"
+            if stat.S_ISBLK(st_mode):
+                return out + "block device"
+            if stat.S_ISREG:
+                return out + "regular file"
+            if stat.S_ISFIFO(st_mode):
+                return out + "FIFO"
+            if stat.S_ISLNK(st_mode):
+                return out + "symbolic link"
+            if stat.S_ISSOCK(st_mode):
+                return out + "socket"
+            return out + "unknown"
+
+        def get_access(self, st_mode):
+            out = "-"
+            info = ("r", "w", "x")
+            perm = [
+                (stat.S_IRUSR, stat.S_IWUSR, stat.S_IXUSR),
+                (stat.S_IRGRP, stat.S_IRWXG, stat.S_IXGRP),
+                (stat.S_IROTH, stat.S_IWOTH, stat.S_IXOTH),
+            ]
+            for pm in perm:
+                for c, p in zip(pm, info):
+                    out += p if st_mode & c else "-"
+            return out
+
+        def get_time(self, st_time):
+            tv_sec = int(st_time["tv_sec"])
+            return datetime.fromtimestamp(tv_sec).isoformat()
+
+        def to_string(self):
+            st = self.val
+            st_ino = int(st["st_ino"])
+            st_mode = int(st["st_mode"])
+            st_uid = int(st["st_uid"])
+            st_gid = int(st["st_gid"])
+            st_size = int(st["st_size"])
+            st_blksize = int(st["st_blksize"])
+            st_blocks = int(st["st_blocks"])
+            st_atim = st["st_atim"]
+            st_mtim = st["st_mtim"]
+            st_ctim = st["st_ctim"]
+
+            out = "{\n"
+            out += f"Size: {st_size}\n"
+            out += f"Blocks: {st_blocks}\n"
+            out += f"IO Block: {st_blksize}\n"
+            out += f"Inode: {st_ino}\n"
+            out += f"Access: {self.get_access(st_mode)}\n"
+            out += f"File Type: {self.get_filetype(st_mode)}\n"
+            out += f"Uid: ({st_uid}/{pwd.getpwuid(st_uid).pw_name})\n"
+            out += f"Gid: ({st_gid}/{grp.getgrgid(st_gid).gr_name})\n"
+            out += f"Access: {self.get_time(st_atim)}\n"
+            out += f"Modify: {self.get_time(st_mtim)}\n"
+            out += f"Change: {self.get_time(st_ctim)}\n"
+            out += "}"
+            return out
+
+    p = gdb.printing.RegexpCollectionPrettyPrinter("sp")
+    p.add_printer("stat", "^stat$", StatPrint)
+
+    o = gdb.current_objfile()
+    gdb.printing.register_pretty_printer(o, p)
+
+By sourcing the previous Python script, the ``PrettyPrinter`` can recognize
+``struct stat`` and output a readable format for developers to inspect file
+attributes. Without inserting functions to parse and print ``struct stat``, it
+is more convenient to acquire a better output from Python API.
+
+.. code-block:: bash
+
+    (gdb) list 15
+    10          struct stat st;
+    11
+    12          if ((rc = stat("./a.cpp", &st)) < 0) {
+    13              perror("stat failed.");
+    14              goto end;
+    15          }
+    16
+    17          rc = 0;
+    18       end:
+    19          return rc;
+    (gdb) source st.py
+    (gdb) b 17
+    Breakpoint 1 at 0x762: file a.cpp, line 17.
+    (gdb) r
+    Starting program: /root/a.out
+
+    Breakpoint 1, main (argc=1, argv=0x7fffffffe788) at a.cpp:17
+    17          rc = 0;
+    (gdb) p st
+    $1 = {
+    Size: 298
+    Blocks: 8
+    IO Block: 4096
+    Inode: 1322071
+    Access: -rw-rw-r--
+    File Type: file type: regular file
+    Uid: (0/root)
+    Gid: (0/root)
+    Access: 2019-12-28T15:53:17
+    Modify: 2019-12-28T15:53:01
+    Change: 2019-12-28T15:53:01
+    }
+
 
 Reference
 ---------
