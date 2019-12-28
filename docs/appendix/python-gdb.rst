@@ -599,8 +599,8 @@ Honestly, inserting or enabling debugging code blocks may change a program’s
 behaviors, and developers should get rid of this bad habit. Also, when a problem
 is reproduced, GDB can attach that process and examine its status without stopping
 it. Obviously, debugging via GDB is inevitable if a challenging issue emerges.
-With Python API in GDB, developing a script for debugging becomes more
-accessible and more straightforward for developers to troubleshoot.
+With Python API in GDB, developing a script to troubleshoot becomes more
+accessible and more straightforward for developers.
 
 
 Reference
