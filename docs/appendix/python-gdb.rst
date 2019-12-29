@@ -478,22 +478,21 @@ developers can parse ``struct stat`` and output information in a readable format
             self.val = val
 
         def get_filetype(self, st_mode):
-            out = "file type: "
             if stat.S_ISDIR(st_mode):
-                return out + "directory"
+                return "directory"
             if stat.S_ISCHR(st_mode):
-                return out + "character device"
+                return "character device"
             if stat.S_ISBLK(st_mode):
-                return out + "block device"
+                return "block device"
             if stat.S_ISREG:
-                return out + "regular file"
+                return "regular file"
             if stat.S_ISFIFO(st_mode):
-                return out + "FIFO"
+                return "FIFO"
             if stat.S_ISLNK(st_mode):
-                return out + "symbolic link"
+                return "symbolic link"
             if stat.S_ISSOCK(st_mode):
-                return out + "socket"
-            return out + "unknown"
+                return "socket"
+            return "unknown"
 
         def get_access(self, st_mode):
             out = "-"
@@ -579,7 +578,7 @@ is a more convenient way to acquire a better output from Python API.
     IO Block: 4096
     Inode: 1322071
     Access: -rw-rw-r--
-    File Type: file type: regular file
+    File Type: regular file
     Uid: (0/root)
     Gid: (0/root)
     Access: 2019-12-28T15:53:17
