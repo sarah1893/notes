@@ -586,6 +586,40 @@ is a more convenient way to acquire a better output from Python API.
     Change: 2019-12-28T15:53:01
     }
 
+Note that developers can disable a user-defined pretty-print via the command
+``disable``. For example, the previous Python script registers a pretty printer
+under the global pretty-printers. By calling ``disable pretty-print``, the
+printer ``sp`` will be disabled.
+
+.. code-block:: bash
+
+    (gdb) disable pretty-print global sp
+    1 printer disabled
+    1 of 2 printers enabled
+    (gdb) i pretty-print
+    global pretty-printers:
+      builtin
+        mpx_bound128
+      sp [disabled]
+        stat
+
+Additionally, developers can exclude a printer in the current GDB debugging
+session if it is no longer required. The following snippet shows how to delete
+the ``sp`` printer through ``gdb.pretty_printers.remove``.
+
+.. code-block:: bash
+
+    (gdb) python
+    >import gdb
+    >for p in gdb.pretty_printers:
+    >    if p.name == "sp":
+    >        gdb.pretty_printers.remove(p)
+    >end
+    (gdb) i pretty-print
+    global pretty-printers:
+      builtin
+        mpx_bound128
+
 Conclusion
 ----------
 
