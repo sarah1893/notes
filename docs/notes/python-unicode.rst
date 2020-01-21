@@ -163,10 +163,10 @@ A *Unicode code point* transfers to a *byte string* is called encoding.
     >>> type(s.encode('utf-8'))
     <class 'bytes'>
 
-Decodeing
+Decoding
 ---------
 
-A *byte string* transfers to a *Unicode code point* is called encoding.
+A *byte string* transfers to a *Unicode code point* is called decoding.
 
 .. code-block:: python
 
