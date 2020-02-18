@@ -8,6 +8,32 @@ Yet Another Introduction to Asyncio
 .. contents:: Table of Contents
     :backlinks: none
 
+Introduction
+------------
+
+.. code-block:: python
+
+    import contextlib
+    import socket
+
+    @contextlib.contextmanager
+    def server(host, port):
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
+            s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            s.bind((host, port))
+            s.listen(10)
+            yield s
+        finally:
+            s.close()
+
+    with server('127.0.0.1', 5566) as s:
+        while True:
+            conn, addr = s.accept()
+            msg = conn.recv(1024)
+            conn.send(msg)
+            conn.close()
+
 
 What is Coroutine?
 -------------------
