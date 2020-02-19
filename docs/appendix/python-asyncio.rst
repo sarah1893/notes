@@ -11,11 +11,16 @@ The Evolution of Asyncio
 Abstract
 --------
 
-The `C10k problem`_ is still a puzzle for a programmer to find an elegant way
-to solve it. Therefore, many programming languages dedicated to developing
-better libraries, frameworks, or syntaxes for programmers to understand how to
-manage extensive I/O operations properly.
-
+The `C10k problem`_ is still a puzzle for a programmer to find a way to solve
+it. Generally, developers deal with extensive I/O operations via **thread**,
+**epoll**, or **kqueue** to avoid their software waiting for an expensive task.
+However, developing a readable and bug-free concurrent code is challenging due
+to data sharing and job dependency. Even though some powerful tools, such as
+`Valgrind`_, help developers to detect deadlock or other asynchronous issues,
+solving these issues may be time-consuming if the scale of software grows large.
+Therefore, many programming languages such as Python, Javascript, or C++
+dedicated to developing better libraries, frameworks, or syntaxes to assist
+programmers in managing concurrent jobs properly.
 
 Introduction
 ------------
@@ -589,3 +594,4 @@ output:
     asyncio
 
 .. _C10k problem: https://en.wikipedia.org/wiki/C10k_problem
+.. _Valgrind: https://valgrind.org/
