@@ -48,6 +48,47 @@ Introduction
         t = threading.Thread(target=handler, args=(conn,))
         t.start()
 
+.. code-block:: python
+
+    import socket
+
+    from selectors import DefaultSelector
+    from selectors import EVENT_READ, EVENT_WRITE
+    from functools import partial
+
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    s.bind(("127.0.0.1", 5566))
+    s.listen(10240)
+    s.setblocking(False)
+
+    sel = DefaultSelector()
+
+    def accept(s, mask):
+        c, addr = s.accept()
+        c.setblocking(False)
+        sel.register(c, EVENT_READ, read)
+
+    def read(c, mask):
+        msg = c.recv(65535)
+        if msg:
+            sel.modify(c, EVENT_WRITE, partial(write, msg=msg))
+        else:
+            sel.unregister(c)
+            c.close()
+
+    def write(c, mask, msg=None):
+        if msg:
+            c.send(msg)
+        sel.modify(c, EVENT_READ, read)
+
+    sel.register(s, EVENT_READ, accept)
+    while True:
+        events = sel.select()
+        for e, m in events:
+            cb = e.data
+            cb(e.fileobj, m)
+
 .. code-block:: bash
 
     #!/bin/bash
