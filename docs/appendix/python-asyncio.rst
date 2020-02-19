@@ -28,23 +28,60 @@ Introduction
 
 .. code-block:: python
 
+    # foo.py
+
     import threading
     import socket
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     s.bind(("127.0.0.1", 5566))
-    s.listen(30)
+    s.listen(10240)
 
     def handler(conn):
         while True:
-            msg = conn.recv(1024)
+            msg = conn.recv(65535)
             conn.send(msg)
 
     while True:
         conn, addr = s.accept()
         t = threading.Thread(target=handler, args=(conn,))
         t.start()
+
+.. code-block:: bash
+
+    #!/bin/bash
+
+    # foo.sh
+
+    python3 foo.py > /dev/null 2>&1 &
+    PID="$!"
+
+    _mem() {
+    cat < "/proc/$PID/smaps" \
+        | grep ^Pss \
+        | awk '{Total+=$2} END {print Total/2014" MB"}'
+    }
+
+    _mem
+
+    msg="$(openssl rand -base64 65534)"
+    while true; do
+        for i in $(seq 1 512); do
+            echo "$msg" \
+                | nc -w 1 localhost 5566 > /dev/null 2>&1 &
+        done
+        _mem
+    done
+
+output:
+
+.. code-blocK:: bash
+
+	$ bash foo.sh
+	$ 0.119662 MB
+	...
+	$ 14.0114 MB
 
 
 What is Coroutine?
