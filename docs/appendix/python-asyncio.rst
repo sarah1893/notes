@@ -16,23 +16,35 @@ Introduction
     import contextlib
     import socket
 
-    @contextlib.contextmanager
-    def server(host, port):
-        try:
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
-            s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            s.bind((host, port))
-            s.listen(10)
-            yield s
-        finally:
-            s.close()
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    s.bind(("127.0.0.1", 5566))
+    s.listen(10)
 
-    with server('127.0.0.1', 5566) as s:
+    while True:
+        conn, addr = s.accept()
+        msg = conn.recv(1024)
+        conn.send(msg)
+
+.. code-block:: python
+
+    import threading
+    import socket
+
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    s.bind(("127.0.0.1", 5566))
+    s.listen(30)
+
+    def handler(conn):
         while True:
-            conn, addr = s.accept()
             msg = conn.recv(1024)
             conn.send(msg)
-            conn.close()
+
+    while True:
+        conn, addr = s.accept()
+        t = threading.Thread(target=handler, args=(conn,))
+        t.start()
 
 
 What is Coroutine?
