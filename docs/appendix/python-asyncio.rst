@@ -1,9 +1,9 @@
 .. meta::
     :keywords: Python, Python3, Asyncio, socket
 
-========================
-The Evolution of Asyncio
-========================
+==========================================
+The Evolution of Asynchronoous Programming
+==========================================
 
 .. contents:: Table of Contents
     :backlinks: none
