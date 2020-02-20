@@ -1,9 +1,9 @@
 .. meta::
     :keywords: Python, Python3, Asyncio, socket
 
-==========================================
-The Evolution of Asynchronoous Programming
-==========================================
+=========================================
+The Evolution of Asynchronous Programming
+=========================================
 
 .. contents:: Table of Contents
     :backlinks: none
@@ -17,10 +17,12 @@ it. Generally, developers deal with extensive I/O operations via **thread**,
 However, developing a readable and bug-free concurrent code is challenging due
 to data sharing and job dependency. Even though some powerful tools, such as
 `Valgrind`_, help developers to detect deadlock or other asynchronous issues,
-solving these issues may be time-consuming if the scale of software grows large.
-Therefore, many programming languages such as Python, Javascript, or C++
+solving these problems may be time-consuming when the scale of software grows
+large. Therefore, many programming languages such as Python, Javascript, or C++
 dedicated to developing better libraries, frameworks, or syntaxes to assist
-programmers in managing concurrent jobs properly.
+programmers in managing concurrent jobs properly. Instead of focusing on how to
+use modern parallel APIs, this article mainly concentrates on the design
+philosophy behind these programming patterns.
 
 Introduction
 ------------
