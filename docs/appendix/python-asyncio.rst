@@ -22,14 +22,21 @@ large. Therefore, many programming languages such as Python, Javascript, or C++
 dedicated to developing better libraries, frameworks, or syntaxes to assist
 programmers in managing concurrent jobs properly. Instead of focusing on how to
 use modern parallel APIs, this article mainly concentrates on the design
-philosophy behind these programming patterns.
+philosophy behind programming patterns.
 
 Introduction
 ------------
 
+Handling I/O operations such as network connections is one of the most expensive
+tasks in a program. Take a simple TCP echo server as an example. If a client
+connects to the server successfully without sending any request, it blocks
+others' connections. Even though clients send data as soon as possible, the
+server handles these requests inefficiently because it wastes a lot of time
+waiting for I/O responses from hardware such as network interfaces. Thus, socket
+programming with concurrency becomes inevitable to manage extensive requests.
+
 .. code-block:: python
 
-    import contextlib
     import socket
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
@@ -41,6 +48,7 @@ Introduction
         conn, addr = s.accept()
         msg = conn.recv(1024)
         conn.send(msg)
+        conn.close()
 
 .. code-block:: python
 
