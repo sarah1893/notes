@@ -81,6 +81,12 @@ event loop is another solution to manage connections.
         t = threading.Thread(target=handler, args=(conn,))
         t.start()
 
+A simple event-driven socket server includes three components: polling APIs,
+a loop (scheduler), and callback functions (events). For example, the following
+server utilizes a ``selector`` within a loop to check whether an I/O operation
+is ready or not. If data is available to read/write, the ``selector`` notifies
+the server to execute callback functions, ``accept``, ``read``, or ``write``.
+
 .. code-block:: python
 
     import socket
