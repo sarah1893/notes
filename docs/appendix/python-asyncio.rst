@@ -28,12 +28,14 @@ Introduction
 ------------
 
 Handling I/O operations such as network connections is one of the most expensive
-tasks in a program. Take a simple TCP echo server as an example. If a client
-connects to the server successfully without sending any request, it blocks
-others' connections. Even though clients send data as soon as possible, the
-server handles these requests inefficiently because it wastes a lot of time
-waiting for I/O responses from hardware such as network interfaces. Thus, socket
-programming with concurrency becomes inevitable to manage extensive requests.
+tasks in a program. Take a simple TCP blocking echo server as an example
+(The following snippet). If a client connects to the server successfully without
+sending any request, it blocks others' connections. Even though clients send data
+as soon as possible, the server cannot handle other requests if there is no
+client tries to establish a connection. Also, handling multiple requests is
+inefficient because it wastes a lot of time waiting for I/O responses from
+hardware such as network interfaces. Thus, socket programming with concurrency
+becomes inevitable to manage extensive requests.
 
 .. code-block:: python
 
@@ -48,7 +50,16 @@ programming with concurrency becomes inevitable to manage extensive requests.
         conn, addr = s.accept()
         msg = conn.recv(1024)
         conn.send(msg)
-        conn.close()
+
+One possible solution to prevent a server waiting for I/O operations is to
+dispatch tasks to other threads. The following example shows how to create a
+thread to handle connections simultaneously. However, creating numerous threads
+may consume all computing power without high throughput. Even worse, an
+application may waste time waiting for a lock to process critical sections within
+a thread. Although using threads can solve blocking issues for a socket server,
+other factors, such as CPU utilization, are essential for a programmer to
+overcome the C10k problem. Therefore, without creating unlimited threads, the
+event loop is another solution to manage connections.
 
 .. code-block:: python
 
@@ -112,42 +123,6 @@ programming with concurrency becomes inevitable to manage extensive requests.
         for e, m in events:
             cb = e.data
             cb(e.fileobj, m)
-
-.. code-block:: bash
-
-    #!/bin/bash
-
-    # foo.sh
-
-    python3 foo.py > /dev/null 2>&1 &
-    PID="$!"
-
-    _mem() {
-    cat < "/proc/$PID/smaps" \
-        | grep ^Pss \
-        | awk '{Total+=$2} END {print Total/2014" MB"}'
-    }
-
-    _mem
-
-    msg="$(openssl rand -base64 65534)"
-    while true; do
-        for i in $(seq 1 512); do
-            echo "$msg" \
-                | nc -w 1 localhost 5566 > /dev/null 2>&1 &
-        done
-        _mem
-    done
-
-output:
-
-.. code-blocK:: bash
-
-	$ bash foo.sh
-	$ 0.119662 MB
-	...
-	$ 14.0114 MB
-
 
 What is Coroutine?
 -------------------
