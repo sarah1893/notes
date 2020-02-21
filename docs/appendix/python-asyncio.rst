@@ -63,8 +63,6 @@ event loop is another solution to manage connections.
 
 .. code-block:: python
 
-    # foo.py
-
     import threading
     import socket
 
@@ -100,22 +98,22 @@ event loop is another solution to manage connections.
     sel = DefaultSelector()
 
     def accept(s, mask):
-        c, addr = s.accept()
-        c.setblocking(False)
-        sel.register(c, EVENT_READ, read)
+        conn, addr = s.accept()
+        conn.setblocking(False)
+        sel.register(conn, EVENT_READ, read)
 
-    def read(c, mask):
-        msg = c.recv(65535)
+    def read(conn, mask):
+        msg = conn.recv(65535)
         if msg:
-            sel.modify(c, EVENT_WRITE, partial(write, msg=msg))
+            sel.modify(conn, EVENT_WRITE, partial(write, msg=msg))
         else:
-            sel.unregister(c)
-            c.close()
+            sel.unregister(conn)
+            conn.close()
 
-    def write(c, mask, msg=None):
+    def write(conn, mask, msg=None):
         if msg:
-            c.send(msg)
-        sel.modify(c, EVENT_READ, read)
+            conn.send(msg)
+        sel.modify(conn, EVENT_READ, read)
 
     sel.register(s, EVENT_READ, accept)
     while True:
