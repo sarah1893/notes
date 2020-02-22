@@ -207,7 +207,7 @@ is equal to the following snippet (blocking version).
 
 .. code-block:: python
 
-    def accept(s, mask):
+    def accept(s):
         conn, addr = s.accept()
         success = handshake(conn)
         if not success:
