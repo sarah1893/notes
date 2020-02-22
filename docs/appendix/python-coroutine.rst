@@ -173,14 +173,18 @@ he/she may requires to store previous status in some where.
         if not msg:
             sel.unregister(conn)
             return conn.close()
-        # check whether a handshake is successful or not
+
+        # check whether handshake is successful or not
         if is_hello[conn]:
             sel.modify(conn, EVENT_WRITE, partial(write, msg=msg))
             return
 
-        # handshake is successful
-        if msg.decode("utf-8").strip() == "hello":
-            is_hello[conn] = True
+        # do a handshake
+        if msg.decode("utf-8").strip() != "hello":
+            sel.unregister(conn)
+            return conn.close()
+
+        is_hello[conn] = True
 
     def write(conn, mask, msg=None):
         if msg:
@@ -193,6 +197,7 @@ he/she may requires to store previous status in some where.
         for e, m in events:
             cb = e.data
             cb(e.fileobj, m)
+
 
 
 Although the variable ``is_hello`` assists in storing status to check whether a
@@ -213,9 +218,9 @@ following snippet.
         data = conn.recv(65535)
         if not data:
             return False
-        if data.decode('utf-8').strip() != "ACK":
+        if data.decode('utf-8').strip() != "hello":
             return False
-        conn.send(b"ACK")
+        conn.send(b"hello")
         return True
 
 What is a Coroutine?
