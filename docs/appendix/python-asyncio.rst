@@ -2,7 +2,7 @@
     :keywords: Python, Python3, Asyncio, socket
 
 =========================================
-The Evolution of Asynchronous Programming
+The Evolution of Event-driven Programming
 =========================================
 
 .. contents:: Table of Contents
