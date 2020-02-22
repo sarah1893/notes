@@ -88,6 +88,7 @@ The appendix mainly focuses on some critical concepts missing in cheat sheets.
     :maxdepth: 1
 
     appendix/python-decorator
+    appendix/python-coroutine
     appendix/python-asyncio
     appendix/python-walrus
     appendix/python-gdb
