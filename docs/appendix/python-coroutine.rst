@@ -266,7 +266,17 @@ What is a Coroutine?
     loop.run_until_complete(loop.create_task(foo()))
     loop.close()
 
+Reference
+---------
+
+1. `Coroutines and Tasks`_
+2. `PEP 342 - Coroutines via Enhanced Generators`_
+3. `PEP 492 - Coroutines with async and await syntax`_
+
 .. _C10k problem: https://en.wikipedia.org/wiki/C10k_problem
 .. _Valgrind: https://valgrind.org/
 .. _select: https://docs.python.org/3/library/select.html
 .. _selectors: https://docs.python.org/3/library/selectors.html
+.. _Coroutines and Tasks: https://docs.python.org/3/library/asyncio-task.html
+.. _PEP 342 - Coroutines via Enhanced Generators: https://www.python.org/dev/peps/pep-0342/
+.. _PEP 492 - Coroutines with async and await syntax: https://www.python.org/dev/peps/pep-0492/
