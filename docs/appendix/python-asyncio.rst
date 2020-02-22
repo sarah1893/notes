@@ -145,18 +145,24 @@ What is Coroutine?
 
     import asyncio
     import inspect
-    from functools import wraps
+    import types
 
-    Future = asyncio.futures.Future
+    from functools import wraps
+    from asyncio.futures import Future
+
     def coroutine(func):
         """Simple prototype of coroutine"""
+        if inspect.isgeneratorfunction(func):
+            return types.coroutine(func)
+
         @wraps(func)
         def coro(*a, **k):
             res = func(*a, **k)
             if isinstance(res, Future) or inspect.isgenerator(res):
                 res = yield from res
             return res
-        return coro
+
+        return types.coroutine(coro)
 
     @coroutine
     def foo():
@@ -168,19 +174,10 @@ What is Coroutine?
         print("Hello Bar")
 
     loop = asyncio.get_event_loop()
-    tasks = [loop.create_task(foo()),
-             loop.create_task(bar())]
-    loop.run_until_complete(
-         asyncio.wait(tasks))
+    tasks = [loop.create_task(f()) for f in [foo, bar]]
+    loop.run_until_complete(asyncio.wait(tasks))
     loop.close()
 
-output:
-
-.. code-block:: console
-
-    $ python test.py
-    Hello Bar
-    Hello Foo
 
 
 What is Task?
