@@ -202,14 +202,13 @@ he/she may requires to store previous status in some where.
 
 Although the variable ``is_hello`` assists in storing status to check whether a
 handshake is successful or not, the code becomes harder for a programmer to
-understand. In fact, the concept of the previous implementation is equal to the
-following snippet.
+understand. In fact, the concept of the previous implementation simple. It is
+equal to the following snippet (blocking version).
 
 .. code-block:: python
 
     def accept(s, mask):
         conn, addr = s.accept()
-        conn.setblocking(False)
         success = handshake(conn)
         if not success:
             conn.close()
