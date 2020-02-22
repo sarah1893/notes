@@ -72,7 +72,7 @@ Appendix
 =========
 
 - `Why does Decorator Need @wraps <docs/appendix/python-decorator.rst>`_
-- `The Evolution of Asynchronoous Programming <docs/appendix/python-asyncio.rst>`_
+- `The Evolution of Event-driven Programming <docs/appendix/python-asyncio.rst>`_
 - `PEP 572 and the walrus operator <docs/appendix/python-walrus.rst>`_
 - `Python Interpreter in GNU Debugger <docs/appendix/python-gdb.rst>`_
 
