@@ -130,6 +130,14 @@ finish tasks.
             cb = e.data
             cb(e.fileobj, m)
 
+Although managing connections via threads may not be efficient, a program that
+utilizes an event loop to schedule tasks isn’t easy to read. To enhance code
+readability, many programming languages, including Python, introduce abstract
+concepts such as coroutine, future, or async/await to handle I/O multiplexing.
+To better understand programming jargon and using them correctly, the following
+sections discuss what these concepts are and what kind of problems they try to
+solve.
+
 What is Coroutine?
 -------------------
 
