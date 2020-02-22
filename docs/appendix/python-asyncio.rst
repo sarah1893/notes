@@ -138,8 +138,8 @@ To better understand programming jargon and using them correctly, the following
 sections discuss what these concepts are and what kind of problems they try to
 solve.
 
-What is Coroutine?
--------------------
+What is a Coroutine?
+--------------------
 
 .. code-block:: python
 
@@ -161,7 +161,6 @@ What is Coroutine?
             if isinstance(res, Future) or inspect.isgenerator(res):
                 res = yield from res
             return res
-
         return types.coroutine(coro)
 
     @coroutine
@@ -169,16 +168,9 @@ What is Coroutine?
         yield from asyncio.sleep(1)
         print("Hello Foo")
 
-    @asyncio.coroutine
-    def bar():
-        print("Hello Bar")
-
     loop = asyncio.get_event_loop()
-    tasks = [loop.create_task(f()) for f in [foo, bar]]
-    loop.run_until_complete(asyncio.wait(tasks))
+    loop.run_until_complete(loop.create_task(foo()))
     loop.close()
-
-
 
 What is Task?
 --------------
