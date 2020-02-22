@@ -202,8 +202,8 @@ he/she may requires to store previous status in some where.
 
 Although the variable ``is_hello`` assists in storing status to check whether a
 handshake is successful or not, the code becomes harder for a programmer to
-understand. In fact, the concept of the previous implementation simple. It is
-equal to the following snippet (blocking version).
+understand. In fact, the concept of the previous implementation is simple. It
+is equal to the following snippet (blocking version).
 
 .. code-block:: python
 
