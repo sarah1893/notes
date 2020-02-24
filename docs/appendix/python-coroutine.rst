@@ -271,7 +271,8 @@ Reference
 
 1. `Coroutines and Tasks`_
 2. `PEP 342 - Coroutines via Enhanced Generators`_
-3. `PEP 492 - Coroutines with async and await syntax`_
+3. `PEP 380 - Syntax for Delegating to a Subgenerator`_
+4. `PEP 492 - Coroutines with async and await syntax`_
 
 .. _C10k problem: https://en.wikipedia.org/wiki/C10k_problem
 .. _Valgrind: https://valgrind.org/
@@ -280,3 +281,4 @@ Reference
 .. _Coroutines and Tasks: https://docs.python.org/3/library/asyncio-task.html
 .. _PEP 342 - Coroutines via Enhanced Generators: https://www.python.org/dev/peps/pep-0342/
 .. _PEP 492 - Coroutines with async and await syntax: https://www.python.org/dev/peps/pep-0492/
+.. _PEP 380 - Syntax for Delegating to a Subgenerator: https://www.python.org/dev/peps/pep-0380/
