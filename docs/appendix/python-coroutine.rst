@@ -232,6 +232,163 @@ all status and re-entry by calling the built-in function ``next()``. By utilizin
 generators, handling I/O operations like the previous snippet but a non-blocking
 form, which is called *inline callback*, is reachable inside an event loop.
 
+Event Loop
+----------
+
+.. code-block:: python
+
+    # loop.py
+
+    from selectors import (
+        DefaultSelector,
+        EVENT_READ,
+        EVENT_WRITE
+    )
+
+
+    class Loop(object):
+        def __init__(self):
+            self.sel = DefaultSelector()
+            self.queue = []
+
+        def create_task(self, task):
+            self.queue.append(task)
+
+        def polling(self):
+            for e, m in self.sel.select(0):
+                self.queue.append((e.data, None))
+                self.sel.unregister(e.fileobj)
+
+        def is_registered(self, fileobj):
+            try:
+                self.sel.get_key(fileobj)
+            except KeyError:
+                return False
+            return True
+
+        def register(self, t, data):
+            if not data:
+                return False
+
+            if data[0] == EVENT_READ:
+                if self.is_registered(data[1]):
+                    self.sel.modify(data[1], EVENT_READ, t)
+                else:
+                    self.sel.register(data[1], EVENT_READ, t)
+            elif data[0] == EVENT_WRITE:
+                if self.is_registered(data[1]):
+                    self.sel.modify(data[1], EVENT_WRITE, t)
+                else:
+                    self.sel.register(data[1], EVENT_WRITE, t)
+            else:
+                return False
+
+            return True
+
+        def accept(self, s):
+            conn, addr = None, None
+            while True:
+                try:
+                    conn, addr = s.accept()
+                except BlockingIOError:
+                    yield (EVENT_READ, s)
+                else:
+                    break
+            return conn, addr
+
+        def recv(self, conn, size):
+            msg = None
+            while True:
+                try:
+                    msg = conn.recv(1024)
+                except BlockingIOError:
+                    yield (EVENT_READ, conn)
+                else:
+                    break
+            return msg
+
+        def send(self, conn, msg):
+            size = 0
+            while True:
+                try:
+                    size = conn.send(msg)
+                except BlockingIOError:
+                    yield (EVENT_WRITE, conn)
+                else:
+                    break
+            return size
+
+        def once(self):
+            self.polling()
+            unfinished = []
+            for t, data in self.queue:
+                try:
+                    data = t.send(data)
+                except StopIteration:
+                    continue
+
+                if self.register(t, data):
+                    unfinished.append((t, None))
+
+            self.queue = unfinished
+
+        def run(self):
+            while self.queue or self.sel.get_map():
+                self.once()
+
+.. code-block:: python
+
+    # foo.py
+    # $ python3 foo.py &
+    # $ nc localhost 5566
+
+    import socket
+
+    from selectors import EVENT_READ, EVENT_WRITE
+
+    from loop import Loop
+
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    s.bind(("127.0.0.1", 5566))
+    s.listen(10240)
+    s.setblocking(False)
+
+    loop = Loop()
+
+
+    def accept(s):
+        yield (EVENT_READ, s)
+        conn, addr = yield from loop.accept(s)
+        conn.setblocking(False)
+        return conn, addr
+
+
+    def recv(conn):
+        yield (EVENT_READ, conn)
+        msg = yield from loop.recv(conn, 1024)
+        if not msg:
+            conn.close()
+            return
+        yield from send(conn, msg)
+
+
+    def send(conn, msg):
+        yield (EVENT_WRITE, conn)
+        _ = yield from loop.send(conn, msg)
+        yield from recv(conn)
+
+
+    def main():
+        while True:
+            conn, addr = yield from accept(s)
+            loop.create_task((recv(conn), None))
+
+
+    loop.create_task((main(), None))
+    loop.run()
+
+
 What is a Coroutine?
 --------------------
 
