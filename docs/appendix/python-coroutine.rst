@@ -358,14 +358,12 @@ Event Loop
 
 
     def accept(s):
-        yield (EVENT_READ, s)
         conn, addr = yield from loop.accept(s)
         conn.setblocking(False)
         return conn, addr
 
 
     def recv(conn):
-        yield (EVENT_READ, conn)
         msg = yield from loop.recv(conn, 1024)
         if not msg:
             conn.close()
@@ -374,7 +372,6 @@ Event Loop
 
 
     def send(conn, msg):
-        yield (EVENT_WRITE, conn)
         _ = yield from loop.send(conn, msg)
         loop.create_task((recv(conn), None))
 
