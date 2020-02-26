@@ -370,13 +370,13 @@ Event Loop
         if not msg:
             conn.close()
             return
-        yield from send(conn, msg)
+        loop.create_task((send(conn, msg), None))
 
 
     def send(conn, msg):
         yield (EVENT_WRITE, conn)
         _ = yield from loop.send(conn, msg)
-        yield from recv(conn)
+        loop.create_task((recv(conn), None))
 
 
     def main():
