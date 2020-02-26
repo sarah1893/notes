@@ -93,8 +93,7 @@ finish tasks.
 
     import socket
 
-    from selectors import DefaultSelector
-    from selectors import EVENT_READ, EVENT_WRITE
+    from selectors import DefaultSelector, EVENT_READ, EVENT_WRITE
     from functools import partial
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -149,8 +148,7 @@ he/she may require to store previous status in some where.
 
     import socket
 
-    from selectors import DefaultSelector
-    from selectors import EVENT_READ, EVENT_WRITE
+    from selectors import DefaultSelector, EVENT_READ, EVENT_WRITE
     from functools import partial
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -235,16 +233,21 @@ form, which is called *inline callback*, is reachable inside an event loop.
 Event Loop
 ----------
 
+An event loop is a scheduler to manage tasks within a program instead of
+operating systems. The following snippet shows how a simple event loop to
+handle socket connections asynchronously. The implementation concept is to
+append tasks into a FIFO job queue and register a *selector* when I/O operations
+are not ready. Also, a *generator* preserves the status of a task that allows
+it to be able to execute its remaining jobs without callback functions when
+I/O results are available. By observing how an event loop works, therefore, it
+would assist in understanding a Python *generator* is indeed a form of
+*coroutine*.
+
 .. code-block:: python
 
     # loop.py
 
-    from selectors import (
-        DefaultSelector,
-        EVENT_READ,
-        EVENT_WRITE
-    )
-
+    from selectors import DefaultSelector, EVENT_READ, EVENT_WRITE
 
     class Loop(object):
         def __init__(self):
