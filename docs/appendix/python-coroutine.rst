@@ -386,6 +386,10 @@ functions to handle I/O operations.
 What is a Coroutine?
 --------------------
 
+Python document defines that **coroutines** are a generalized form of subroutines.
+However, this definition is ambiguous and impedes developers to understand what
+coroutines are.
+
 .. code-block:: python
 
     import asyncio
