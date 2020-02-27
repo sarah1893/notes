@@ -340,7 +340,7 @@ would assist in understanding a Python *generator* is indeed a form of
                 self.once()
 
 By assigning jobs into an event loop to handle connections, the programming
-pattern is similar to use threads to manage I/O operations but utilizing a
+pattern is similar to using threads to manage I/O operations but utilizing a
 user-level scheduler. Also, `PEP 380`_ enables a generator delegation, which
 allows a generator can wait for other generators to finish their jobs. Obviously,
 the following snippet is more intuitive and readable than using callback
