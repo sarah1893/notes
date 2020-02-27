@@ -22,7 +22,7 @@ large. Therefore, many programming languages such as Python, Javascript, or C++
 dedicated to developing better libraries, frameworks, or syntaxes to assist
 programmers in managing concurrent jobs properly. Instead of focusing on how to
 use modern parallel APIs, this article mainly concentrates on the design
-philosophy behind programming patterns.
+philosophy behind asynchronous programming patterns.
 
 Introduction
 ------------
