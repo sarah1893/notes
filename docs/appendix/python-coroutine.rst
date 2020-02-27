@@ -339,7 +339,7 @@ would assist in understanding a Python *generator* is indeed a form of
             while self.queue or self.sel.get_map():
                 self.once()
 
-By assigning jobs into the event loop to handle connections, the programming
+By assigning jobs into an event loop to handle connections, the programming
 pattern is similar to use threads to manage I/O operations but utilizing a
 user-level scheduler. Also, `PEP 380`_ enables a generator delegation, which
 allows a generator can wait for other generators to finish their jobs. Obviously,
