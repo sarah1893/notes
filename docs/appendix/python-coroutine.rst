@@ -1,9 +1,9 @@
 .. meta::
     :keywords: Python, Python3, coroutine, asyncio
 
-====================
-What is a Coroutine?
-====================
+===============================================
+A Hitchhikers Guide to Asynchronous Programming
+===============================================
 
 .. contents:: Table of Contents
     :backlinks: none
@@ -339,9 +339,12 @@ would assist in understanding a Python *generator* is indeed a form of
             while self.queue or self.sel.get_map():
                 self.once()
 
-
-
-
+By assigning jobs into the event loop to handle connections, the programming
+pattern is similar to use threads to manage I/O operations but utilizing a
+user-level scheduler. Also, `PEP 380`_ enables a generator delegation, which
+allows a generator can wait for other generators to finish their jobs. Obviously,
+the following snippet is more intuitive and readable than using callback
+functions to handle I/O operations.
 
 .. code-block:: python
 
@@ -366,7 +369,10 @@ would assist in understanding a Python *generator* is indeed a form of
     def handler(conn):
         while True:
             msg = yield from loop.recv(conn, 1024)
-            _ = yield from loop.send(conn, msg)
+            if not msg:
+                conn.close()
+                break
+            yield from loop.send(conn, msg)
 
     def main():
         while True:
@@ -376,7 +382,6 @@ would assist in understanding a Python *generator* is indeed a form of
 
     loop.create_task((main(), None))
     loop.run()
-
 
 What is a Coroutine?
 --------------------
@@ -425,6 +430,7 @@ Reference
 .. _select: https://docs.python.org/3/library/select.html
 .. _selectors: https://docs.python.org/3/library/selectors.html
 .. _Coroutines and Tasks: https://docs.python.org/3/library/asyncio-task.html
+.. _PEP 380: https://www.python.org/dev/peps/pep-0380/
 .. _PEP 342 - Coroutines via Enhanced Generators: https://www.python.org/dev/peps/pep-0342/
 .. _PEP 492 - Coroutines with async and await syntax: https://www.python.org/dev/peps/pep-0492/
 .. _PEP 380 - Syntax for Delegating to a Subgenerator: https://www.python.org/dev/peps/pep-0380/
