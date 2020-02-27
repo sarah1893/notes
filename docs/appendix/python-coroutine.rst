@@ -339,6 +339,10 @@ would assist in understanding a Python *generator* is indeed a form of
             while self.queue or self.sel.get_map():
                 self.once()
 
+
+
+
+
 .. code-block:: python
 
     # foo.py
@@ -359,31 +363,16 @@ would assist in understanding a Python *generator* is indeed a form of
 
     loop = Loop()
 
-
-    def accept(s):
-        conn, addr = yield from loop.accept(s)
-        conn.setblocking(False)
-        return conn, addr
-
-
-    def recv(conn):
-        msg = yield from loop.recv(conn, 1024)
-        if not msg:
-            conn.close()
-            return
-        loop.create_task((send(conn, msg), None))
-
-
-    def send(conn, msg):
-        _ = yield from loop.send(conn, msg)
-        loop.create_task((recv(conn), None))
-
+    def handler(conn):
+        while True:
+            msg = yield from loop.recv(conn, 1024)
+            _ = yield from loop.send(conn, msg)
 
     def main():
         while True:
-            conn, addr = yield from accept(s)
-            loop.create_task((recv(conn), None))
-
+            conn, addr = yield from loop.accept(s)
+            conn.setblocking(False)
+            loop.create_task((handler(conn), None))
 
     loop.create_task((main(), None))
     loop.run()
