@@ -72,7 +72,7 @@ Appendix
 =========
 
 - `Why does Decorator Need @wraps <docs/appendix/python-decorator.rst>`_
-- `What is a Coroutine? <docs/appendix/python-coroutine.rst>`_
+- `A Hitchhikers Guide to Asynchronous Programming <docs/appendix/python-coroutine.rst>`_
 - `Asyncio behind the Scenes <docs/appendix/python-asyncio.rst>`_
 - `PEP 572 and the walrus operator <docs/appendix/python-walrus.rst>`_
 - `Python Interpreter in GNU Debugger <docs/appendix/python-gdb.rst>`_
