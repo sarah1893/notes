@@ -24,6 +24,17 @@ programmers in managing concurrent jobs properly. Instead of focusing on how to
 use modern parallel APIs, this article mainly concentrates on the design
 philosophy behind asynchronous programming patterns.
 
+Using threads is a more natural way for developers to dispatch tasks without
+blocking the main thread. However, threads may lead to performance issues such
+as locking critical sections to do some atomic operations. Although using
+event-loop can enhance performance in some cases, writing readable code is
+challenging due to callback problems (e.g., callback hell). Fortunately, programming
+languages like Python introduced a concept, `async/await`, to help developers
+write readable code with high performance. The following figure shows the main
+goal to use `async/await` to handle socket connections like utilizing threads.
+
+.. image:: ../_static/appendix/event-loop-vs-thread.png
+
 Introduction
 ------------
 
