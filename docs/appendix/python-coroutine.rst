@@ -29,9 +29,9 @@ blocking the main thread. However, threads may lead to performance issues such
 as locking critical sections to do some atomic operations. Although using
 event-loop can enhance performance in some cases, writing readable code is
 challenging due to callback problems (e.g., callback hell). Fortunately, programming
-languages like Python introduced a concept, `async/await`, to help developers
+languages like Python introduced a concept, ``async/await``, to help developers
 write readable code with high performance. The following figure shows the main
-goal to use `async/await` to handle socket connections like utilizing threads.
+goal to use ``async/await`` to handle socket connections like utilizing threads.
 
 .. image:: ../_static/appendix/event-loop-vs-thread.png
 
@@ -367,6 +367,7 @@ functions to handle I/O operations.
 
     from selectors import EVENT_READ, EVENT_WRITE
 
+    # import loop.py
     from loop import Loop
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -393,6 +394,16 @@ functions to handle I/O operations.
 
     loop.create_task((main(), None))
     loop.run()
+
+Using an event loop with syntax, ``yield from``, can manage connections without
+blocking the main thread, which is the usage of the module, ``asyncio``,
+before Python 3.5. However, using the syntax, ``yield from``, is ambiguous
+because it may tie programmers in knots: why adding ``@asyncio.coroutine`` makes
+a generator becomes a coroutine? Instead of using ``yield from`` to handle
+asynchronous operations, `PEP 492`_ proposes that *coroutine* should become a
+standalone concept in Python, and that is how the new syntax, ``async/await``,
+was introduced to enhance readability for asynchronous programming.
+
 
 What is a Coroutine?
 --------------------
@@ -448,6 +459,7 @@ Reference
 .. _select: https://docs.python.org/3/library/select.html
 .. _selectors: https://docs.python.org/3/library/selectors.html
 .. _Coroutines and Tasks: https://docs.python.org/3/library/asyncio-task.html
+.. _PEP 492: https://www.python.org/dev/peps/pep-0492/
 .. _PEP 380: https://www.python.org/dev/peps/pep-0380/
 .. _PEP 342 - Coroutines via Enhanced Generators: https://www.python.org/dev/peps/pep-0342/
 .. _PEP 492 - Coroutines with async and await syntax: https://www.python.org/dev/peps/pep-0492/
