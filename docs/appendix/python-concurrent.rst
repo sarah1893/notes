@@ -462,7 +462,7 @@ their code, like using threads. Also, without calling a callback function after
 a task finish, programmers do not need to worry about how to pass the current
 task status, such as local variables and arguments, into other callbacks. Thus,
 programmers will be able to focus on developing their programs without wasting
-their time to troubleshoot concurrent issues.
+a log of time to troubleshoot concurrent issues.
 
 Reference
 ---------
