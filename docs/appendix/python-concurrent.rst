@@ -399,7 +399,7 @@ Using an event loop with syntax, ``yield from``, can manage connections without
 blocking the main thread, which is the usage of the module, ``asyncio``,
 before Python 3.5. However, using the syntax, ``yield from``, is ambiguous
 because it may tie programmers in knots: why adding ``@asyncio.coroutine`` makes
-a generator becomes a coroutine? Instead of using ``yield from`` to handle
+a generator become a coroutine? Instead of using ``yield from`` to handle
 asynchronous operations, `PEP 492`_ proposes that *coroutine* should become a
 standalone concept in Python, and that is how the new syntax, ``async/await``,
 was introduced to enhance readability for asynchronous programming.
