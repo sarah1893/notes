@@ -245,9 +245,9 @@ Event Loop
 ----------
 
 An event loop is a scheduler to manage tasks within a program instead of
-operating systems. The following snippet shows how a simple event loop to
-handle socket connections asynchronously. The implementation concept is to
-append tasks into a FIFO job queue and register a *selector* when I/O operations
+depending on operating systems. The following snippet shows how a simple event
+loop to handle socket connections asynchronously. The implementation concept is
+to append tasks into a FIFO job queue and register a *selector* when I/O operations
 are not ready. Also, a *generator* preserves the status of a task that allows
 it to be able to execute its remaining jobs without callback functions when
 I/O results are available. By observing how an event loop works, therefore, it
@@ -410,7 +410,14 @@ What is a Coroutine?
 
 Python document defines that **coroutines** are a generalized form of subroutines.
 However, this definition is ambiguous and impedes developers to understand what
-coroutines are.
+coroutines are. Based on the previous discussion, an event loop is responsible
+for scheduling generators to perform specific tasks, and that is similar to
+dispatch jobs to threads. In this case, generators serve like threads to be in
+charge of “routine jobs.”  Obviously, A coroutine is just a term to represent a
+task that is scheduled by an event-loop in a program instead of operating systems.
+The following snippet shows what ``@coroutine`` is. This decorator mainly
+transforms a function into a generator function and using the wrapper,
+``types.coroutine``, to preserve backward compatibility.
 
 .. code-block:: python
 
@@ -445,6 +452,8 @@ coroutines are.
 
 Conclusion
 ----------
+
+
 
 Reference
 ---------
