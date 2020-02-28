@@ -251,7 +251,7 @@ to append tasks into a FIFO job queue and register a *selector* when I/O operati
 are not ready. Also, a *generator* preserves the status of a task that allows
 it to be able to execute its remaining jobs without callback functions when
 I/O results are available. By observing how an event loop works, therefore, it
-would assist in understanding a Python *generator* is indeed a form of
+would assist in understanding a Python generator is indeed a form of
 *coroutine*.
 
 .. code-block:: python
@@ -400,7 +400,7 @@ blocking the main thread, which is the usage of the module, ``asyncio``,
 before Python 3.5. However, using the syntax, ``yield from``, is ambiguous
 because it may tie programmers in knots: why adding ``@asyncio.coroutine`` makes
 a generator become a coroutine? Instead of using ``yield from`` to handle
-asynchronous operations, `PEP 492`_ proposes that *coroutine* should become a
+asynchronous operations, `PEP 492`_ proposes that coroutine should become a
 standalone concept in Python, and that is how the new syntax, ``async/await``,
 was introduced to enhance readability for asynchronous programming.
 
@@ -408,7 +408,7 @@ was introduced to enhance readability for asynchronous programming.
 What is a Coroutine?
 --------------------
 
-Python document defines that **coroutines** are a generalized form of subroutines.
+Python document defines that coroutines are a generalized form of subroutines.
 However, this definition is ambiguous and impedes developers to understand what
 coroutines are. Based on the previous discussion, an event loop is responsible
 for scheduling generators to perform specific tasks, and that is similar to
