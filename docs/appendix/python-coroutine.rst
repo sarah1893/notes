@@ -66,8 +66,8 @@ One possible solution to prevent a server waiting for I/O operations is to
 dispatch tasks to other threads. The following example shows how to create a
 thread to handle connections simultaneously. However, creating numerous threads
 may consume all computing power without high throughput. Even worse, an
-application may waste time waiting for a lock to process critical sections within
-a thread. Although using threads can solve blocking issues for a socket server,
+application may waste time waiting for a lock to process tasks in critical
+sections. Although using threads can solve blocking issues for a socket server,
 other factors, such as CPU utilization, are essential for a programmer to
 overcome the C10k problem. Therefore, without creating unlimited threads, the
 event loop is another solution to manage connections.
@@ -453,12 +453,21 @@ transforms a function into a generator function and using the wrapper,
 Conclusion
 ----------
 
-
+Asynchronous programming via an event loop becomes more straightforward and
+readable nowadays due to modern syntaxes and libraries’ support. Most programming
+languages, including Python, implement libraries to manage task scheduling
+via interacting with new syntaxes. While new syntaxes look enigmatic in the
+beginning, they provide a way for programmers to develop logical structure in
+their code, like using threads. Also, without calling a callback function after
+a task finish, programmers do not need to worry about how to pass the current
+task status, such as local variables and arguments, into other callbacks. Thus,
+programmers will be able to focus on developing their programs without wasting
+their time to troubleshoot concurrent issues.
 
 Reference
 ---------
 
-1. `Coroutines and Tasks`_
+1. `asyncio — Asynchronous I/O`_
 2. `PEP 342 - Coroutines via Enhanced Generators`_
 3. `PEP 380 - Syntax for Delegating to a Subgenerator`_
 4. `PEP 492 - Coroutines with async and await syntax`_
@@ -467,7 +476,7 @@ Reference
 .. _Valgrind: https://valgrind.org/
 .. _select: https://docs.python.org/3/library/select.html
 .. _selectors: https://docs.python.org/3/library/selectors.html
-.. _Coroutines and Tasks: https://docs.python.org/3/library/asyncio-task.html
+.. _asyncio — Asynchronous I/O: https://docs.python.org/3/library/asyncio.html
 .. _PEP 492: https://www.python.org/dev/peps/pep-0492/
 .. _PEP 380: https://www.python.org/dev/peps/pep-0380/
 .. _PEP 342 - Coroutines via Enhanced Generators: https://www.python.org/dev/peps/pep-0342/
