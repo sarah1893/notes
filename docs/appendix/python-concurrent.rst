@@ -30,7 +30,7 @@ as locking critical sections to do some atomic operations. Although using
 event-loop can enhance performance in some cases, writing readable code is
 challenging due to callback problems (e.g., callback hell). Fortunately, programming
 languages like Python introduced a concept, ``async/await``, to help developers
-write readable code with high performance. The following figure shows the main
+write understandable code with high performance. The following figure shows the main
 goal by using ``async/await`` to handle socket connections like utilizing threads.
 
 .. image:: ../_static/appendix/event-loop-vs-thread.png
