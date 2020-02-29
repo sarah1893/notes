@@ -413,8 +413,8 @@ However, this definition is ambiguous and impedes developers to understand what
 coroutines are. Based on the previous discussion, an event loop is responsible
 for scheduling generators to perform specific tasks, and that is similar to
 dispatch jobs to threads. In this case, generators serve like threads to be in
-charge of “routine jobs.”  Obviously, A coroutine is just a term to represent a
-task that is scheduled by an event-loop in a program instead of operating systems.
+charge of “routine jobs.”  Obviously, A coroutine is a term to represent a task
+that is scheduled by an event-loop in a program instead of operating systems.
 The following snippet shows what ``@coroutine`` is. This decorator mainly
 transforms a function into a generator function and using a wrapper,
 ``types.coroutine``, to preserve backward compatibility.
