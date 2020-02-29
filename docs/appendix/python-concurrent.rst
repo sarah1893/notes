@@ -43,7 +43,7 @@ tasks in a program. Take a simple TCP blocking echo server as an example
 (The following snippet). If a client connects to the server successfully without
 sending any request, it blocks others' connections. Even though clients send data
 as soon as possible, the server cannot handle other requests if there is no
-client tries to establish a connection. Also, handling multiple requests is
+client trying to establish a connection. Also, handling multiple requests is
 inefficient because it wastes a lot of time waiting for I/O responses from
 hardware such as network interfaces. Thus, socket programming with concurrency
 becomes inevitable to manage extensive requests.
