@@ -89,6 +89,7 @@ The appendix mainly focuses on some critical concepts missing in cheat sheets.
 
     appendix/python-decorator
     appendix/python-concurrent
+    appendix/python-awaitable
     appendix/python-asyncio
     appendix/python-walrus
     appendix/python-gdb

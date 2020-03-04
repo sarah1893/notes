@@ -73,6 +73,7 @@ Appendix
 
 - `Why does Decorator Need @wraps <docs/appendix/python-decorator.rst>`_
 - `A Hitchhikers Guide to Asynchronous Programming <docs/appendix/python-concurrent.rst>`_
+- `Asynchronous Programming: To Be Continued <docs/appendix/python-awaitable>`_
 - `Asyncio behind the Scenes <docs/appendix/python-asyncio.rst>`_
 - `PEP 572 and the walrus operator <docs/appendix/python-walrus.rst>`_
 - `Python Interpreter in GNU Debugger <docs/appendix/python-gdb.rst>`_
