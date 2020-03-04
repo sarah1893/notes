@@ -11,6 +11,12 @@ Asynochronous Programming: To Be Continued
 Abstract
 --------
 
+Similar concepts
+
+1. Javascript: Promise/resolve/reject/then
+2. C++11: promise/promise::set_value/promise::set_exception/future::get
+3. Python: Future/Future.set_result/Future.set_exception/Future.result
+
 
 What is Task?
 --------------
