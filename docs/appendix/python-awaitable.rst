@@ -17,6 +17,35 @@ Similar concepts
 2. C++11: promise/promise::set_value/promise::set_exception/future::get
 3. Python: Future/Future.set_result/Future.set_exception/Future.result
 
+.. code-block:: javascript
+
+    const https = require('https');
+
+    let req = https.get('https://github.com', res => {
+      res.on('data', d => console.log(d.toString('utf8')));
+    })
+    req.on('error', e => console.log(e));
+    req.end();
+
+.. code-block:: javascript
+
+    const https = require('https');
+
+    function httpGet(url) {
+      return new Promise((resolve, reject) => {
+        let req = https.get(url, res => {
+          let buf = [];
+          res.on('data', d => buf.push(d));
+          res.on('end', () => resolve(buf.toString('utf8')));
+        })
+        req.on('error', e => reject(e));
+        req.end();
+      });
+    }
+
+    httpGet('https://github.com')
+      .then(d => console.log(d))
+      .catch(e => console.error(e));
 
 What is Task?
 --------------
