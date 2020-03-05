@@ -47,6 +47,30 @@ Similar concepts
       .then(d => console.log(d))
       .catch(e => console.error(e));
 
+
+.. code-block:: python3
+
+    import asyncio
+    import aiohttp
+
+    async def fetch(session, url):
+        async with session.get(url) as response:
+            return await response.text()
+
+    async def http_get(url, handler):
+        async with aiohttp.ClientSession() as session:
+            try:
+                handler(await fetch(session, url))
+            except Exception as e:
+                handler(None, e)
+
+    def handler(data, err=None):
+        if err:
+            raise err
+        print(data)
+
+    asyncio.run(http_get("https://github.com", handler))
+
 What is Task?
 --------------
 
